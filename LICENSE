@@ -1,0 +1,9 @@
+The software is prohibited for commercial use and is for learning and communication only!
+
+1. Built-in ADB tools, no need to configure environment variables
+
+2. Built-in screen cpoy open-source tool: https://github.com/Genymobile/scrcpy
+
+3. Most functions require root permissions and are for userdebug debugging only. Do not use them in a formal testing environment.
+
+4. For operations such as capturing pictures and videos, the default pull path is the computer desktop.
