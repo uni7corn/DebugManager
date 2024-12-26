@@ -39,3 +39,6 @@ val darkdevidelineColor = Color(0xff000000)
 val lightDevidelineColor = Color(0xff848aa1)
 
 val transparentColor = Color(0x00000000)
+
+// 网络链接颜色
+val networkTextColor = Color(0xff62bffc)

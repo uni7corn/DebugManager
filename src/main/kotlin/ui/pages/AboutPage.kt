@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import org.koin.core.context.GlobalContext
 import ui.component.BasePage
 import ui.component.CenterText
+import ui.component.ClickableLink
 import ui.component.CommonButton
 import ui.theme.groupTitleText
 
@@ -23,9 +24,22 @@ fun AboutPage() {
 
         CenterText(
             "Version: ${mainStateHolder.getDebugManagetVersion()}",
-            style = groupTitleText,
-            modifier = Modifier.padding(bottom = 20.dp)
+            modifier = Modifier.padding(bottom = 10.dp)
         )
+        Row(
+            modifier = Modifier.padding(bottom = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CenterText(
+                "Github Link:",
+                modifier = Modifier.padding(end = 10.dp)
+            )
+            ClickableLink(
+                "https://github.com/stepheneasyshot/DebugManager",
+                "https://github.com/stepheneasyshot/DebugManager"
+            )
+        }
+
         CenterText("缓存文件", style = groupTitleText)
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 20.dp)) {
             CenterText(
