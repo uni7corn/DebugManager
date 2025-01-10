@@ -1,7 +1,7 @@
 # DebugManager
 
 ## 介绍
-Dosktop端调试车机android系统的软件，采用Compose Desktop。
+Desktop端调试车机android系统的软件，采用Compose Desktop。
 * 关于字符串解析采用了大量的特判，不同设备上，可能会有一些问题。
 * 桌面端完全没有经验，关于应用日志和配置文件的处理，完全自己一拍脑袋设计的，和主流方案可能有出入。
 * MacOS端只在自己的电脑上成功安装dmg运行，在我们设计师电脑上还没有跑过，不确定什么原因。
