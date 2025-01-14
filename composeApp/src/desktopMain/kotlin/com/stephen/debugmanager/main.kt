@@ -116,7 +116,7 @@ fun CustomTitleBar(
             ) {
                 Image(
                     contentDescription = "logo",
-                    painter = painterResource(Res.drawable.ic_close),
+                    painter = painterResource(Res.drawable.icon),
                     modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10))
                 )
                 CenterText(text = title, modifier = Modifier.padding(start = 4.dp))

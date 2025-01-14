@@ -57,7 +57,7 @@ compose.desktop {
             description = "DebugManager"
             copyright = "C 2024 Stephen. All rights reserved."
             vendor = "Stephen Zhan"
-            licenseFile.set(project.file("LICENSE"))
+            licenseFile.set(project.file("../LICENSE"))
             modules("java.instrument", "jdk.unsupported")
             // 配置打包保留文件，不同平台下区分
             appResourcesRootDir.set(project.layout.projectDirectory.dir("../resources"))
