@@ -1,3 +1,6 @@
+rootProject.name = "DebugManager"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         maven("https://maven.aliyun.com/repository/google")
@@ -5,15 +8,22 @@ pluginManagement {
         maven("https://maven.aliyun.com/repository/gradle-plugin")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         google()
-        gradlePluginPortal()
+        maven("https://jitpack.io")
         mavenCentral()
-    }
-
-    plugins {
-        kotlin("jvm").version(extra["kotlin.version"] as String)
-        id("org.jetbrains.compose").version(extra["compose.version"] as String)
-        id("org.jetbrains.kotlin.plugin.compose").version(extra["kotlin.version"] as String)
+        gradlePluginPortal()
     }
 }
 
-rootProject.name = "DebugManager"
+dependencyResolutionManagement {
+    repositories {
+        maven("https://maven.aliyun.com/repository/google")
+        maven("https://maven.aliyun.com/repository/public")
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://jitpack.io")
+        google()
+        mavenCentral()
+    }
+}
+
+include(":composeApp")
