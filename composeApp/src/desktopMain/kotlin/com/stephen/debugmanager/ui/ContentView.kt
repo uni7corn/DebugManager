@@ -11,6 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.bean.MainTabItem
 import com.stephen.debugmanager.model.uistate.DirectoryState
@@ -28,14 +31,14 @@ import org.koin.core.context.GlobalContext
 fun ContentView(onExitApplication: () -> Unit) {
 
     val mainItemList = listOf(
-        MainTabItem(Constants.BAME_INFO, "基本信息"),
+        MainTabItem(Constants.BASE_INFO, "基本信息"),
         MainTabItem(Constants.INSTALL, "软件管理"),
         MainTabItem(Constants.FILE_MANAGE, "文件管理"),
         MainTabItem(Constants.COMMAND, "命令模式"),
         MainTabItem(Constants.ABOUT, "关于"),
     )
 
-    val choosedTab = remember { mutableIntStateOf(Constants.BAME_INFO) }
+    val choosedTab = remember { mutableIntStateOf(Constants.BASE_INFO) }
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
@@ -66,6 +69,8 @@ fun ContentView(onExitApplication: () -> Unit) {
     }
 
     Row(modifier = Modifier.fillMaxSize(1f)) {
+        val navController = rememberNavController()
+
         SideTabBar(
             deviceMapState.deviceMap,
             deviceMapState.currentChoosedDevice.toString(),
@@ -74,40 +79,50 @@ fun ContentView(onExitApplication: () -> Unit) {
                 mainStateHolder.getCurrentDeviceInfo()
             },
             mainItemList,
-            onItemClick = { choosedTab.value = it },
+            onItemClick = {
+                navController.navigate(it.toString())
+                choosedTab.value = it
+            },
             choosePosition = choosedTab.value,
             modifier = Modifier.weight(0.25f)
         )
         DarkDivider(modifier = Modifier.width(2.dp).fillMaxHeight(1f))
         // 右侧内容区
         Box(modifier = Modifier.weight(0.75f)) {
-            when (choosedTab.value) {
-                Constants.BAME_INFO -> DeviceInfoPage(
-                    deviceState,
-                    onRefresh = {
-                        mainStateHolder.getCurrentDeviceInfo()
-                    })
-
-                Constants.INSTALL -> ApkManagePage(appListState) {
-                    mainStateHolder.getPackageList(it)
+            NavHost(navController, startDestination = Constants.BASE_INFO.toString()) {
+                composable(Constants.BASE_INFO.toString()) {
+                    DeviceInfoPage(
+                        deviceState,
+                        onRefresh = {
+                            mainStateHolder.getCurrentDeviceInfo()
+                        })
                 }
-
-                Constants.FILE_MANAGE -> FileManagePage(
-                    DirectoryState(
-                        directoryState.deviceCode,
-                        directoryState.currentdirectory,
-                        directoryState.subdirectories,
-                    ),
-                    destinationCall = { destination ->
-                        mainStateHolder.getFileList(destination)
+                composable(Constants.INSTALL.toString()) {
+                    ApkManagePage(appListState) {
+                        mainStateHolder.getPackageList(it)
                     }
-                )
-
-                Constants.COMMAND -> CommandPage()
-
-                Constants.PERFORMANCE -> PerformancePage()
-
-                Constants.ABOUT -> AboutPage()
+                }
+                composable(Constants.FILE_MANAGE.toString()) {
+                    FileManagePage(
+                        DirectoryState(
+                            directoryState.deviceCode,
+                            directoryState.currentdirectory,
+                            directoryState.subdirectories,
+                        ),
+                        destinationCall = { destination ->
+                            mainStateHolder.getFileList(destination)
+                        }
+                    )
+                }
+                composable(Constants.COMMAND.toString()) {
+                    CommandPage()
+                }
+                composable(Constants.PERFORMANCE.toString()) {
+                    PerformancePage()
+                }
+                composable(Constants.ABOUT.toString()) {
+                    AboutPage()
+                }
             }
         }
     }
@@ -138,8 +153,8 @@ fun SideTabBar(
         item {
             Spacer(Modifier.height(40.dp))
         }
-        items(mainItemList) {it->
-            MainItem(
+        items(mainItemList) { it ->
+            SideTabItem(
                 title = it.name,
                 modifier = modifier.width(160.dp).clickable {
                     onItemClick(it.id)
@@ -151,7 +166,7 @@ fun SideTabBar(
 }
 
 @Composable
-fun MainItem(title: String, modifier: Modifier, isChecked: Boolean) {
+fun SideTabItem(title: String, modifier: Modifier, isChecked: Boolean) {
     val backGround = if (isChecked) groupBackGroundColor else backGroundColor
     CenterText(
         title,

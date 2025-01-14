@@ -33,6 +33,7 @@ kotlin{
             implementation(libs.kotlin.coroutines)
             implementation(libs.kotlin.serialization)
             implementation(libs.vidstige.jadb)
+            implementation(libs.navigation.compose)
             implementation(libs.koin)
             implementation(compose.runtime)
             implementation(compose.foundation)

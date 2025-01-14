@@ -2,7 +2,7 @@ package com.stephen.debugmanager.data
 
 object Constants {
     //  主条目
-    const val BAME_INFO = 0
+    const val BASE_INFO = 0
     const val INSTALL = 1
     const val COMMAND = 2
     const val FILE_MANAGE = 3
