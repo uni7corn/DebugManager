@@ -13,12 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.ic_close
-import com.stephen.composeapp.generated.resources.ic_floating
-import com.stephen.composeapp.generated.resources.ic_maximize
-import com.stephen.composeapp.generated.resources.ic_minimize
-import com.stephen.composeapp.generated.resources.icon
+import com.stephen.composeapp.generated.resources.*
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
 import com.stephen.debugmanager.ui.component.CenterText
@@ -66,10 +61,12 @@ fun main() = application {
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
+
             ContentView {
                 mainStateHolder.uninstallToolsApp()
                 exitApplication()
             }
+
             if (dialogState.value) {
                 CommonDialog(
                     title = "确认退出应用程序？",

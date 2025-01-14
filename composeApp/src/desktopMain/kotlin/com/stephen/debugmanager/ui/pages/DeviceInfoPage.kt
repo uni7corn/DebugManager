@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -168,7 +169,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         CenterText(
                             "录屏与截屏", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
-                        Row(modifier = Modifier.width(IntrinsicSize.Max)) {
+                        FlowRow(modifier = Modifier.width(IntrinsicSize.Max), maxItemsInEachRow = 3) {
                             WrappedEditText(
                                 value = recordTime.value,
                                 tipText = "设置时长(s)",
@@ -209,8 +210,6 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 modifier = Modifier.padding(10.dp),
                                 color = alertButtonBackGroundColor
                             )
-                        }
-                        Row {
                             CommonButton(
                                 "截屏保存", onClick = {
                                     mainStateHolder.screenshot()
@@ -290,8 +289,10 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 },
                                 modifier = itemModifier
                             )
-                            Row(modifier = Modifier.width(IntrinsicSize.Max),
-                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                            Row(
+                                modifier = Modifier.width(IntrinsicSize.Max),
+                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                            ) {
                                 WrappedEditText(
                                     value = mockInputSting.value,
                                     tipText = "模拟输入法(English Only)",
