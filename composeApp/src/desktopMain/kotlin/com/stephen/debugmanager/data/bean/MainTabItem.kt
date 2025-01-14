@@ -1,3 +1,5 @@
 package com.stephen.debugmanager.data.bean
 
-data class MainTabItem(val id: Int, val name: String)
+import org.jetbrains.compose.resources.DrawableResource
+
+data class MainTabItem(val name: String, val icon: DrawableResource)

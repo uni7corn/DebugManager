@@ -2,13 +2,12 @@ package com.stephen.debugmanager.data
 
 object Constants {
     //  主条目
-    const val BASE_INFO = 0
-    const val INSTALL = 1
-    const val COMMAND = 2
-    const val FILE_MANAGE = 3
-    const val PERFORMANCE = 4
-    const val ABOUT = 5
-
+    const val BASE_INFO = "基本信息"
+    const val INSTALL = "软件管理"
+    const val COMMAND = "命令模式"
+    const val FILE_MANAGE = "文件管理"
+    const val PERFORMANCE = "性能监测"
+    const val ABOUT = "关于"
 
     // 向左的箭头
     const val LEFT_ARROW = "\u2190"

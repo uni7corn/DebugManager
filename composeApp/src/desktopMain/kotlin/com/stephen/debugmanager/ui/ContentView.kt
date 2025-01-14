@@ -1,6 +1,7 @@
 package com.stephen.debugmanager.ui
 
 import MainStateHolder
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,12 +9,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.stephen.composeapp.generated.resources.*
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.bean.MainTabItem
 import com.stephen.debugmanager.model.uistate.DirectoryState
@@ -25,20 +28,23 @@ import com.stephen.debugmanager.ui.pages.*
 import com.stephen.debugmanager.ui.theme.backGroundColor
 import com.stephen.debugmanager.ui.theme.groupBackGroundColor
 import com.stephen.debugmanager.ui.theme.pageTitleText
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
 @Composable
 fun ContentView(onExitApplication: () -> Unit) {
 
     val mainItemList = listOf(
-        MainTabItem(Constants.BASE_INFO, "基本信息"),
-        MainTabItem(Constants.INSTALL, "软件管理"),
-        MainTabItem(Constants.FILE_MANAGE, "文件管理"),
-        MainTabItem(Constants.COMMAND, "命令模式"),
-        MainTabItem(Constants.ABOUT, "关于"),
-    )
+        Constants.BASE_INFO to Res.drawable.ic_info_page,
+        Constants.INSTALL to Res.drawable.ic_software_page,
+        Constants.FILE_MANAGE to Res.drawable.ic_file_page,
+        Constants.COMMAND to Res.drawable.ic_command_page,
+        Constants.PERFORMANCE to Res.drawable.ic_performance_page,
+        Constants.ABOUT to Res.drawable.ic_about_page,
+    ).map { (name, icon) -> MainTabItem(name, icon) }
 
-    val choosedTab = remember { mutableIntStateOf(Constants.BASE_INFO) }
+    val choosedTab = remember { mutableStateOf(mainItemList[0]) }
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
@@ -70,7 +76,6 @@ fun ContentView(onExitApplication: () -> Unit) {
 
     Row(modifier = Modifier.fillMaxSize(1f)) {
         val navController = rememberNavController()
-
         SideTabBar(
             deviceMapState.deviceMap,
             deviceMapState.currentChoosedDevice.toString(),
@@ -80,15 +85,14 @@ fun ContentView(onExitApplication: () -> Unit) {
             },
             mainItemList,
             onItemClick = {
-                navController.navigate(it.toString())
+                navController.navigate(it.name)
                 choosedTab.value = it
             },
-            choosePosition = choosedTab.value,
-            modifier = Modifier.weight(0.25f)
+            chooseTabItem = choosedTab.value,
         )
         DarkDivider(modifier = Modifier.width(2.dp).fillMaxHeight(1f))
         // 右侧内容区
-        Box(modifier = Modifier.weight(0.75f)) {
+        Box(modifier = Modifier.weight(1f)) {
             NavHost(navController, startDestination = Constants.BASE_INFO.toString()) {
                 composable(Constants.BASE_INFO.toString()) {
                     DeviceInfoPage(
@@ -134,9 +138,8 @@ fun SideTabBar(
     deviceSelectedPosition: String,
     onDeviceSelect: (String) -> Unit,
     mainItemList: List<MainTabItem>,
-    onItemClick: (itemId: Int) -> Unit,
-    choosePosition: Int,
-    modifier: Modifier
+    onItemClick: (name: MainTabItem) -> Unit,
+    chooseTabItem: MainTabItem
 ) {
     LazyColumn {
         item {
@@ -153,27 +156,36 @@ fun SideTabBar(
         item {
             Spacer(Modifier.height(40.dp))
         }
-        items(mainItemList) { it ->
-            SideTabItem(
-                title = it.name,
-                modifier = modifier.width(160.dp).clickable {
-                    onItemClick(it.id)
-                },
-                isChecked = choosePosition == it.id
-            )
+        item {
+            Column(Modifier.width(160.dp)) {
+                mainItemList.forEach { it ->
+                    SideTabItem(
+                        icon = it.icon,
+                        title = it.name,
+                        modifier = Modifier.fillMaxWidth(1f).clip(RoundedCornerShape(10))
+                            .background(if (chooseTabItem == it) groupBackGroundColor else backGroundColor).clickable {
+                                onItemClick(it)
+                            },
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun SideTabItem(title: String, modifier: Modifier, isChecked: Boolean) {
-    val backGround = if (isChecked) groupBackGroundColor else backGroundColor
-    CenterText(
-        title,
-        style = pageTitleText,
-        modifier = modifier
-            .background(backGround)
-            .clip(RoundedCornerShape(10))
-            .padding(vertical = 10.dp)
-    )
+fun SideTabItem(icon: DrawableResource, title: String, modifier: Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.padding(vertical = 10.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(icon),
+                modifier = Modifier.padding(end = 10.dp).size(28.dp),
+                contentDescription = "tab_icon"
+            )
+            CenterText(title, style = pageTitleText)
+        }
+    }
 }
