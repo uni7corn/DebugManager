@@ -87,7 +87,7 @@ class MainStateHolder(
                 platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} start-server")
                 adbClient.runRootScript()
                 adbClient.runRemountScript()
-                appinfoHelper.launchSaveAppInfoService()
+                appinfoHelper.tryToLaunchSaveAppInfoService()
                 // 获取安装的app列表
                 getPackageList()
                 isInProcessing = false
