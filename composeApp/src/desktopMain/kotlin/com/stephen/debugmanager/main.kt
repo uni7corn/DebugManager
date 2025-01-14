@@ -40,7 +40,7 @@ fun main() = application {
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
-    val windowState = rememberWindowState(width = 1100.dp, height = 650.dp)
+    val windowState = rememberWindowState(width = 1000.dp, height = 650.dp)
 
     val dialogState = remember { mutableStateOf(false) }
 

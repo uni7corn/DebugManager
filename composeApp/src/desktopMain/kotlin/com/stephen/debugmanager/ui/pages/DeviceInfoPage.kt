@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -35,47 +36,48 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
     BasePage("设备信息") {
         LazyColumn {
             item {
-                FlowRow(horizontalArrangement = Arrangement.Start) {
-                    Column(
-                        modifier = Modifier.height(IntrinsicSize.Min).width(IntrinsicSize.Max)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Box(
+                        modifier = Modifier.width(IntrinsicSize.Max)
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp)).background(groupBackGroundColor)
                             .padding(10.dp)
                     ) {
-                        CenterText(
-                            "设备基础信息", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
-                        )
-
                         CommonButton(
-                            onClick = {
-                                onRefresh()
-                            },
+                            onClick = { onRefresh() },
                             text = "刷新设备信息",
+                            modifier = Modifier.align(Alignment.TopEnd)
                         )
+                        Column {
+                            CenterText(
+                                "设备基础信息", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
+                            )
 
-                        NameValueText("SerialNumber", deviceName.serial ?: "null")
+                            NameValueText("SerialNumber", deviceName.serial ?: "null")
 
-                        NameValueText("型号", deviceName.name ?: "null")
+                            NameValueText("型号", deviceName.name ?: "null")
 
-                        NameValueText("内部代号", deviceName.innerName ?: "null")
+                            NameValueText("内部代号", deviceName.innerName ?: "null")
 
-                        NameValueText("制造商", deviceName.manufacturer ?: "null")
+                            NameValueText("制造商", deviceName.manufacturer ?: "null")
 
-                        NameValueText("操作系统版本", deviceName.systemVersion ?: "null")
+                            NameValueText("操作系统版本", deviceName.systemVersion ?: "null")
 
-                        NameValueText("版本构建类型", deviceName.buildType ?: "null")
+                            NameValueText("版本构建类型", deviceName.buildType ?: "null")
 
-                        NameValueText("Android版本", deviceName.sdkVersion ?: "null")
+                            NameValueText("Android版本", deviceName.sdkVersion ?: "null")
 
-                        NameValueText("CPU架构", deviceName.cpuArch ?: "null")
+                            NameValueText("CPU架构", deviceName.cpuArch ?: "null")
 
-                        NameValueText("分辨率", deviceName.resolution ?: "null")
+                            NameValueText("分辨率", deviceName.resolution ?: "null")
 
-                        NameValueText("显示密度", deviceName.density ?: "null")
+                            NameValueText("显示密度", deviceName.density ?: "null")
+                        }
                     }
 
                     Column(
                         modifier = Modifier
+                            .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(groupBackGroundColor)
@@ -84,25 +86,30 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         CenterText(
                             "快捷操作", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
-                        FlowRow(maxItemsInEachRow = 3) {
+                        FlowRow(maxItemsInEachRow = 3, modifier = Modifier.width(IntrinsicSize.Max)) {
+
+                            val itemModifier = Modifier
+                                .padding(10.dp)
+                                .weight(1f)
+
                             CommonButton(
                                 "获取ROOT", onClick = {
                                     mainStateHolder.root()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
                                 "重载REMOUNT", onClick = {
                                     mainStateHolder.remount()
                                     toastState.show("已执行，如果是刷完机首次remount，请先重启设备")
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
-                                "Recovery模式", onClick = {
+                                "Recovery", onClick = {
                                     mainStateHolder.rebootRecovery()
                                 },
-                                modifier = Modifier.padding(10.dp),
+                                modifier = itemModifier,
                                 color = alertButtonBackGroundColor
                             )
 
@@ -110,21 +117,21 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 "重启设备", onClick = {
                                     mainStateHolder.rebootDevice()
                                 },
-                                modifier = Modifier.padding(10.dp),
+                                modifier = itemModifier,
                                 color = alertButtonBackGroundColor
                             )
                             CommonButton(
-                                "Fastboot模式", onClick = {
+                                "Fastboot", onClick = {
                                     mainStateHolder.rebootFastboot()
                                 },
-                                modifier = Modifier.padding(10.dp),
+                                modifier = itemModifier,
                                 color = alertButtonBackGroundColor
                             )
                             CommonButton(
                                 "关机", onClick = {
                                     mainStateHolder.powerOff()
                                 },
-                                modifier = Modifier.padding(10.dp),
+                                modifier = itemModifier,
                                 color = alertButtonBackGroundColor
                             )
                             CommonButton(
@@ -132,26 +139,28 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.startCollectTrace()
                                     toastState.show("默认抓取10s，完成后$PULL_FILE_TOAST")
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
                                 "打开Google设置", onClick = {
                                     mainStateHolder.openAndroidSettings()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
                                 "打开scrcpy投屏", onClick = {
                                     mainStateHolder.openScreenCopy()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                         }
                     }
 
                     Column(
                         modifier = Modifier
+                            .fillMaxRowHeight()
                             .padding(5.dp)
+                            .width(IntrinsicSize.Max)
                             .clip(RoundedCornerShape(10.dp))
                             .background(groupBackGroundColor)
                             .padding(10.dp)
@@ -159,12 +168,14 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         CenterText(
                             "录屏与截屏", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
-                        Row {
+                        Row(modifier = Modifier.width(IntrinsicSize.Max)) {
                             WrappedEditText(
                                 value = recordTime.value,
                                 tipText = "设置时长(s)",
-                                onValueChange = { recordTime.value = it },
-                                modifier = Modifier.padding(horizontal = 5.dp)
+                                onValueChange = {
+                                    recordTime.value = it
+                                },
+                                modifier = Modifier.padding(horizontal = 5.dp).weight(1f)
                             )
                             CommonButton(
                                 "开始录屏", onClick = {
@@ -205,21 +216,22 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.screenshot()
                                     toastState.show(PULL_FILE_TOAST)
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier.padding(10.dp).weight(1f)
                             )
                             CommonButton(
                                 "清空截屏图片缓存", onClick = {
                                     mainStateHolder.clearScreenShotsCache()
                                     toastState.show("已清空缓存，节省空间")
                                 },
-                                modifier = Modifier.padding(10.dp),
+                                modifier = Modifier.padding(10.dp).weight(1f),
                                 color = alertButtonBackGroundColor
                             )
                         }
                     }
 
                     Column(
-                        modifier = Modifier.width(IntrinsicSize.Min)
+                        modifier = Modifier
+                            .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(groupBackGroundColor)
@@ -228,57 +240,63 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         CenterText(
                             "模拟按键", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
-                        FlowRow(maxItemsInEachRow = 2) {
+                        FlowRow(maxItemsInEachRow = 2, modifier = Modifier.width(IntrinsicSize.Max)) {
+
+                            val itemModifier = Modifier
+                                .padding(10.dp)
+                                .weight(1f)
+
                             CommonButton(
                                 "返回按键", onClick = {
                                     mainStateHolder.mockBackPressed()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
                                 "回到桌面", onClick = {
                                     mainStateHolder.mockHomePressed()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
 
                             CommonButton(
                                 "亮屏", onClick = {
                                     mainStateHolder.turnOnScreen()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
                                 "灭屏", onClick = {
                                     mainStateHolder.turnOffScreen()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
 
                             CommonButton(
                                 "静音开关", onClick = {
                                     mainStateHolder.muteDevice()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
                                 "音量+", onClick = {
                                     mainStateHolder.volumeUp()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
                             CommonButton(
                                 "音量-", onClick = {
                                     mainStateHolder.volumeDown()
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = itemModifier
                             )
-                            Row {
+                            Row(modifier = Modifier.width(IntrinsicSize.Max),
+                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                                 WrappedEditText(
                                     value = mockInputSting.value,
                                     tipText = "模拟输入法(English Only)",
                                     onValueChange = { mockInputSting.value = it },
-                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
                                 )
                                 CommonButton(
                                     "确认", onClick = {

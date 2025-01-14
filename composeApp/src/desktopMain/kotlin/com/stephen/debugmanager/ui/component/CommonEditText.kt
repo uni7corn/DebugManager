@@ -2,6 +2,9 @@ package com.stephen.debugmanager.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -34,8 +37,9 @@ fun WrappedEditText(
         label = { Text(tipText, color = fontSecondaryColor) },
         onValueChange = { onValueChange(it) },
         modifier = modifier
+            .widthIn(max = 200.dp, min = 100.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(locationBackColor)
-            .border(2.dp, fontSecondaryColor, RoundedCornerShape(10.dp))
+            .border(2.dp, fontSecondaryColor, RoundedCornerShape(10.dp)),
     )
 }

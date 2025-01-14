@@ -2,7 +2,9 @@ package com.stephen.debugmanager.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,7 +22,9 @@ fun CommonButton(
     color:Color = buttonBackGroundColor
 ) {
     CenterText(
-        modifier = modifier.clickable {
+        modifier = modifier
+            .width(IntrinsicSize.Max)
+            .clickable {
             onClick()
         }.clip(RoundedCornerShape(10))
             .background(color)
