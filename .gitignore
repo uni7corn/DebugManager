@@ -42,4 +42,4 @@ bin/
 .kotlin
 
 ### resource test  ###
-app
+composeApp/app

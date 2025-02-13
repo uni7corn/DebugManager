@@ -18,6 +18,7 @@ import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonDialog
+import com.stephen.debugmanager.ui.pages.SplashScreen
 import com.stephen.debugmanager.ui.theme.backGroundColor
 import com.stephen.debugmanager.ui.theme.groupBackGroundColor
 import org.jetbrains.compose.resources.painterResource
@@ -48,35 +49,37 @@ fun main() = application {
         title = "DebugManager",
         undecorated = true,
         state = windowState,
-        icon = painterResource(Res.drawable.icon),
+        icon = painterResource(Res.drawable.app_logo),
     ) {
-        Column(modifier = Modifier.background(backGroundColor)) {
-            WindowDraggableArea {
-                CustomTitleBar(
-                    title = "DebugManager by Stephen",
-                    windowState = windowState,
-                    onClose = {
-                        dialogState.value = true
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+        SplashScreen {
+            Column(modifier = Modifier.background(backGroundColor)) {
+                WindowDraggableArea {
+                    CustomTitleBar(
+                        title = "DebugManager by Stephen",
+                        windowState = windowState,
+                        onClose = {
+                            dialogState.value = true
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
 
-            ContentView {
-                mainStateHolder.uninstallToolsApp()
-                exitApplication()
-            }
+                ContentView {
+                    mainStateHolder.uninstallToolsApp()
+                    exitApplication()
+                }
 
-            if (dialogState.value) {
-                CommonDialog(
-                    title = "确认退出应用程序？",
-                    onConfirm = {
-                        mainStateHolder.uninstallToolsApp()
-                        exitApplication()
-                    },
-                    onCancel = { dialogState.value = false },
-                    onDismiss = { dialogState.value = false }
-                )
+                if (dialogState.value) {
+                    CommonDialog(
+                        title = "确认退出应用程序？",
+                        onConfirm = {
+                            mainStateHolder.uninstallToolsApp()
+                            exitApplication()
+                        },
+                        onCancel = { dialogState.value = false },
+                        onDismiss = { dialogState.value = false }
+                    )
+                }
             }
         }
     }
@@ -113,7 +116,7 @@ fun CustomTitleBar(
             ) {
                 Image(
                     contentDescription = "logo",
-                    painter = painterResource(Res.drawable.icon),
+                    painter = painterResource(Res.drawable.app_logo),
                     modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10))
                 )
                 CenterText(text = title, modifier = Modifier.padding(start = 4.dp))
