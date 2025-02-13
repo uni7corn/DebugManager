@@ -8,6 +8,8 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 ## 声明
 本软件仅用于学习交流，请勿用于非法用途，否则后果自负。
 
+![screenshot](screenshots/blogs_debugmanager_splash_screen.png)
+
 ## 功能
 ### 设备信息
 1. root和remount，这两个是点击后自动执行adbd获取root权限，remount重载。一般情况下这两个操作会在刚启动软件就自动执行，特殊的场景下可能需要手动点击。如果刚刷完机，最好打开软件后立即重启一次设备，使文件系统重载生效，否则很多文件相关的功能可能会执行失败 
