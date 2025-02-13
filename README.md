@@ -20,7 +20,7 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 6. 录屏，可以自定义输入录屏时长，录屏期间屏幕上会显示一个手指点按位置的小点，记录操作，预设的录屏时间到了之后，会自动把录屏MP4提取到电脑桌面，之后不再显示手指点按位置的小点； 
 7. 截屏，把此时屏幕上的显示图像自动提取到桌面。使用完毕建议点击清空缓存，以免占用车机存储空间。 
 8. 最下面有一些模拟按键输入的按钮，模拟侧滑返回，回到launcher桌面，亮灭屏，音量加减等，还可以将文本输入到输入框内，输入功能目前只支持英文和数字。
-![screenshot](screenshots/1.png)
+![screenshot](screenshots/blogs_cmp_deviceinfo.png)
 
 ### APP管理
 1. 上方的软件安装，点击后会有一个文件选取弹窗，选取电脑中的apk文件。再配置正确的安装参数，降级安装，覆盖安装等，可将apk安装到系统。一般在安装第三方的apk做验证时使用，需要注意车机系统内置的priv-app，不可以通过install来更新，只能通过下面的push功能来置换。
@@ -30,9 +30,9 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 5. 提取apk，将对应系统内软件的apk文件提取到桌面。
 6. 置换apk，选择电脑端的apk文件，替换掉车机里面原来的apk，达到精准更新软件的目的，适合在不刷机的情况下进行小范围验证操作。选择文件后点击开始PUSH，就会自动替换了。在所有的待替换的apk更新完毕之后，重启设备，下次开机即为新的apk了。注意PUSH的耗时时间和apk体积有关，100Mb以上的apk文件，push后请等待10s以上，再进行重启。
 
-![screenshot](screenshots/2.png)
+![screenshot](screenshots/blogs_cmp_appmanage_1.png)
 
-![screenshot](screenshots/2-2.png)
+![screenshot](screenshots/blogs_cmp_appmanage_2.png)
 
 ### 文件管理
 文件管理界面，提供了更精细的文件操作，
@@ -41,19 +41,19 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 3. 请非专业人员不要进行文件的删除和移动操作，以免造成车机异常。
 4. 上方提供了一些快捷操作按钮，可以返回上级页面，根目录，sdcard页面，priv-app页面，达到快速切换目录。
 目前区分不了link类型的文件夹，其会被识别成文件，但是可以通过其真实的路径一步一步访问到。
-![screenshot](screenshots/3.png)
+![screenshot](screenshots/blogs_cmp_filemanage_1.png)
 
 ### 命令界面
 这个页面是一些输入指令的调试功能。
 1. 最上方是adb操作，注意这里同样没有上下文机制，适合执行单次生效的命令，像发送广播，更新系统数据库，拉起activity，拉起service等。
 2. 在车机上我们还联动语音和carservice层，可以在这里输入一些快速调试的指令，可以发挥想象自行扩展。
 
-![screenshot](screenshots/4.png)
+![screenshot](screenshots/blogs_cmp_cmdexecute.png)
 
 ### 关于页
 版本号，两个缓存文件夹的快速入口
 
-![screenshot](screenshots/5.png)
+![screenshot](screenshots/blogs_cmp_about.png)
 
 ## 个人开源库引用
 此项目所使用的个人开发者的开源组件有：
