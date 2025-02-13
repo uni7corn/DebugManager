@@ -8,7 +8,22 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 ## 声明
 本软件仅用于学习交流，请勿用于非法用途，否则后果自负。
 
+## 跨平台运行截图
+### 开屏页
+
 ![screenshot](screenshots/blogs_debugmanager_splash_screen.png)
+
+### Windows
+
+![screenshot](screenshots/blogs_debugmanager_windows.jpg)
+
+### Linux
+
+![screenshot](screenshots/blogs_debugmanager_linux.jpg)
+
+### MacOS
+
+![screenshot](screenshots/blogs_debugmanager_macos.jpg)
 
 ## 功能
 ### 设备信息
@@ -20,6 +35,7 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 6. 录屏，可以自定义输入录屏时长，录屏期间屏幕上会显示一个手指点按位置的小点，记录操作，预设的录屏时间到了之后，会自动把录屏MP4提取到电脑桌面，之后不再显示手指点按位置的小点； 
 7. 截屏，把此时屏幕上的显示图像自动提取到桌面。使用完毕建议点击清空缓存，以免占用车机存储空间。 
 8. 最下面有一些模拟按键输入的按钮，模拟侧滑返回，回到launcher桌面，亮灭屏，音量加减等，还可以将文本输入到输入框内，输入功能目前只支持英文和数字。
+
 ![screenshot](screenshots/blogs_cmp_deviceinfo.png)
 
 ### APP管理
