@@ -74,14 +74,14 @@ compose.desktop {
                 // 可单独为当前用户安装，不需要管理员权限
                 perUserInstall = true
                 // 设置图标
-                iconFile.set(project.file("../launcher/icon.ico"))
+                iconFile.set(project.file("../launcher/logo.ico"))
                 upgradeUuid = "888888-8888-8888-8888-888888888888"
             }
             linux {
                 packageVersion = debugManagerAppVersion
                 debPackageVersion = debugManagerAppVersion
                 rpmPackageVersion = debugManagerAppVersion
-                iconFile.set(project.file("../launcher/icon.png"))
+                iconFile.set(project.file("../launcher/logo.png"))
             }
             macOS {
                 bundleID = "com.stephen.debugmanager"
@@ -95,7 +95,7 @@ compose.desktop {
                 dmgPackageBuildVersion = debugManagerAppVersion
                 pkgPackageBuildVersion = debugManagerAppVersion
                 // 设置图标
-                iconFile.set(project.file("../launcher/icon.icns"))
+                iconFile.set(project.file("../launcher/logo.icns"))
                 entitlementsFile.set(project.file("../default.entitlements"))
             }
         }
