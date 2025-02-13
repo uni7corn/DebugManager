@@ -14,6 +14,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.decodeToImageBitmap
 import java.text.SimpleDateFormat
 
 
@@ -407,6 +409,7 @@ class MainStateHolder(
     /**
      * 获取安装的app列表
      */
+    @OptIn(ExperimentalResourceApi::class)
     fun getPackageList(filterParams: String = PackageFilter.SIMPLE.param) {
         LogUtils.printLog("getPackageList $filterParams")
         CoroutineScope(Dispatchers.IO).launch {
@@ -425,7 +428,7 @@ class MainStateHolder(
                     runCatching {
                         // suspend方法，只有读取完成后才会往下走，否则会阻塞
                         val iconFile = appinfoHelper.getIconFile(it)
-                        val imageBitmap: ImageBitmap = loadImageBitmap(iconFile.inputStream())
+                        val imageBitmap: ImageBitmap = iconFile.inputStream().readAllBytes().decodeToImageBitmap()
                         // 读取label
                         val label = packageLabelMap[it] ?: "default"
                         // 读取版本
