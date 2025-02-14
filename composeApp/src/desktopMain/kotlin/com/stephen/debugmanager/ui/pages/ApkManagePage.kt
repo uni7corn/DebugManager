@@ -142,9 +142,9 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
             }
             WeSkeleton.Rectangle(appListState.appList.isEmpty()) {
                 LazyColumn {
-                    items(appListState.appList) {
+                    items(appListState.appList, key = { it.packageName }) {
                         Box(
-                            modifier = Modifier.fillMaxWidth(1f)
+                            modifier = Modifier.fillMaxWidth(1f).animateItem()
                         ) {
                             AppItem(
                                 it.packageName,

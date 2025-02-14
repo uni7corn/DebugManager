@@ -4,8 +4,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 
 data class AppListState(
     val appList: List<AppItemData> = listOf(),
+    val listSize:Int = appList.size
 ) {
-    fun toUiState() = AppListState(appList = appList)
+    fun toUiState() = AppListState(appList = appList, listSize = listSize)
 }
 
 data class AppItemData(

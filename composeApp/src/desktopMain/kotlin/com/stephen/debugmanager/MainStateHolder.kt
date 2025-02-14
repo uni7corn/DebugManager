@@ -452,14 +452,14 @@ class MainStateHolder(
                                 lastUpdateTime = lastUpdateTime
                             )
                         )
-                    }.onFailure { e->
+                        _appListState.update {
+                            it.copy(appList = tempList, tempList.size)
+                        }
+                        _appListState.value = _appListState.value.toUiState()
+                    }.onFailure { e ->
                         LogUtils.printLog("获取app信息失败:${e.message}", LogUtils.LogLevel.ERROR)
                     }
                 }
-            _appListState.update {
-                it.copy(appList = tempList)
-            }
-            _appListState.value = _appListState.value.toUiState()
         }
     }
 
