@@ -43,3 +43,5 @@ bin/
 
 ### resource test  ###
 composeApp/app
+
+local.properties
