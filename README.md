@@ -8,23 +8,6 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 ## 声明
 本软件仅用于学习交流，请勿用于非法用途，否则后果自负。
 
-## 跨平台运行截图
-### 开屏页
-
-![screenshot](screenshots/blogs_debugmanager_splash_screen.png)
-
-### Windows
-
-![screenshot](screenshots/blogs_debugmanager_windows.jpg)
-
-### Linux
-
-![screenshot](screenshots/blogs_debugmanager_linux.jpg)
-
-### MacOS
-
-![screenshot](screenshots/blogs_debugmanager_macos.jpg)
-
 ## 功能
 ### 设备信息
 1. root和remount，这两个是点击后自动执行adbd获取root权限，remount重载。一般情况下这两个操作会在刚启动软件就自动执行，特殊的场景下可能需要手动点击。如果刚刷完机，最好打开软件后立即重启一次设备，使文件系统重载生效，否则很多文件相关的功能可能会执行失败 
@@ -76,3 +59,20 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 1. 模仿微信的weui设计的compose版本，使用了其中的一些写好的组件，拿来改制使用https://gitee.com/chengdongqing/weui
 2. adb client, 建立基于adb的socket通信，简化了一些功能的解析流程，例如文件列表的显示。https://github.com/vidstige/jadb
 3. 架构设计上稍微模仿了一下adb pad，可惜还是没有模仿到位，越来越忙，时间上也不允许再去优化架构了。https://github.com/kaleidot725/AdbPad
+
+## 跨平台运行截图
+### 开屏页
+
+![screenshot](screenshots/blogs_debugmanager_splash_screen.png)
+
+### Windows
+
+![screenshot](screenshots/blogs_debugmanager_windows.jpg)
+
+### Linux
+
+![screenshot](screenshots/blogs_debugmanager_linux.jpg)
+
+### MacOS
+
+![screenshot](screenshots/blogs_debugmanager_macos.jpg)
