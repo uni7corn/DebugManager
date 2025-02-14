@@ -1,6 +1,6 @@
 package com.stephen.debugmanager.ui
 
-import MainStateHolder
+import com.stephen.debugmanager.MainStateHolder
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

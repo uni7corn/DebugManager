@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import com.stephen.composeapp.generated.resources.*
+import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
 import com.stephen.debugmanager.ui.component.CenterText

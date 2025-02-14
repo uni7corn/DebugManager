@@ -1,6 +1,6 @@
 package com.stephen.debugmanager.di
 
-import MainStateHolder
+import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.model.AndroidAppHelper

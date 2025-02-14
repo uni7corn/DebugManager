@@ -1,6 +1,6 @@
 package com.stephen.debugmanager.ui.pages
 
-import MainStateHolder
+import com.stephen.debugmanager.MainStateHolder
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
