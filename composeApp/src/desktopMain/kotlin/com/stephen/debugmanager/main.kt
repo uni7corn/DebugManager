@@ -23,6 +23,7 @@ import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonDialog
+import com.stephen.debugmanager.ui.component.CustomTitleBar
 import com.stephen.debugmanager.ui.pages.SplashScreen
 import com.stephen.debugmanager.ui.theme.DarkColorScheme
 import com.stephen.debugmanager.ui.theme.LightColorScheme
@@ -100,65 +101,6 @@ fun main() = application {
                         )
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun CustomTitleBar(
-    title: String,
-    windowState: WindowState,
-    onClose: () -> Unit,
-    onMinimize: () -> Unit = {
-        windowState.isMinimized = true
-    },
-    onMaximize: () -> Unit = {
-        windowState.placement = if (windowState.placement == WindowPlacement.Maximized)
-            WindowPlacement.Floating else WindowPlacement.Maximized
-    },
-    modifier: Modifier = Modifier
-) {
-    val isMaximized = windowState.placement == WindowPlacement.Maximized
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(32.dp)
-            .background(groupBackGroundColor),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                modifier = Modifier.align(Alignment.Center),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Image(
-                    contentDescription = "logo",
-                    painter = painterResource(Res.drawable.app_logo),
-                    modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10))
-                )
-                CenterText(text = title, modifier = Modifier.padding(start = 4.dp))
-            }
-
-            Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-                Image(
-                    contentDescription = "minimize",
-                    painter = painterResource(Res.drawable.ic_minimize),
-                    modifier = Modifier.clickable { onMinimize() }.size(40.dp).padding(5.dp)
-                )
-                Image(
-                    contentDescription = "maximize",
-                    painter = if (isMaximized) painterResource(Res.drawable.ic_floating)
-                    else painterResource(Res.drawable.ic_maximize),
-                    modifier = Modifier.clickable { onMaximize() }.size(40.dp).padding(5.dp)
-                )
-                Image(
-                    contentDescription = "close",
-                    painter = painterResource(Res.drawable.ic_close),
-                    modifier = Modifier.clickable { onClose() }.size(40.dp).padding(2.dp)
-                )
             }
         }
     }
