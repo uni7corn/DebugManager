@@ -5,6 +5,7 @@ import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
+import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.model.AndroidAppHelper
 import com.stephen.debugmanager.model.FileManager
 import com.stephen.debugmanager.model.uistate.*
@@ -43,11 +44,21 @@ class MainStateHolder(
     private val _appListState = MutableStateFlow(AppListState())
     val appListStateStateFlow = _appListState.asStateFlow()
 
+    // 主题
+    private val _themeState = MutableStateFlow(ThemeState.DARK)
+    val themeStateStateFlow = _themeState.asStateFlow()
+
     init {
         println("MainStateHolder init")
         recycleCheckConnection()
         platformAdapter.init()
         adbClient.init()
+    }
+
+    fun setThemeState(themeState: ThemeState) {
+        _themeState.update {
+            themeState
+        }
     }
 
     /**
