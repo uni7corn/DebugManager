@@ -44,7 +44,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                     ) {
                         CommonButton(
                             onClick = { onRefresh() },
-                            text = "刷新设备信息",
+                            text = "刷新",
                             modifier = Modifier.align(Alignment.TopEnd)
                         )
                         Column {

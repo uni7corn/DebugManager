@@ -29,7 +29,7 @@ fun CommonButton(
         }.clip(RoundedCornerShape(10))
             .background(color)
             .shadow(1.dp, spotColor = Color.White)
-            .padding(5.dp),
+            .padding(vertical = 5.dp, horizontal = 10.dp),
         text = text
     )
 }

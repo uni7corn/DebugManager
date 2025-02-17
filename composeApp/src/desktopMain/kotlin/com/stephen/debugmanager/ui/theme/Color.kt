@@ -10,7 +10,7 @@ val networkTextColor = Color(0xff62bffc)
 
 val DarkColorScheme = darkColors(
     // 使用最多的按钮色
-    primary = Color(0xff509554),
+    primary = Color(0xff575e6e),
     //大背景
     background = Color(0xFF303845),
     // 功能组背景
