@@ -35,12 +35,12 @@ import org.koin.core.context.GlobalContext
 fun ContentView(onExitApplication: () -> Unit) {
 
     val mainItemList = listOf(
-        Constants.BASE_INFO to Res.drawable.ic_info_page,
-        Constants.INSTALL to Res.drawable.ic_software_page,
-        Constants.FILE_MANAGE to Res.drawable.ic_file_page,
-        Constants.COMMAND to Res.drawable.ic_command_page,
-        Constants.PERFORMANCE to Res.drawable.ic_performance_page,
-        Constants.ABOUT to Res.drawable.ic_about_page,
+        Constants.BASE_INFO to Res.drawable.ic_devices,
+        Constants.INSTALL to Res.drawable.ic_software,
+        Constants.FILE_MANAGE to Res.drawable.ic_file_manage,
+        Constants.COMMAND to Res.drawable.ic_terminal,
+        Constants.PERFORMANCE to Res.drawable.ic_performance,
+        Constants.ABOUT to Res.drawable.ic_about,
     ).map { (name, icon) -> MainTabItem(name, icon) }
 
     val choosedTab = remember { mutableStateOf(mainItemList[0]) }

@@ -6,18 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.app_logo
+import com.stephen.composeapp.generated.resources.ic_compose
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
@@ -58,7 +54,7 @@ fun main() = application {
         title = "DebugManager",
         undecorated = true,
         state = windowState,
-        icon = painterResource(Res.drawable.app_logo),
+        icon = painterResource(Res.drawable.ic_compose),
     ) {
         MaterialTheme(
             colors = when (themeState.value) {

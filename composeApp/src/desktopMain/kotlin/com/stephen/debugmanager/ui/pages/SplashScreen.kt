@@ -6,17 +6,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.app_logo
+import com.stephen.composeapp.generated.resources.ic_compose
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.theme.pageTitleText
 import kotlinx.coroutines.delay
@@ -63,7 +61,8 @@ fun SplashScreenContent(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(Res.drawable.app_logo),
+                painter = painterResource(Res.drawable.ic_compose),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                 contentDescription = "Splash Logo",
                 modifier = Modifier.size(200.dp)
             )

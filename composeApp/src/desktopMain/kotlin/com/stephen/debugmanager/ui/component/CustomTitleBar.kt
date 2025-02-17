@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.composeapp.generated.resources.ic_close
+import com.stephen.composeapp.generated.resources.ic_compose
 import com.stephen.composeapp.generated.resources.ic_floating
 import com.stephen.composeapp.generated.resources.ic_maximize
 import com.stephen.composeapp.generated.resources.ic_minimize
@@ -53,7 +53,8 @@ fun CustomTitleBar(
             ) {
                 Image(
                     contentDescription = "logo",
-                    painter = painterResource(Res.drawable.app_logo),
+                    painter = painterResource(Res.drawable.ic_compose),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                     modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10))
                 )
                 CenterText(text = title, modifier = Modifier.padding(start = 4.dp))
@@ -76,11 +77,8 @@ fun CustomTitleBar(
                 Image(
                     contentDescription = "close",
                     painter = painterResource(Res.drawable.ic_close),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
-                    modifier = Modifier.clickable { onClose() }.size(32.dp).padding(4.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(MaterialTheme.colors.error)
-                        .padding(5.dp)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.error),
+                    modifier = Modifier.clickable { onClose() }.size(32.dp).padding(5.dp)
                 )
             }
         }

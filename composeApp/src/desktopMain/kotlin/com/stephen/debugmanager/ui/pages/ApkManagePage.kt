@@ -18,7 +18,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_close
-import com.stephen.composeapp.generated.resources.ic_options
+import com.stephen.composeapp.generated.resources.ic_more
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.InstallParams
@@ -190,7 +190,7 @@ fun AppItem(
 
         Image(
             contentDescription = "app options",
-            painter = painterResource(Res.drawable.ic_options),
+            painter = painterResource(Res.drawable.ic_more),
             colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
             modifier = Modifier.padding(end = 10.dp)
                 .clip(RoundedCornerShape(10.dp)).clickable {
@@ -230,7 +230,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     painter = painterResource(Res.drawable.ic_close),
                     colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                     contentDescription = "close",
-                    modifier = Modifier.size(28.dp).padding(end = 10.dp, top = 10.dp).clip(RoundedCornerShape(50))
+                    modifier = Modifier.size(32.dp).padding(end = 10.dp, top = 10.dp).clip(RoundedCornerShape(50))
                         .clickable { dismiss() }
                 )
             }
