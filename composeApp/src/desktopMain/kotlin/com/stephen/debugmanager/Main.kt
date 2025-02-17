@@ -13,7 +13,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.ic_compose
+import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
@@ -54,7 +54,7 @@ fun main() = application {
         title = "DebugManager",
         undecorated = true,
         state = windowState,
-        icon = painterResource(Res.drawable.ic_compose),
+        icon = painterResource(Res.drawable.app_logo),
     ) {
         MaterialTheme(
             colors = when (themeState.value) {

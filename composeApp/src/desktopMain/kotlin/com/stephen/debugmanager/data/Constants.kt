@@ -7,7 +7,7 @@ object Constants {
     const val COMMAND = "命令模式"
     const val FILE_MANAGE = "文件管理"
     const val PERFORMANCE = "性能监测"
-    const val ABOUT = "关于"
+    const val ABOUT = "关        于"
 
     // 向左的箭头
     const val LEFT_ARROW = "\u2190"
