@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
@@ -62,18 +63,24 @@ fun CustomTitleBar(
                 Image(
                     contentDescription = "minimize",
                     painter = painterResource(Res.drawable.ic_minimize),
-                    modifier = Modifier.clickable { onMinimize() }.size(40.dp).padding(5.dp)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    modifier = Modifier.clickable { onMinimize() }.size(32.dp).padding(5.dp)
                 )
                 Image(
                     contentDescription = "maximize",
                     painter = if (isMaximized) painterResource(Res.drawable.ic_floating)
                     else painterResource(Res.drawable.ic_maximize),
-                    modifier = Modifier.clickable { onMaximize() }.size(40.dp).padding(5.dp)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    modifier = Modifier.clickable { onMaximize() }.size(32.dp).padding(5.dp)
                 )
                 Image(
                     contentDescription = "close",
                     painter = painterResource(Res.drawable.ic_close),
-                    modifier = Modifier.clickable { onClose() }.size(40.dp).padding(2.dp)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    modifier = Modifier.clickable { onClose() }.size(32.dp).padding(4.dp)
+                        .clip(RoundedCornerShape(50))
+                        .background(MaterialTheme.colors.error)
+                        .padding(5.dp)
                 )
             }
         }

@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
+import com.stephen.debugmanager.ui.component.CenterText
+import com.stephen.debugmanager.ui.theme.pageTitleText
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
@@ -47,7 +49,7 @@ fun SplashScreen(appContent: @Composable () -> Unit) {
                         enter = fadeIn(),
                         exit = fadeOut()
                     )
-                    .background(Color.White)
+                    .background(MaterialTheme.colors.background)
             )
         }
     }
@@ -66,10 +68,9 @@ fun SplashScreenContent(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(200.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(
+            CenterText(
                 text = "Welcome to DebugManager",
-                style = MaterialTheme.typography.h5,
-                fontSize = 24.sp
+                style = pageTitleText,
             )
         }
     }

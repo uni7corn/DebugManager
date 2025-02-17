@@ -10,13 +10,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.ic_dialog_close
+import com.stephen.composeapp.generated.resources.ic_close
 import com.stephen.composeapp.generated.resources.ic_options
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
@@ -190,6 +191,7 @@ fun AppItem(
         Image(
             contentDescription = "app options",
             painter = painterResource(Res.drawable.ic_options),
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
             modifier = Modifier.padding(end = 10.dp)
                 .clip(RoundedCornerShape(10.dp)).clickable {
                     optionsDialogState.value = true
@@ -225,11 +227,11 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
             Row {
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
-                    painter = painterResource(Res.drawable.ic_dialog_close),
+                    painter = painterResource(Res.drawable.ic_close),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                     contentDescription = "close",
-                    modifier = Modifier.size(28.dp).padding(end = 10.dp, top = 10.dp).clickable {
-                        dismiss()
-                    }
+                    modifier = Modifier.size(28.dp).padding(end = 10.dp, top = 10.dp).clip(RoundedCornerShape(50))
+                        .clickable { dismiss() }
                 )
             }
             CenterText(

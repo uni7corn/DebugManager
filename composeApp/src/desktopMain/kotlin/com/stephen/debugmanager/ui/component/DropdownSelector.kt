@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.stephen.composeapp.generated.resources.Res
@@ -48,6 +49,7 @@ fun DropdownSelector(
             Image(
                 modifier = Modifier.size(16.dp).rotate(if (expanded) 180f else 0f),
                 painter = painterResource(Res.drawable.ic_expand),
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                 contentDescription = "Dropdown"
             )
         }

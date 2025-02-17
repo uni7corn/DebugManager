@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_file
@@ -382,6 +383,7 @@ fun FileViewItem(path: String, isDirectory: Boolean, modifier: Modifier) {
         Image(
             painter = if (isDirectory) painterResource(Res.drawable.ic_folder)
             else painterResource(Res.drawable.ic_file),
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
             modifier = Modifier.size(15.dp),
             contentDescription = "file_icon"
         )
