@@ -40,6 +40,8 @@ kotlin{
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
+            implementation(libs.datastore)
+            implementation(libs.datastore.preferences)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -50,7 +52,7 @@ kotlin{
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.stephen.debugmanager.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Exe, TargetFormat.Dmg, TargetFormat.Deb)
             packageName = "DebugManager"

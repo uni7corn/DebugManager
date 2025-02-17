@@ -3,8 +3,8 @@ package com.stephen.debugmanager.data
 /**
  * 应用主题
  */
-enum class ThemeState {
-    DARK,
-    LIGHT,
-    SYSTEM
+object ThemeState {
+    const val DARK = 2
+    const val LIGHT = 1
+    const val SYSTEM = 0
 }

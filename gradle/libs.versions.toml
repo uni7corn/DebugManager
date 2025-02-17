@@ -9,6 +9,7 @@ koin = "3.5.6"
 ktor = "2.3.8"
 jadb = "1.2.1"
 navigationCompose = "2.7.0-alpha07"
+datastore = "1.1.1"
 
 [libraries]
 kotlin_coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin_coroutines" }
@@ -20,6 +21,8 @@ ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 vidstige-jadb = { module = "com.github.vidstige:jadb", version.ref = "jadb" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }

@@ -1,11 +1,15 @@
 package com.stephen.debugmanager
 
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
+import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
+import com.stephen.debugmanager.helper.DataStoreHelper
 import com.stephen.debugmanager.model.AndroidAppHelper
 import com.stephen.debugmanager.model.FileManager
 import com.stephen.debugmanager.model.uistate.*
@@ -25,7 +29,8 @@ class MainStateHolder(
     private val adbClient: AdbClient,
     private val platformAdapter: PlatformAdapter,
     private val fileManager: FileManager,
-    private val appinfoHelper: AndroidAppHelper
+    private val appinfoHelper: AndroidAppHelper,
+    private val dataStoreHelper: DataStoreHelper
 ) {
 
     // 连接的设备列表
@@ -47,17 +52,42 @@ class MainStateHolder(
     // 主题
     private val _themeState = MutableStateFlow(ThemeState.DARK)
     val themeStateStateFlow = _themeState.asStateFlow()
+    private val themePreferencesKey = stringPreferencesKey("ThemeState")
 
     init {
         println("MainStateHolder init")
         recycleCheckConnection()
+        dataStoreHelper.init(dataStoreFileName)
         platformAdapter.init()
         adbClient.init()
     }
 
-    fun setThemeState(themeState: ThemeState) {
+    /**
+     * 下发主题切换，存储在dataStore中
+     */
+    fun setThemeState(themeState: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreHelper.dataStore.edit {
+                it[themePreferencesKey] = themeState.toString()
+            }
+        }
         _themeState.update {
             themeState
+        }
+    }
+
+    /**
+     * 获取本地存储的主题
+     */
+    fun getThemeState() {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreHelper.dataStore.data.collect {
+                val themeState = it[themePreferencesKey]?.toInt() ?: ThemeState.DARK
+                LogUtils.printLog("getThemeState-> themeState:$themeState", LogUtils.LogLevel.INFO)
+                _themeState.update {
+                    themeState
+                }
+            }
         }
     }
 

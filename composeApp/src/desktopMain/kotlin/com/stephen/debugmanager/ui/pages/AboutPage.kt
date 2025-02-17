@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +34,10 @@ fun AboutPage() {
         val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
         val themeState = mainStateHolder.themeStateStateFlow.collectAsState()
+
+        LaunchedEffect(Unit) {
+            mainStateHolder.getThemeState()
+        }
 
         CenterText(
             "Version: ${mainStateHolder.getDebugManagetVersion()}",
@@ -87,8 +92,8 @@ fun AboutPage() {
 }
 
 @Composable
-fun ThemeSwitcher(mainStateHolder: MainStateHolder, currentTheme: ThemeState, onThemeChange: (ThemeState) -> Unit) {
-    val themeMap = mapOf<String, ThemeState>(
+fun ThemeSwitcher(mainStateHolder: MainStateHolder, currentTheme: Int, onThemeChange: (Int) -> Unit) {
+    val themeMap = mapOf<String, Int>(
         "深色" to ThemeState.DARK,
         "浅色" to ThemeState.LIGHT,
         "跟随系统" to ThemeState.SYSTEM

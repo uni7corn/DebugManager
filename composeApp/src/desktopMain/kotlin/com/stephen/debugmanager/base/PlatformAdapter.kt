@@ -13,7 +13,9 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
 
-class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
+class PlatformAdapter(
+    singleInstanceApp: SingleInstanceApp
+) {
 
     init {
         println("PlatformAdapter init")
@@ -42,6 +44,8 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         val userAndroidTempFiles = "${userConfigFile}${sp}AndroidDeviceTempFiles"
 
         val appVersion: String = System.getProperty("jpackage.app-version") ?: "DefaultVersion 1.0.0"
+
+        val dataStoreFileName = "${userConfigFile}${sp}local_datastore.preferences_pb"
     }
 
     val localAdbPath =

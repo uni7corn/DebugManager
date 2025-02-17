@@ -4,13 +4,14 @@ import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.SingleInstanceApp
+import com.stephen.debugmanager.helper.DataStoreHelper
 import com.stephen.debugmanager.model.AndroidAppHelper
 import com.stephen.debugmanager.model.FileManager
 import org.koin.dsl.module
 
 val koinModules = module {
     single<MainStateHolder> {
-        MainStateHolder(get(), get(), get(), get())
+        MainStateHolder(get(), get(), get(), get(), get())
     }
     single<PlatformAdapter> {
         PlatformAdapter(get())
@@ -25,4 +26,5 @@ val koinModules = module {
         AndroidAppHelper(get(), get())
     }
     factory { SingleInstanceApp() }
+    factory { DataStoreHelper() }
 }
