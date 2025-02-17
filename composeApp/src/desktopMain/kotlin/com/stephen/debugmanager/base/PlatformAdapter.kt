@@ -1,11 +1,11 @@
 package com.stephen.debugmanager.base
 
 import com.stephen.debugmanager.data.PlatformType
+import com.stephen.debugmanager.utils.LogUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.stephen.debugmanager.utils.LogUtils
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -13,7 +13,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
 
-class PlatformAdapter {
+class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     init {
         println("PlatformAdapter init")
@@ -21,6 +21,7 @@ class PlatformAdapter {
 
     fun init() {
         createInitTempFile()
+        singleInstanceApp.initCheckFileLock()
     }
 
     companion object {
