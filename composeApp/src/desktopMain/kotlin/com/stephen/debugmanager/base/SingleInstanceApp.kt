@@ -13,9 +13,9 @@ class SingleInstanceApp {
     private var lock: FileLock? = null
     private var channel: FileChannel? = null
 
-    fun initCheckFileLock() {
+    fun initCheckFileLock(lockFilePath: String) {
         LogUtils.printLog("initCheckFileLock")
-        val file = File("app.lock")
+        val file = File(lockFilePath)
         channel = RandomAccessFile(file, "rw").getChannel()
         lock = channel?.tryLock()
         if (lock == null) {

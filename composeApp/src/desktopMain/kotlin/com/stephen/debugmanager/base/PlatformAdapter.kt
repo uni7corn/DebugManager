@@ -13,17 +13,15 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
 
-class PlatformAdapter(
-    singleInstanceApp: SingleInstanceApp
-) {
+class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     init {
         println("PlatformAdapter init")
-        singleInstanceApp.initCheckFileLock()
     }
 
     fun init() {
         createInitTempFile()
+        singleInstanceApp.initCheckFileLock(lockFilePath)
     }
 
     companion object {
@@ -46,6 +44,8 @@ class PlatformAdapter(
         val appVersion: String = System.getProperty("jpackage.app-version") ?: "DefaultVersion 1.0.0"
 
         val dataStoreFileName = "${userConfigFile}${sp}local_datastore.preferences_pb"
+
+        val lockFilePath = "${userConfigFile}${sp}app.lock"
     }
 
     val localAdbPath =
