@@ -159,7 +159,6 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         modifier = Modifier
                             .fillMaxRowHeight()
                             .padding(5.dp)
-                            .width(IntrinsicSize.Max)
                             .clip(RoundedCornerShape(10.dp))
                             .background(MaterialTheme.colors.surface)
                             .padding(10.dp)
@@ -167,35 +166,46 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         CenterText(
                             "录屏与截屏", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
-                        FlowRow(modifier = Modifier.width(IntrinsicSize.Max), maxItemsInEachRow = 3) {
-                            WrappedEditText(
-                                value = recordTime.value,
-                                tipText = "设置时长(s)",
-                                onValueChange = {
-                                    recordTime.value = it
-                                },
-                                modifier = Modifier.padding(horizontal = 5.dp).weight(1f)
-                            )
-                            CommonButton(
-                                "开始录屏", onClick = {
-                                    if (mainStateHolder.isRecording) {
-                                        toastState.show("上次录制还未完成")
-                                    } else if (recordTime.value.isEmpty()) {
-                                        toastState.show("请先输入录制时长")
-                                    } else {
-                                        runCatching {
-                                            val timeInt = recordTime.value.toInt()
-                                            mainStateHolder.startScreenRecord(timeInt)
-                                            recordTime.value = ""
-                                            toastState.show("已开始，录制期间会显示手指点击位置，完成后$PULL_FILE_TOAST")
-                                        }.onFailure {
-                                            toastState.show("请输入正确的时长")
-                                            recordTime.value = ""
+                        Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                            Row {
+                                WrappedEditText(
+                                    value = recordTime.value,
+                                    tipText = "设置时长(s)",
+                                    onValueChange = {
+                                        recordTime.value = it
+                                    },
+                                    modifier = Modifier.padding(horizontal = 5.dp).weight(1f)
+                                )
+                                CommonButton(
+                                    "开始录屏", onClick = {
+                                        if (mainStateHolder.isRecording) {
+                                            toastState.show("上次录制还未完成")
+                                        } else if (recordTime.value.isEmpty()) {
+                                            toastState.show("请先输入录制时长")
+                                        } else {
+                                            runCatching {
+                                                val timeInt = recordTime.value.toInt()
+                                                mainStateHolder.startScreenRecord(timeInt)
+                                                recordTime.value = ""
+                                                toastState.show("已开始，录制期间会显示手指点击位置，完成后$PULL_FILE_TOAST")
+                                            }.onFailure {
+                                                toastState.show("请输入正确的时长")
+                                                recordTime.value = ""
+                                            }
                                         }
-                                    }
+                                    },
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+
+                            CommonButton(
+                                "截屏保存", onClick = {
+                                    mainStateHolder.screenshot()
+                                    toastState.show(PULL_FILE_TOAST)
                                 },
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
                             )
+
                             CommonButton(
                                 "清空录屏缓存", onClick = {
                                     if (mainStateHolder.isRecording) {
@@ -205,22 +215,16 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                         toastState.show("已清空缓存，节省空间")
                                     }
                                 },
-                                modifier = Modifier.padding(10.dp),
+                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
                                 color = MaterialTheme.colors.error
                             )
-                            CommonButton(
-                                "截屏保存", onClick = {
-                                    mainStateHolder.screenshot()
-                                    toastState.show(PULL_FILE_TOAST)
-                                },
-                                modifier = Modifier.padding(10.dp).weight(1f)
-                            )
+
                             CommonButton(
                                 "清空截屏图片缓存", onClick = {
                                     mainStateHolder.clearScreenShotsCache()
                                     toastState.show("已清空缓存，节省空间")
                                 },
-                                modifier = Modifier.padding(10.dp).weight(1f),
+                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
                                 color = MaterialTheme.colors.error
                             )
                         }
