@@ -1,5 +1,6 @@
 package  com.stephen.debugmanager.ui.component
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +32,8 @@ fun DropdownSelector(
 
     var expanded by remember { mutableStateOf(false) }
 
+    val rotateAnimation by animateFloatAsState(if(expanded) 180f else 0f, label = "expand or collapse")
+
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -47,7 +50,7 @@ fun DropdownSelector(
             )
 
             Image(
-                modifier = Modifier.size(16.dp).rotate(if (expanded) 180f else 0f),
+                modifier = Modifier.size(16.dp).rotate(rotateAnimation),
                 painter = painterResource(Res.drawable.ic_expand),
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                 contentDescription = "Dropdown"
