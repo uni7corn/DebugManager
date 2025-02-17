@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,13 +22,15 @@ fun NameValueText(name: String, value: String, modifier: Modifier = Modifier) {
         Text(
             text = name,
             style = itemKeyText,
-            modifier = Modifier.weight(0.5f)
+            modifier = Modifier.weight(0.5f),
+            color = MaterialTheme.colors.onPrimary
         )
         Spacer(modifier = Modifier.width(20.dp))
         Text(
             text = value,
             style = itemValueText,
-            modifier = Modifier.weight(0.5f)
+            modifier = Modifier.weight(0.5f),
+            color = MaterialTheme.colors.onPrimary
         )
     }
 }

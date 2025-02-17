@@ -1,20 +1,20 @@
 package com.stephen.debugmanager.ui.pages
 
-import com.stephen.debugmanager.MainStateHolder
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonButton
 import com.stephen.debugmanager.ui.component.WrappedEditText
-import org.koin.core.context.GlobalContext
-import com.stephen.debugmanager.ui.theme.groupBackGroundColor
 import com.stephen.debugmanager.ui.theme.groupTitleText
+import org.koin.core.context.GlobalContext
 
 @Composable
 fun CommandPage() {
@@ -26,7 +26,7 @@ fun CommandPage() {
     BasePage("命令模式") {
         Column(
             modifier = Modifier.fillMaxWidth(1f).padding(bottom = 10.dp)
-                .clip(RoundedCornerShape(10.dp)).background(groupBackGroundColor)
+                .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colors.surface)
                 .padding(10.dp)
         ) {
             CenterText(

@@ -1,6 +1,5 @@
 package com.stephen.debugmanager.ui.pages
 
-import com.stephen.debugmanager.MainStateHolder
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,24 +19,17 @@ import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_file
 import com.stephen.composeapp.generated.resources.ic_folder
+import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.model.FileManager
 import com.stephen.debugmanager.model.uistate.DirectoryState
 import com.stephen.debugmanager.ui.component.*
-import com.stephen.debugmanager.ui.theme.alertButtonBackGroundColor
-import com.stephen.debugmanager.ui.theme.defaultText
-import com.stephen.debugmanager.ui.theme.fontSecondaryColor
-import com.stephen.debugmanager.ui.theme.groupBackGroundColor
-import com.stephen.debugmanager.ui.theme.groupTitleText
-import com.stephen.debugmanager.ui.theme.infoText
-import com.stephen.debugmanager.ui.theme.itemKeyText
-import com.stephen.debugmanager.ui.theme.locationBackColor
-import com.stephen.debugmanager.ui.theme.selectedColor
-import org.koin.core.context.GlobalContext
+import com.stephen.debugmanager.ui.theme.*
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
+import org.koin.core.context.GlobalContext
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
@@ -83,7 +76,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                 "当前操作中的文件：${androidSelectedFile}", style = defaultText,
                 modifier = Modifier.padding(vertical = 5.dp).fillMaxWidth(1f)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(groupBackGroundColor)
+                    .background(MaterialTheme.colors.surface)
                     .padding(5.dp)
             )
         }
@@ -92,7 +85,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
             Column(
                 modifier = Modifier.fillMaxHeight(1f).padding(end = 10.dp).weight(0.6f)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(groupBackGroundColor)
+                    .background(MaterialTheme.colors.surface)
             ) {
                 CenterText(
                     "${directoryState.deviceCode}:${directoryState.currentdirectory}",
@@ -120,7 +113,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                 }.fillParentMaxWidth().background(
                                     if (androidSelectedFile.split("/")
                                             .last() == it.path
-                                    ) selectedColor else Color.Transparent
+                                    ) MaterialTheme.colors.onSurface else Color.Transparent
                                 )
                             )
                     }
@@ -136,14 +129,14 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                 "2. 文件操作的耗时无法监听，可以一段时间后再次进入刷新",
                         style = infoText,
                         modifier = Modifier.padding(bottom = 10.dp),
-                        color = fontSecondaryColor
+                        color = MaterialTheme.colors.onSecondary
                     )
                 }
                 item {
                     Column(
                         modifier = Modifier.fillParentMaxWidth(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(groupBackGroundColor).padding(10.dp)
+                            .background(MaterialTheme.colors.surface).padding(10.dp)
                     ) {
                         CenterText("Android内操作", modifier = Modifier.padding(bottom = 10.dp), style = groupTitleText)
                         Row(
@@ -198,11 +191,11 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                     deleteConfirmDialogState.value = true
                                 },
                                 modifier = Modifier.weight(1f),
-                                color = alertButtonBackGroundColor
+                                color = MaterialTheme.colors.error
                             )
                         }
 
-                        LightDivider(
+                        SimpleDivider(
                             modifier = Modifier.fillParentMaxWidth(1f).padding(vertical = 10.dp, horizontal = 10.dp)
                                 .height(1.dp)
                         )
@@ -229,7 +222,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                             )
                         }
 
-                        LightDivider(
+                        SimpleDivider(
                             modifier = Modifier.fillParentMaxWidth(1f).padding(vertical = 10.dp, horizontal = 10.dp)
                                 .height(1.dp)
                         )
@@ -278,10 +271,10 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                     Column(
                         modifier = Modifier.fillParentMaxWidth(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(groupBackGroundColor).padding(10.dp)
+                            .background(MaterialTheme.colors.surface).padding(10.dp)
                     ) {
                         CenterText("电脑端互操作", modifier = Modifier.padding(bottom = 10.dp), style = groupTitleText)
-                        LightDivider(
+                        SimpleDivider(
                             modifier = Modifier.fillParentMaxWidth(1f).padding(vertical = 10.dp, horizontal = 10.dp)
                                 .height(1.dp)
                         )
@@ -298,8 +291,8 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                         fileChooser.isVisible = true
                                         desktopSelectedFile = fileChooser.directory?.let { File(it, fileChooser.file) }
                                     }.clip(RoundedCornerShape(10.dp))
-                                        .background(locationBackColor)
-                                        .border(2.dp, fontSecondaryColor, RoundedCornerShape(10.dp))
+                                        .background(MaterialTheme.colors.secondary)
+                                        .border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
                                         .padding(10.dp)
                                 )
                                 CenterText(
@@ -327,7 +320,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                             )
                         }
 
-                        LightDivider(
+                        SimpleDivider(
                             modifier = Modifier.fillParentMaxWidth(1f).padding(vertical = 10.dp, horizontal = 10.dp)
                                 .height(1.dp)
                         )
@@ -345,8 +338,8 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                     text = "文件拉取默认到Desktop桌面",
                                     modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp)
                                         .clip(RoundedCornerShape(10.dp))
-                                        .background(locationBackColor)
-                                        .border(2.dp, fontSecondaryColor, RoundedCornerShape(10.dp))
+                                        .background(MaterialTheme.colors.secondary)
+                                        .border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
                                         .padding(10.dp)
                                 )
                             }

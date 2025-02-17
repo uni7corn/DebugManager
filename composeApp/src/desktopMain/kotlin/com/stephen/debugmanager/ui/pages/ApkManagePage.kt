@@ -1,14 +1,13 @@
 package com.stephen.debugmanager.ui.pages
 
-import com.stephen.debugmanager.MainStateHolder
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
@@ -19,19 +18,14 @@ import androidx.compose.ui.window.DialogProperties
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_dialog_close
 import com.stephen.composeapp.generated.resources.ic_options
+import com.stephen.debugmanager.MainStateHolder
+import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.InstallParams
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.model.uistate.AppListState
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.component.skeleton.WeSkeleton
-import com.stephen.debugmanager.ui.theme.alertButtonBackGroundColor
-import com.stephen.debugmanager.ui.theme.defaultText
-import com.stephen.debugmanager.ui.theme.dialogBackColor
-import com.stephen.debugmanager.ui.theme.fontPrimaryColor
-import com.stephen.debugmanager.ui.theme.groupBackGroundColor
-import com.stephen.debugmanager.ui.theme.groupTitleText
-import com.stephen.debugmanager.ui.theme.itemKeyText
-import com.stephen.debugmanager.ui.theme.locationBackColor
+import com.stephen.debugmanager.ui.theme.*
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import java.awt.FileDialog
@@ -68,7 +62,7 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
         Row(
             modifier = Modifier.padding(bottom = 10.dp)
                 .clip(RoundedCornerShape(10.dp)).fillMaxWidth(1f)
-                .background(groupBackGroundColor).padding(10.dp),
+                .background(MaterialTheme.colors.surface).padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CenterText(
@@ -79,9 +73,9 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
                 text = "选择 apk 路径: ${selectedFile?.absolutePath}",
                 style = defaultText,
                 modifier = Modifier.padding(start = 20.dp).weight(1f)
-                    .border(2.dp, fontPrimaryColor, RoundedCornerShape(10.dp))
+                    .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp))
                     .clip(RoundedCornerShape(10.dp))
-                    .background(locationBackColor).clickable {
+                    .background(MaterialTheme.colors.secondary).clickable {
                         val fileChooser = FileDialog(
                             Frame(),
                             "Select a file",
@@ -122,7 +116,7 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
         // app大列表
         Column(
             modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                .background(groupBackGroundColor).padding(10.dp)
+                .background(MaterialTheme.colors.surface).padding(10.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 CenterText(
@@ -177,7 +171,7 @@ fun AppItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(1f).padding(vertical = 5.dp)
-            .border(2.dp, fontPrimaryColor, RoundedCornerShape(10.dp)).padding(5.dp)
+            .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp)).padding(5.dp)
     ) {
         Image(
             painter = BitmapPainter(image = iconBitmap),
@@ -224,7 +218,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
     ) {
         Column(
             modifier = Modifier.width(380.dp).clip(RoundedCornerShape(10.dp))
-                .background(dialogBackColor),
+                .background(MaterialTheme.colors.surface),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -259,7 +253,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     dismiss()
                 },
                 modifier = Modifier.height(45.dp).padding(5.dp).fillMaxWidth(1f),
-                color = alertButtonBackGroundColor
+                color = MaterialTheme.colors.error
             )
             CommonButton(
                 "提取APK",
@@ -270,7 +264,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                 },
                 modifier = Modifier.height(45.dp).padding(5.dp).fillMaxWidth(1f)
             )
-            LightDivider(Modifier.height(2.dp).fillMaxWidth(1f))
+            SimpleDivider(Modifier.height(2.dp).fillMaxWidth(1f))
             CenterText(
                 "置换apk",
                 defaultText,
@@ -284,9 +278,9 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     text = "选择 apk 路径: ${selectedPushApk?.absolutePath}",
                     style = defaultText,
                     modifier = Modifier.weight(1f)
-                        .border(2.dp, fontPrimaryColor, RoundedCornerShape(10.dp))
+                        .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp))
                         .clip(RoundedCornerShape(10.dp))
-                        .background(locationBackColor).clickable {
+                        .background(MaterialTheme.colors.secondary).clickable {
                             val fileChooser = FileDialog(
                                 Frame(),
                                 "Select a file",

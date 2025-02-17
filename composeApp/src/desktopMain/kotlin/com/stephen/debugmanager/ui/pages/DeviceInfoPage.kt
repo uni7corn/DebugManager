@@ -1,10 +1,10 @@
 package com.stephen.debugmanager.ui.pages
 
-import com.stephen.debugmanager.MainStateHolder
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,13 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.model.uistate.DeviceState
 import com.stephen.debugmanager.ui.component.*
-import org.koin.core.context.GlobalContext
-import com.stephen.debugmanager.ui.theme.alertButtonBackGroundColor
-import com.stephen.debugmanager.ui.theme.groupBackGroundColor
 import com.stephen.debugmanager.ui.theme.groupTitleText
+import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -40,7 +39,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                     Box(
                         modifier = Modifier.width(IntrinsicSize.Max)
                             .padding(5.dp)
-                            .clip(RoundedCornerShape(10.dp)).background(groupBackGroundColor)
+                            .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colors.surface)
                             .padding(10.dp)
                     ) {
                         CommonButton(
@@ -80,7 +79,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(groupBackGroundColor)
+                            .background(MaterialTheme.colors.surface)
                             .padding(10.dp)
                     ) {
                         CenterText(
@@ -110,7 +109,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.rebootRecovery()
                                 },
                                 modifier = itemModifier,
-                                color = alertButtonBackGroundColor
+                                color = MaterialTheme.colors.error
                             )
 
                             CommonButton(
@@ -118,21 +117,21 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.rebootDevice()
                                 },
                                 modifier = itemModifier,
-                                color = alertButtonBackGroundColor
+                                color = MaterialTheme.colors.error
                             )
                             CommonButton(
                                 "Fastboot", onClick = {
                                     mainStateHolder.rebootFastboot()
                                 },
                                 modifier = itemModifier,
-                                color = alertButtonBackGroundColor
+                                color = MaterialTheme.colors.error
                             )
                             CommonButton(
                                 "关机", onClick = {
                                     mainStateHolder.powerOff()
                                 },
                                 modifier = itemModifier,
-                                color = alertButtonBackGroundColor
+                                color = MaterialTheme.colors.error
                             )
                             CommonButton(
                                 "开始抓取trace", onClick = {
@@ -162,7 +161,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             .padding(5.dp)
                             .width(IntrinsicSize.Max)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(groupBackGroundColor)
+                            .background(MaterialTheme.colors.surface)
                             .padding(10.dp)
                     ) {
                         CenterText(
@@ -207,7 +206,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     }
                                 },
                                 modifier = Modifier.padding(10.dp),
-                                color = alertButtonBackGroundColor
+                                color = MaterialTheme.colors.error
                             )
                             CommonButton(
                                 "截屏保存", onClick = {
@@ -222,7 +221,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     toastState.show("已清空缓存，节省空间")
                                 },
                                 modifier = Modifier.padding(10.dp).weight(1f),
-                                color = alertButtonBackGroundColor
+                                color = MaterialTheme.colors.error
                             )
                         }
                     }
@@ -232,7 +231,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(groupBackGroundColor)
+                            .background(MaterialTheme.colors.surface)
                             .padding(10.dp)
                     ) {
                         CenterText(

@@ -3,13 +3,9 @@ package com.stephen.debugmanager.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +19,6 @@ import com.stephen.composeapp.generated.resources.ic_close
 import com.stephen.composeapp.generated.resources.ic_floating
 import com.stephen.composeapp.generated.resources.ic_maximize
 import com.stephen.composeapp.generated.resources.ic_minimize
-import com.stephen.debugmanager.ui.theme.groupBackGroundColor
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -45,7 +40,7 @@ fun CustomTitleBar(
         modifier = modifier
             .fillMaxWidth()
             .height(32.dp)
-            .background(groupBackGroundColor),
+            .background(MaterialTheme.colors.surface),
         contentAlignment = Alignment.Center
     ) {
         Box(

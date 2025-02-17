@@ -1,12 +1,12 @@
 package com.stephen.debugmanager.ui
 
-import com.stephen.debugmanager.MainStateHolder
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,16 +16,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.stephen.composeapp.generated.resources.*
+import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.bean.MainTabItem
 import com.stephen.debugmanager.model.uistate.DirectoryState
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonDialog
-import com.stephen.debugmanager.ui.component.DarkDivider
+import com.stephen.debugmanager.ui.component.SimpleDivider
 import com.stephen.debugmanager.ui.component.DropdownSelector
 import com.stephen.debugmanager.ui.pages.*
-import com.stephen.debugmanager.ui.theme.backGroundColor
-import com.stephen.debugmanager.ui.theme.groupBackGroundColor
 import com.stephen.debugmanager.ui.theme.pageTitleText
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -89,7 +88,7 @@ fun ContentView(onExitApplication: () -> Unit) {
             },
             chooseTabItem = choosedTab.value,
         )
-        DarkDivider(modifier = Modifier.width(2.dp).fillMaxHeight(1f))
+        SimpleDivider(modifier = Modifier.width(2.dp).fillMaxHeight(1f))
         // 右侧内容区
         Box(modifier = Modifier.weight(1f)) {
             NavHost(navController, startDestination = Constants.BASE_INFO.toString()) {
@@ -162,7 +161,7 @@ fun SideTabBar(
                         icon = it.icon,
                         title = it.name,
                         modifier = Modifier.fillMaxWidth(1f).clip(RoundedCornerShape(10))
-                            .background(if (chooseTabItem == it) groupBackGroundColor else backGroundColor).clickable {
+                            .background(if (chooseTabItem == it) MaterialTheme.colors.surface else MaterialTheme.colors.background).clickable {
                                 onItemClick(it)
                             },
                     )

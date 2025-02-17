@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +26,6 @@ import com.stephen.debugmanager.ui.component.CustomTitleBar
 import com.stephen.debugmanager.ui.pages.SplashScreen
 import com.stephen.debugmanager.ui.theme.DarkColorScheme
 import com.stephen.debugmanager.ui.theme.LightColorScheme
-import com.stephen.debugmanager.ui.theme.backGroundColor
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
@@ -42,10 +42,12 @@ fun main() = application {
 
     val dialogState = remember { mutableStateOf(false) }
 
-    /**
-     * 先设置默认黑色，后期改为本地datastore记忆存储
-     */
     val themeState = mainStateHolder.themeStateStateFlow.collectAsState()
+
+    LaunchedEffect(Unit) {
+        // 获取存储的主题设置
+        mainStateHolder.getThemeState()
+    }
 
     Window(
         onCloseRequest = {
@@ -66,7 +68,7 @@ fun main() = application {
             }
         ) {
             SplashScreen {
-                Column(modifier = Modifier.background(backGroundColor)) {
+                Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
                     WindowDraggableArea {
                         CustomTitleBar(
                             title = "DebugManager by Stephen",

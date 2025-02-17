@@ -50,7 +50,7 @@ class MainStateHolder(
     val appListStateStateFlow = _appListState.asStateFlow()
 
     // 主题
-    private val _themeState = MutableStateFlow(ThemeState.DARK)
+    private val _themeState = MutableStateFlow(ThemeState.DEFAULT)
     val themeStateStateFlow = _themeState.asStateFlow()
     private val themePreferencesKey = stringPreferencesKey("ThemeState")
 

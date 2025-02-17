@@ -4,14 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.stephen.debugmanager.ui.theme.dialogBackColor
 
 @Composable
 fun SingleConfirmDialog(title: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {
@@ -21,7 +21,7 @@ fun SingleConfirmDialog(title: String, onConfirm: () -> Unit, onDismiss: () -> U
     ) {
         Column(
             modifier = Modifier.width(320.dp).clip(RoundedCornerShape(10.dp))
-                .background(dialogBackColor)
+                .background(MaterialTheme.colors.onSecondary)
         ) {
             Row(
                 modifier = Modifier.padding(vertical = 10.dp),
@@ -34,7 +34,7 @@ fun SingleConfirmDialog(title: String, onConfirm: () -> Unit, onDismiss: () -> U
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    LightDivider(Modifier.height(1.dp).fillMaxWidth(1f))
+                    SimpleDivider(Modifier.height(1.dp).fillMaxWidth(1f))
                     Row {
                         CenterText(
                             "知道了",

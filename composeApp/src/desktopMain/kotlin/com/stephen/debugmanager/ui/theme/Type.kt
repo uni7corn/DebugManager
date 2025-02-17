@@ -1,5 +1,6 @@
 package com.stephen.debugmanager.ui.theme
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,7 +22,6 @@ val pageTitleText = TextStyle(
     fontSize = 22.sp,
     fontWeight = FontWeight.Bold,
     textAlign = TextAlign.Center,
-    color = fontPrimaryColor
 )
 
 val groupTitleText = TextStyle(
@@ -34,12 +34,10 @@ val itemKeyText = TextStyle(
     fontSize = 16.sp,
     fontWeight = FontWeight.Bold,
     textAlign = TextAlign.Left,
-    color = fontPrimaryColor
 )
 
 val itemValueText = TextStyle(
     fontSize = 14.sp,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Left,
-    color = fontPrimaryColor
 )

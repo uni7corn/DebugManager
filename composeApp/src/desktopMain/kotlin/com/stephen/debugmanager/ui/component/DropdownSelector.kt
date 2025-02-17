@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -15,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_expand
-import com.stephen.debugmanager.ui.theme.groupBackGroundColor
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 
@@ -59,7 +59,7 @@ fun DropdownSelector(
                     expanded = false
             },
             properties = PopupProperties(usePlatformDefaultWidth = false),
-            modifier = modifier.background(groupBackGroundColor)
+            modifier = modifier.background(MaterialTheme.colors.surface)
         ) {
             options.forEach {
                 DropdownMenuItem(
