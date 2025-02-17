@@ -1,5 +1,6 @@
 package com.stephen.debugmanager.base
 
+import com.stephen.debugmanager.utils.LogUtils
 import java.io.File
 import java.io.RandomAccessFile
 import java.nio.channels.FileChannel
@@ -13,11 +14,12 @@ class SingleInstanceApp {
     private var channel: FileChannel? = null
 
     fun initCheckFileLock() {
+        LogUtils.printLog("initCheckFileLock")
         val file = File("app.lock")
         channel = RandomAccessFile(file, "rw").getChannel()
         lock = channel?.tryLock()
         if (lock == null) {
-            println("Another instance is already running.")
+            LogUtils.printLog("Another instance is already running.", LogUtils.LogLevel.ERROR)
             exitProcess(1)
         }
         // 添加JVM关闭时的钩子，释放锁

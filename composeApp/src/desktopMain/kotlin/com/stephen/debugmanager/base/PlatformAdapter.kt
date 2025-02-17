@@ -17,11 +17,11 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     init {
         println("PlatformAdapter init")
+        singleInstanceApp.initCheckFileLock()
     }
 
     fun init() {
         createInitTempFile()
-        singleInstanceApp.initCheckFileLock()
     }
 
     companion object {
