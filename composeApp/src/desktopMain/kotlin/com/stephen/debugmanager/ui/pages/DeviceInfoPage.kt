@@ -316,7 +316,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         CenterText(
                             "模拟按键", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
-                        FlowRow(maxItemsInEachRow = 2, modifier = Modifier.width(IntrinsicSize.Max)) {
+                        FlowRow(maxItemsInEachRow = 3, modifier = Modifier.width(IntrinsicSize.Max)) {
 
                             val itemModifier = Modifier
                                 .padding(10.dp)
@@ -334,6 +334,12 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 },
                                 modifier = itemModifier
                             )
+                            CommonButton(
+                                "最近任务", onClick = {
+                                    mainStateHolder.mockRecentPressed()
+                                },
+                                modifier = itemModifier
+                            )
 
                             CommonButton(
                                 "亮屏", onClick = {
@@ -344,6 +350,12 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             CommonButton(
                                 "灭屏", onClick = {
                                     mainStateHolder.turnOffScreen()
+                                },
+                                modifier = itemModifier
+                            )
+                            CommonButton(
+                                "锁屏", onClick = {
+                                    mainStateHolder.lockScreen()
                                 },
                                 modifier = itemModifier
                             )
@@ -367,7 +379,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 modifier = itemModifier
                             )
                             Row(
-                                modifier = Modifier.width(IntrinsicSize.Max),
+                                modifier = Modifier.fillMaxWidth(1f),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 WrappedEditText(

@@ -222,6 +222,15 @@ class MainStateHolder(
     }
 
     /**
+     * 模拟最近任务
+     */
+    fun mockRecentPressed() {
+        CoroutineScope(Dispatchers.IO).launch {
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 187")
+        }
+    }
+
+    /**
      * 截屏保存到windows
      */
     fun screenshot() {
@@ -258,6 +267,15 @@ class MainStateHolder(
     fun turnOffScreen() {
         CoroutineScope(Dispatchers.IO).launch {
             platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 223")
+        }
+    }
+
+    /**
+     * 手机锁屏
+     */
+    fun lockScreen() {
+        CoroutineScope(Dispatchers.IO).launch {
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 82")
         }
     }
 
