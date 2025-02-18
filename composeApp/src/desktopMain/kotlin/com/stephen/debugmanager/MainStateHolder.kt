@@ -10,6 +10,7 @@ import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.helper.DataStoreHelper
+import com.stephen.debugmanager.helper.LogFileFinder
 import com.stephen.debugmanager.model.AndroidAppHelper
 import com.stephen.debugmanager.model.FileManager
 import com.stephen.debugmanager.model.uistate.*
@@ -30,7 +31,8 @@ class MainStateHolder(
     private val platformAdapter: PlatformAdapter,
     private val fileManager: FileManager,
     private val appinfoHelper: AndroidAppHelper,
-    private val dataStoreHelper: DataStoreHelper
+    private val dataStoreHelper: DataStoreHelper,
+    private val logFileFinder: LogFileFinder
 ) {
 
     // 连接的设备列表
@@ -701,4 +703,12 @@ class MainStateHolder(
     fun getUserTempFilePath() = platformAdapter.getUserTempFilePath()
 
     fun getDesktopTempFolder() = PlatformAdapter.desktopTempFolder
+
+    fun processLogFiles(path: String, textToFind: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val resultPath = logFileFinder.processLogFilesByText(path, textToFind)
+            LogUtils.printLog("resultPath: $resultPath")
+            openFolder(resultPath.toString())
+        }
+    }
 }

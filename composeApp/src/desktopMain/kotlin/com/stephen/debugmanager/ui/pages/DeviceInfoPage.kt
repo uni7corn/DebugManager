@@ -1,14 +1,13 @@
 package com.stephen.debugmanager.ui.pages
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,8 +16,10 @@ import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.model.uistate.DeviceState
 import com.stephen.debugmanager.ui.component.*
+import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import org.koin.core.context.GlobalContext
+import javax.swing.JFileChooser
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -31,6 +32,10 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
     val mockInputSting = remember { mutableStateOf("") }
 
     val recordTime = remember { mutableStateOf("") }
+
+    var logFolderPath by remember { mutableStateOf("") }
+
+    val logTag = remember { mutableStateOf("") }
 
     BasePage("设备信息") {
         LazyColumn {
@@ -152,6 +157,15 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 },
                                 modifier = itemModifier
                             )
+                            CommonButton(
+                                "触发日志解压", onClick = {
+                                    mainStateHolder.processLogFiles(
+                                        "C:\\Users\\stephen\\Desktop\\AndroidTempFiles\\android",
+                                        "Hvac"
+                                    )
+                                },
+                                modifier = itemModifier
+                            )
                         }
                     }
 
@@ -227,6 +241,67 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
                                 color = MaterialTheme.colors.error
                             )
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxRowHeight()
+                            .padding(5.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colors.surface)
+                            .padding(10.dp)
+                    ) {
+                        CenterText(
+                            "日志文件处理", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
+                        )
+                        Column(modifier = Modifier.width(IntrinsicSize.Min)) {
+                            CenterText(
+                                text = "选择 日志 路径: $logFolderPath",
+                                style = defaultText,
+                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
+                                    .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp))
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(MaterialTheme.colors.secondary).clickable {
+                                        val fileChooser = JFileChooser()
+                                        fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+                                        // 显示对话框并等待用户选择
+                                        val result = fileChooser.showOpenDialog(null);
+                                        // 如果用户选择了文件夹
+                                        if (result == JFileChooser.APPROVE_OPTION) {
+                                            // 获取用户选择的文件夹
+                                            logFolderPath = fileChooser.selectedFile.absolutePath
+                                        } else {
+                                            // 用户取消了选择
+                                            toastState.show("No folder selected.");
+                                        }
+                                    }.padding(horizontal = 10.dp, vertical = 5.dp)
+                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
+                            ) {
+                                WrappedEditText(
+                                    value = logTag.value,
+                                    tipText = "待寻找的tag",
+                                    onValueChange = {
+                                        logTag.value = it
+                                    },
+                                    modifier = Modifier.padding(horizontal = 5.dp).weight(1f)
+                                )
+                                CommonButton(
+                                    "开始处理", onClick = {
+                                        if (logFolderPath.isEmpty()) {
+                                            toastState.show("请先选择日志文件")
+                                        } else if (logTag.value.isEmpty()) {
+                                            toastState.show("请先输入待寻找的tag")
+                                        } else {
+                                            toastState.show("开始处理，完成后将自动打开所在文件夹")
+                                            mainStateHolder.processLogFiles(logFolderPath, logTag.value)
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
 
