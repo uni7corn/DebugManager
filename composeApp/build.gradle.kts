@@ -42,6 +42,11 @@ kotlin{
             implementation(compose.components.resources)
             implementation(libs.datastore)
             implementation(libs.datastore.preferences)
+            implementation(libs.ktor.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.content.negotiation)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

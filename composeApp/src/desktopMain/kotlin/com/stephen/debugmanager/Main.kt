@@ -16,6 +16,7 @@ import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
+import com.stephen.debugmanager.net.KtorClient
 import com.stephen.debugmanager.ui.ContentView
 import com.stephen.debugmanager.ui.component.CommonDialog
 import com.stephen.debugmanager.ui.component.CustomTitleBar
@@ -43,6 +44,7 @@ fun main() = application {
     LaunchedEffect(Unit) {
         // 获取存储的主题设置
         mainStateHolder.getThemeState()
+        KtorClient().getChatResultTest()
     }
 
     Window(
