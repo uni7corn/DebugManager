@@ -557,7 +557,7 @@ class MainStateHolder(
             val installedApkPath =
                 adbClient.getExecuteResult(adbClient.choosedDevicePosition, "pm path $packageName")
                     .split("package:").last()
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $installedApkPath ${PlatformAdapter.desktopTempFolder}")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $installedApkPath ${PlatformAdapter.desktopTempFolder}/${packageName}.apk")
             platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
         }
     }
