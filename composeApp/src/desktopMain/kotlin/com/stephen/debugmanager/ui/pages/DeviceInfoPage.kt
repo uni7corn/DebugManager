@@ -141,7 +141,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             CommonButton(
                                 "开始抓取trace", onClick = {
                                     mainStateHolder.startCollectTrace()
-                                    toastState.show("默认抓取10s，完成后$PULL_FILE_TOAST")
+                                    toastState.show("默认抓取10s，$PULL_FILE_TOAST")
                                 },
                                 modifier = itemModifier
                             )
@@ -201,7 +201,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                                 val timeInt = recordTime.value.toInt()
                                                 mainStateHolder.startScreenRecord(timeInt)
                                                 recordTime.value = ""
-                                                toastState.show("已开始，录制期间会显示手指点击位置，完成后$PULL_FILE_TOAST")
+                                                toastState.show("已开始，录制期间会显示手指点击位置，$PULL_FILE_TOAST")
                                             }.onFailure {
                                                 toastState.show("请输入正确的时长")
                                                 recordTime.value = ""

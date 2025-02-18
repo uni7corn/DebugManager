@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import se.vidstige.jadb.RemoteFile
 import com.stephen.debugmanager.utils.LogUtils
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class FileManager(private val adbClient: AdbClient, private val platformAdapter: PlatformAdapter) {
@@ -120,7 +121,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     /**
      * 推送文件到Android设备
      */
-    fun pushFileToAndroid(windowsPath: String, androidPath: String) {
+    suspend fun pushFileToAndroid(windowsPath: String, androidPath: String) = withContext(Dispatchers.IO) {
         runCatching {
             adbClient.getAdbClient(adbClient.choosedDevicePosition)?.push(File(windowsPath), RemoteFile(androidPath))
         }.onFailure { e ->
@@ -128,6 +129,28 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
         }
     }
 
+    /**
+     * 推送文件夹到Android设备
+     */
+    suspend fun pushFolderToAndroid(windowsPath: String, androidPath: String) {
+        runCatching {
+            // android端先创建文件夹
+            createDirectory(androidPath)
+            // windows端遍历文件夹，逐个推送文件
+            val flder = File(windowsPath)
+            if (flder.isDirectory) {
+                flder.listFiles()?.forEach { file ->
+                    if (file.isFile) {
+                        pushFileToAndroid(file.absolutePath, "$androidPath/${file.name}")
+                    } else {
+                        pushFolderToAndroid(file.absolutePath, "$androidPath/${file.name}")
+                    }
+                }
+            }
+        }.onFailure { e ->
+            LogUtils.printLog("推送文件失败：${e.message}", LogUtils.LogLevel.ERROR)
+        }
+    }
 
     /**
      * 拉取文件到Windows设备

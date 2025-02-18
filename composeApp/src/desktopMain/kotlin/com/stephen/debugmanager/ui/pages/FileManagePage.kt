@@ -21,19 +21,23 @@ import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_file
 import com.stephen.composeapp.generated.resources.ic_folder
 import com.stephen.debugmanager.MainStateHolder
+import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.model.FileManager
 import com.stephen.debugmanager.model.uistate.DirectoryState
 import com.stephen.debugmanager.ui.component.*
-import com.stephen.debugmanager.ui.theme.*
+import com.stephen.debugmanager.ui.theme.defaultText
+import com.stephen.debugmanager.ui.theme.groupTitleText
+import com.stephen.debugmanager.ui.theme.infoText
+import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import java.awt.FileDialog
 import java.awt.Frame
-import java.io.File
+import javax.swing.JFileChooser
 
 @Composable
 fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String) -> Unit) {
@@ -44,7 +48,9 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
 
     val deleteConfirmDialogState = remember { mutableStateOf(false) }
 
-    var desktopSelectedFile by remember { mutableStateOf<File?>(null) }
+    var desktopSelectedFolderPath by remember { mutableStateOf("") }
+
+    var desktopSelectedFile by remember { mutableStateOf("") }
 
     var androidSelectedFile by remember { mutableStateOf("") }
 
@@ -112,6 +118,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                             println("点击文件：${it.path}")
                                     }
                                 }.fillParentMaxWidth().background(
+                                    // android端分隔符固定为/
                                     if (androidSelectedFile.split("/")
                                             .last() == it.path
                                     ) MaterialTheme.colors.onSurface else Color.Transparent
@@ -136,6 +143,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                 item {
                     Column(
                         modifier = Modifier.fillParentMaxWidth(1f)
+                            .padding(bottom = 10.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(MaterialTheme.colors.surface).padding(10.dp)
                     ) {
@@ -266,18 +274,15 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                     }
                 }
                 item {
-                    Spacer(Modifier.padding(10.dp))
-                }
-                item {
                     Column(
                         modifier = Modifier.fillParentMaxWidth(1f)
                             .clip(RoundedCornerShape(10.dp))
                             .background(MaterialTheme.colors.surface).padding(10.dp)
                     ) {
-                        CenterText("电脑端互操作", modifier = Modifier.padding(bottom = 10.dp), style = groupTitleText)
-                        SimpleDivider(
-                            modifier = Modifier.fillParentMaxWidth(1f).padding(vertical = 10.dp, horizontal = 10.dp)
-                                .height(1.dp)
+                        CenterText(
+                            "推送Desktop单文件",
+                            modifier = Modifier.padding(bottom = 10.dp),
+                            style = groupTitleText
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -286,11 +291,11 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                 modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
                             ) {
                                 CenterText(
-                                    text = "推送的电脑端文件: ${desktopSelectedFile?.absolutePath}",
+                                    text = "选取文件: $desktopSelectedFile",
                                     modifier = Modifier.clickable {
                                         val fileChooser = FileDialog(Frame(), "Select a file", FileDialog.LOAD)
                                         fileChooser.isVisible = true
-                                        desktopSelectedFile = fileChooser.directory?.let { File(it, fileChooser.file) }
+                                        desktopSelectedFile = fileChooser.directory + fileChooser.file
                                     }.clip(RoundedCornerShape(10.dp))
                                         .background(MaterialTheme.colors.secondary)
                                         .border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
@@ -306,15 +311,18 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                 text = "PUSH",
                                 modifier = Modifier.width(100.dp),
                                 onClick = {
-                                    desktopSelectedFile?.let {
+                                    if (desktopSelectedFile.isNotEmpty()) {
+                                        toastState.show("开始推送文件，请勿多次点击")
                                         mainStateHolder.pushFileToAndroid(
-                                            it.absolutePath,
-                                            "${directoryState.currentdirectory}/${it.name}"
+                                            desktopSelectedFile,
+                                            "${directoryState.currentdirectory}/${
+                                                desktopSelectedFile.split(PlatformAdapter.sp).last()
+                                            }"
                                         )
                                         directoryState.currentdirectory?.let { it1 ->
                                             mainStateHolder.updateFileList(it1)
                                         }
-                                    } ?: run {
+                                    } else {
                                         toastState.show("请选择电脑端要推送到Android的文件")
                                     }
                                 }
@@ -325,7 +333,72 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                             modifier = Modifier.fillParentMaxWidth(1f).padding(vertical = 10.dp, horizontal = 10.dp)
                                 .height(1.dp)
                         )
+
+                        CenterText(
+                            "推送Desktop的文件夹",
+                            modifier = Modifier.padding(bottom = 10.dp),
+                            style = groupTitleText
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
+                            ) {
+                                CenterText(
+                                    text = "选取文件夹: $desktopSelectedFolderPath",
+                                    modifier = Modifier.clickable {
+                                        val fileChooser = JFileChooser()
+                                        fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+                                        // 显示对话框并等待用户选择
+                                        val result = fileChooser.showOpenDialog(null);
+                                        // 如果用户选择了文件夹
+                                        if (result == JFileChooser.APPROVE_OPTION) {
+                                            // 获取用户选择的文件夹
+                                            desktopSelectedFolderPath = fileChooser.selectedFile.absolutePath
+                                        } else {
+                                            // 用户取消了选择
+                                            toastState.show("No folder selected.");
+                                        }
+                                    }.clip(RoundedCornerShape(10.dp))
+                                        .background(MaterialTheme.colors.secondary)
+                                        .border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
+                                        .padding(10.dp)
+                                )
+                                CenterText(
+                                    text = "待接收的Android路径: ${directoryState.currentdirectory}",
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+
+                            CommonButton(
+                                text = "PUSH",
+                                modifier = Modifier.width(100.dp),
+                                onClick = {
+                                    if (desktopSelectedFolderPath.isNotEmpty()) {
+                                        toastState.show("开始推送文件夹，请勿多次点击")
+                                        mainStateHolder.pushFolderToAndroid(
+                                            desktopSelectedFolderPath,
+                                            "${directoryState.currentdirectory}/${
+                                                desktopSelectedFolderPath.split(PlatformAdapter.sp).last()
+                                            }"
+                                        )
+                                    } else {
+                                        toastState.show("请选择电脑端要推送到Android的文件夹")
+                                    }
+                                }
+                            )
+                        }
+                        SimpleDivider(
+                            modifier = Modifier.fillParentMaxWidth(1f).padding(vertical = 10.dp, horizontal = 10.dp)
+                                .height(1.dp)
+                        )
                         // pull界面
+                        CenterText(
+                            "从Android拉取文件",
+                            modifier = Modifier.padding(bottom = 10.dp),
+                            style = groupTitleText
+                        )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -336,7 +409,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                 )
 
                                 CenterText(
-                                    text = "文件拉取默认到Desktop桌面",
+                                    text = "默认pull到: ${PlatformAdapter.desktopTempFolder}",
                                     modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp)
                                         .clip(RoundedCornerShape(10.dp))
                                         .background(MaterialTheme.colors.secondary)

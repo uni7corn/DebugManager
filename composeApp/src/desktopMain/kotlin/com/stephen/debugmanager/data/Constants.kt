@@ -12,7 +12,7 @@ object Constants {
     // 向左的箭头
     const val LEFT_ARROW = "\u2190"
 
-    const val PULL_FILE_TOAST = "目标文件会拉取到桌面的AndroidTempFiles文件夹下"
+    const val PULL_FILE_TOAST = "拉取中，拉取完毕后会自动打开文件夹"
 }
 
 val languageList = listOf(

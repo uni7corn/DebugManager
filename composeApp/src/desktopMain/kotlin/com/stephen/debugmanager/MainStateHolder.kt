@@ -334,6 +334,7 @@ class MainStateHolder(
             platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $androidFilePath ${PlatformAdapter.desktopTempFolder}")
             delay(recordTime * 1000L)
             isRecording = false
+            platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
         }
     }
 
@@ -380,6 +381,7 @@ class MainStateHolder(
                 delay(10_000L)
                 platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull /data/misc/perfetto-traces/$traceLogName ${PlatformAdapter.desktopTempFolder}")
                 platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell rm /data/misc/perfetto-traces/$traceLogName")
+                platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
             }.onFailure { e ->
                 LogUtils.printLog("抓取trace出错：${e.message}", LogUtils.LogLevel.ERROR)
             }
@@ -556,6 +558,7 @@ class MainStateHolder(
                 adbClient.getExecuteResult(adbClient.choosedDevicePosition, "pm path $packageName")
                     .split("package:").last()
             platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $installedApkPath ${PlatformAdapter.desktopTempFolder}")
+            platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
         }
     }
 
@@ -662,14 +665,31 @@ class MainStateHolder(
      * 推送文件到Android设备
      */
     fun pushFileToAndroid(windowsPath: String, androidPath: String) {
-        fileManager.pushFileToAndroid(windowsPath, androidPath)
+        CoroutineScope(Dispatchers.IO).launch {
+            LogUtils.printLog("pushFileToAndroid: $windowsPath, $androidPath")
+            fileManager.pushFileToAndroid(windowsPath, androidPath)
+        }
+    }
+
+    /**
+     * 往Android设备推送文件夹
+     */
+    fun pushFolderToAndroid(windowsPath: String, androidPath: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            LogUtils.printLog("pushFolderToAndroid: $windowsPath, $androidPath")
+            fileManager.pushFolderToAndroid(windowsPath, androidPath)
+        }
     }
 
     /**
      * 拉取文件到Windows设备
      */
     fun pullFileFromAndroid(androidPath: String) {
-        fileManager.pullFileFromAndroid(androidPath)
+        CoroutineScope(Dispatchers.IO).launch {
+            LogUtils.printLog("pullFileFromAndroid: $androidPath")
+            fileManager.pullFileFromAndroid(androidPath)
+            platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
+        }
     }
 
     /**
