@@ -368,7 +368,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             )
                             Row(
                                 modifier = Modifier.width(IntrinsicSize.Max),
-                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
                                 WrappedEditText(
                                     value = mockInputSting.value,
