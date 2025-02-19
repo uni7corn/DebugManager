@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -110,10 +111,12 @@ fun ChatItem(
             // 大模型显示头像，并使用markdown组件来显示内容
             when (role) {
                 Role.USER -> {
-                    CenterText(
-                        text = content,
-                        style = markdownDefaultText
-                    )
+                    SelectionContainer {
+                        CenterText(
+                            text = content,
+                            style = markdownDefaultText
+                        )
+                    }
                 }
 
                 else -> {
@@ -123,7 +126,9 @@ fun ChatItem(
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
                         modifier = Modifier.padding(end = 8.dp).size(24.dp).clip(RoundedCornerShape(50))
                     )
-                    Markdown(content = content, markDownColors, markdownTypography)
+                    SelectionContainer {
+                        Markdown(content = content, markDownColors, markdownTypography)
+                    }
                 }
             }
         }

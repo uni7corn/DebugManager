@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -174,7 +175,9 @@ fun AppItem(
         Column(modifier = Modifier.padding(start = 10.dp).weight(0.4f)) {
             CenterText(text = label, style = itemKeyText)
             CenterText(text = version, style = defaultText)
-            CenterText(text = packageName, style = defaultText)
+            SelectionContainer {
+                CenterText(text = packageName, style = defaultText)
+            }
         }
 
         CenterText(text = "上次更新时间:$lastUpdateTime", style = defaultText, modifier = Modifier.weight(0.6f))
