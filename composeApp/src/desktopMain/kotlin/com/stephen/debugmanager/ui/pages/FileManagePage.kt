@@ -290,17 +290,13 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                             Column(
                                 modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
                             ) {
-                                CenterText(
-                                    text = "选取文件: $desktopSelectedFile",
-                                    modifier = Modifier.clickable {
-                                        val fileChooser = FileDialog(Frame(), "Select a file", FileDialog.LOAD)
-                                        fileChooser.isVisible = true
-                                        desktopSelectedFile = fileChooser.directory + fileChooser.file
-                                    }.clip(RoundedCornerShape(10.dp))
-                                        .background(MaterialTheme.colors.secondary)
-                                        .border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
-                                        .padding(10.dp)
-                                )
+                                LocalFileChooser(
+                                    tintText = "选取文件",
+                                    path = desktopSelectedFile,
+                                    isChooseFile = true
+                                ) {
+                                    desktopSelectedFile = it
+                                }
                                 CenterText(
                                     text = "待接收的Android路径: ${directoryState.currentdirectory}",
                                     modifier = Modifier.padding(10.dp)
@@ -345,26 +341,13 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                             Column(
                                 modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
                             ) {
-                                CenterText(
-                                    text = "选取文件夹: $desktopSelectedFolderPath",
-                                    modifier = Modifier.clickable {
-                                        val fileChooser = JFileChooser()
-                                        fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
-                                        // 显示对话框并等待用户选择
-                                        val result = fileChooser.showOpenDialog(null);
-                                        // 如果用户选择了文件夹
-                                        if (result == JFileChooser.APPROVE_OPTION) {
-                                            // 获取用户选择的文件夹
-                                            desktopSelectedFolderPath = fileChooser.selectedFile.absolutePath
-                                        } else {
-                                            // 用户取消了选择
-                                            toastState.show("No folder selected.");
-                                        }
-                                    }.clip(RoundedCornerShape(10.dp))
-                                        .background(MaterialTheme.colors.secondary)
-                                        .border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
-                                        .padding(10.dp)
-                                )
+                                LocalFileChooser(
+                                    tintText = "选取文件夹",
+                                    path = desktopSelectedFolderPath,
+                                    isChooseFile = false
+                                ) {
+                                    desktopSelectedFolderPath = it
+                                }
                                 CenterText(
                                     text = "待接收的Android路径: ${directoryState.currentdirectory}",
                                     modifier = Modifier.padding(10.dp)

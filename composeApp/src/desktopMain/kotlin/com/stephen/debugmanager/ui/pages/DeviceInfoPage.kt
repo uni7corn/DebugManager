@@ -256,34 +256,21 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             "日志文件处理", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
                         Column(modifier = Modifier.width(IntrinsicSize.Min)) {
-                            CenterText(
-                                text = "选择 日志 路径: $logFolderPath",
-                                style = defaultText,
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
-                                    .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp))
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(MaterialTheme.colors.secondary).clickable {
-                                        val fileChooser = JFileChooser()
-                                        fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
-                                        // 显示对话框并等待用户选择
-                                        val result = fileChooser.showOpenDialog(null);
-                                        // 如果用户选择了文件夹
-                                        if (result == JFileChooser.APPROVE_OPTION) {
-                                            // 获取用户选择的文件夹
-                                            logFolderPath = fileChooser.selectedFile.absolutePath
-                                        } else {
-                                            // 用户取消了选择
-                                            toastState.show("No folder selected.");
-                                        }
-                                    }.padding(horizontal = 10.dp, vertical = 5.dp)
-                            )
+                            LocalFileChooser(
+                                tintText = "选择 日志 路径",
+                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
+                                path = logFolderPath,
+                                isChooseFile = false
+                            ) {
+                                logFolderPath = it
+                            }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
                             ) {
                                 WrappedEditText(
                                     value = logTag.value,
-                                    tipText = "待寻找的tag",
+                                    tipText = "待寻找的tag(区分大小写)",
                                     onValueChange = {
                                         logTag.value = it
                                     },
@@ -299,7 +286,8 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                             toastState.show("开始处理，完成后将自动打开所在文件夹")
                                             mainStateHolder.processLogFiles(logFolderPath, logTag.value)
                                         }
-                                    }
+                                    },
+                                    modifier = Modifier.padding(10.dp)
                                 )
                             }
                         }

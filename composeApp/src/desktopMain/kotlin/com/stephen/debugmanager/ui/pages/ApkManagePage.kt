@@ -55,7 +55,7 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
 
     var apkFilterSelected by remember { mutableStateOf(PackageFilter.SIMPLE.param) }
 
-    var selectedFile by remember { mutableStateOf<File?>(null) }
+    var selectedFile by remember { mutableStateOf("") }
 
     val toastState = rememberToastState()
 
@@ -70,24 +70,15 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
                 "软件安装",
                 style = groupTitleText
             )
-            CenterText(
-                text = "选择 apk 路径: ${selectedFile?.absolutePath}",
-                style = defaultText,
-                modifier = Modifier.padding(start = 20.dp).weight(1f)
-                    .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp))
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colors.secondary).clickable {
-                        val fileChooser = FileDialog(
-                            Frame(),
-                            "Select a file",
-                            FileDialog.LOAD
-                        ).apply {
-                            file = "*.apk"
-                        }
-                        fileChooser.isVisible = true
-                        selectedFile = fileChooser.directory?.let { File(it, fileChooser.file) }
-                    }.padding(10.dp)
-            )
+            LocalFileChooser(
+                tintText = "选择 apk 路径",
+                path = selectedFile,
+                modifier = Modifier.padding(start = 20.dp).weight(1f),
+                isChooseFile = true,
+                fileType = "*.apk"
+            ) { path ->
+                selectedFile = path
+            }
             Row(
                 modifier = Modifier.weight(0.5f).padding(start = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -103,9 +94,9 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
                 CommonButton(
                     text = "安装",
                     onClick = {
-                        selectedFile?.absolutePath?.let {
-                            mainStateHolder.installApp(it, installParams)
-                        } ?: run {
+                        if (selectedFile.isNotEmpty()) {
+                            mainStateHolder.installApp(selectedFile, installParams)
+                        } else {
                             toastState.show("请选择一个要安装 apk 文件")
                         }
                     },

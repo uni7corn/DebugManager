@@ -80,5 +80,5 @@ val LightColorScheme = lightColors(
     error = Color(0xffff5370),
     onSecondary = Color(0xff888477),
     onBackground = Color(0xffd9d4c7),
-    onSurface = Color(0xffeccfa9),
+    onSurface = Color(0xffcfb694),
 )
