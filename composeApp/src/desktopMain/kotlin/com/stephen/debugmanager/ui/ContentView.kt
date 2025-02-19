@@ -40,8 +40,8 @@ fun ContentView(onExitApplication: () -> Unit) {
         Constants.FILE_MANAGE to Res.drawable.ic_file_manage,
         Constants.COMMAND to Res.drawable.ic_terminal,
         Constants.PERFORMANCE to Res.drawable.ic_performance,
+        Constants.AI_MODEL to Res.drawable.ic_robot,
         Constants.ABOUT to Res.drawable.ic_about,
-        Constants.AI_MODEL to Res.drawable.ic_about,
     ).map { (name, icon) -> MainTabItem(name, icon) }
 
     val choosedTab = remember { mutableStateOf(mainItemList[0]) }
