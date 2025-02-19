@@ -68,6 +68,7 @@ fun AiModelPage() {
                         role = chatItem.role,
                         markDownColors = markDownColors
                     )
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
             Row(
@@ -100,28 +101,21 @@ fun ChatItem(
 ) {
     Box(modifier = Modifier.fillMaxWidth(1f)) {
         Row(
-            modifier = Modifier.padding(horizontal = 10.dp).clip(RoundedCornerShape(10)).background(
+            modifier = Modifier.clip(RoundedCornerShape(10)).background(
                 if (role == Role.USER) MaterialTheme.colors.surface else MaterialTheme.colors.background
             ).align(if (role == Role.USER) Alignment.CenterEnd else Alignment.CenterStart)
                 .padding(vertical = 5.dp, horizontal = 10.dp)
         ) {
             // 大模型显示头像，并使用markdown组件来显示内容
-            when (role) {
-                Role.USER -> {
-                    // 用户发送显示普通文本样式
-                    CenterText(text = content)
-                }
-
-                Role.ASSISTANT, Role.SYSTEM -> {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_robot),
-                        contentDescription = "logo",
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
-                        modifier = Modifier.padding(end = 8.dp).size(24.dp).clip(RoundedCornerShape(50))
-                    )
-                    Markdown(content = content, markDownColors, markdownTypography)
-                }
+            if (role == Role.ASSISTANT || role == Role.SYSTEM) {
+                Image(
+                    painter = painterResource(Res.drawable.ic_robot),
+                    contentDescription = "logo",
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    modifier = Modifier.padding(end = 8.dp).size(24.dp).clip(RoundedCornerShape(50))
+                )
             }
+            Markdown(content = content, markDownColors, markdownTypography)
         }
     }
 }

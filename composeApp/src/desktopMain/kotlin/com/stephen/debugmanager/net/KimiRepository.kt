@@ -16,7 +16,7 @@ class KimiRepository(private val ktorClient: KtorClient) {
     companion object {
         const val BASE_URL = "https://api.moonshot.cn/v1/chat/completions"
         const val COMMON_SYSTEM_PROMT = "你是一个人工智能系统，可以根据用户的输入来返回生成式的回复"
-        const val API_KEY = "sk-XXXXXXXXXXXXXXXXXXXXXX"
+        const val API_KEY = "sk-XXXXXXXXXXXXXX"
     }
 
     suspend fun chatWithMoonShotKimi(text: String) = withContext(Dispatchers.IO) {
