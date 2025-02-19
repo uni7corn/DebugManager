@@ -28,6 +28,7 @@ import com.stephen.debugmanager.ui.component.CommonButton
 import com.stephen.debugmanager.ui.component.WrappedEditText
 import com.stephen.debugmanager.ui.theme.markDownDark
 import com.stephen.debugmanager.ui.theme.markDownLight
+import com.stephen.debugmanager.ui.theme.markdownDefaultText
 import com.stephen.debugmanager.ui.theme.markdownTypography
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
@@ -107,15 +108,24 @@ fun ChatItem(
                 .padding(vertical = 5.dp, horizontal = 10.dp)
         ) {
             // 大模型显示头像，并使用markdown组件来显示内容
-            if (role == Role.ASSISTANT || role == Role.SYSTEM) {
-                Image(
-                    painter = painterResource(Res.drawable.ic_robot),
-                    contentDescription = "logo",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
-                    modifier = Modifier.padding(end = 8.dp).size(24.dp).clip(RoundedCornerShape(50))
-                )
+            when (role) {
+                Role.USER -> {
+                    CenterText(
+                        text = content,
+                        style = markdownDefaultText
+                    )
+                }
+
+                else -> {
+                    Image(
+                        painter = painterResource(Res.drawable.ic_robot),
+                        contentDescription = "logo",
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                        modifier = Modifier.padding(end = 8.dp).size(24.dp).clip(RoundedCornerShape(50))
+                    )
+                    Markdown(content = content, markDownColors, markdownTypography)
+                }
             }
-            Markdown(content = content, markDownColors, markdownTypography)
         }
     }
 }
