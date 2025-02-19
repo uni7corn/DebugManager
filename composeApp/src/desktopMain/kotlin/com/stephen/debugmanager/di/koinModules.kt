@@ -6,13 +6,15 @@ import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.SingleInstanceApp
 import com.stephen.debugmanager.helper.DataStoreHelper
 import com.stephen.debugmanager.helper.LogFileFinder
-import com.stephen.debugmanager.model.AndroidAppHelper
-import com.stephen.debugmanager.model.FileManager
+import com.stephen.debugmanager.helper.AndroidAppHelper
+import com.stephen.debugmanager.helper.FileManager
+import com.stephen.debugmanager.net.KimiRepository
+import com.stephen.debugmanager.net.KtorClient
 import org.koin.dsl.module
 
 val koinModules = module {
     single<MainStateHolder> {
-        MainStateHolder(get(), get(), get(), get(), get(),get())
+        MainStateHolder(get(), get(), get(), get(), get(), get(), get())
     }
     single<PlatformAdapter> {
         PlatformAdapter(get())
@@ -29,4 +31,6 @@ val koinModules = module {
     factory { SingleInstanceApp() }
     factory { DataStoreHelper() }
     factory { LogFileFinder() }
+    factory { KtorClient() }
+    factory { KimiRepository(get()) }
 }

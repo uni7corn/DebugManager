@@ -23,7 +23,7 @@ import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.InstallParams
 import com.stephen.debugmanager.data.PackageFilter
-import com.stephen.debugmanager.model.uistate.AppListState
+import com.stephen.debugmanager.data.uistate.AppListState
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.component.skeleton.WeSkeleton
 import com.stephen.debugmanager.ui.theme.*

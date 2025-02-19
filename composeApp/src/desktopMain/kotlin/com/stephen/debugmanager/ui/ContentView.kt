@@ -20,7 +20,7 @@ import com.stephen.composeapp.generated.resources.*
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.bean.MainTabItem
-import com.stephen.debugmanager.model.uistate.DirectoryState
+import com.stephen.debugmanager.data.uistate.DirectoryState
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonDialog
 import com.stephen.debugmanager.ui.component.SimpleDivider
@@ -41,6 +41,7 @@ fun ContentView(onExitApplication: () -> Unit) {
         Constants.COMMAND to Res.drawable.ic_terminal,
         Constants.PERFORMANCE to Res.drawable.ic_performance,
         Constants.ABOUT to Res.drawable.ic_about,
+        Constants.AI_MODEL to Res.drawable.ic_about,
     ).map { (name, icon) -> MainTabItem(name, icon) }
 
     val choosedTab = remember { mutableStateOf(mainItemList[0]) }
@@ -126,6 +127,9 @@ fun ContentView(onExitApplication: () -> Unit) {
                 composable(Constants.ABOUT.toString()) {
                     AboutPage()
                 }
+                composable(Constants.AI_MODEL.toString()) {
+                    AiModelPage()
+                }
             }
         }
     }
@@ -162,7 +166,8 @@ fun SideTabBar(
                         icon = it.icon,
                         title = it.name,
                         modifier = Modifier.fillMaxWidth(1f).clip(RoundedCornerShape(10))
-                            .background(if (chooseTabItem == it) MaterialTheme.colors.surface else MaterialTheme.colors.background).clickable {
+                            .background(if (chooseTabItem == it) MaterialTheme.colors.surface else MaterialTheme.colors.background)
+                            .clickable {
                                 onItemClick(it)
                             },
                     )

@@ -25,8 +25,8 @@ import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.FileOperationType
-import com.stephen.debugmanager.model.FileManager
-import com.stephen.debugmanager.model.uistate.DirectoryState
+import com.stephen.debugmanager.helper.FileManager
+import com.stephen.debugmanager.data.uistate.DirectoryState
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText

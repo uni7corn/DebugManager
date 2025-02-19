@@ -17,3 +17,9 @@ data class RequestMessage(
     val content: String,
     val role: String
 )
+
+object Role {
+    const val USER = "user"
+    const val ASSISTANT = "assistant"
+    const val SYSTEM = "system"
+}

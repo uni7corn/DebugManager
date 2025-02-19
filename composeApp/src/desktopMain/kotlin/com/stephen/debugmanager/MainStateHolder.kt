@@ -9,11 +9,12 @@ import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
+import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.helper.DataStoreHelper
 import com.stephen.debugmanager.helper.LogFileFinder
-import com.stephen.debugmanager.model.AndroidAppHelper
-import com.stephen.debugmanager.model.FileManager
-import com.stephen.debugmanager.model.uistate.*
+import com.stephen.debugmanager.helper.AndroidAppHelper
+import com.stephen.debugmanager.helper.FileManager
+import com.stephen.debugmanager.data.uistate.*
 import com.stephen.debugmanager.utils.LogUtils
 import com.stephen.debugmanager.utils.getDateString
 import com.stephen.debugmanager.utils.size
@@ -23,6 +24,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
+import java.io.PrintStream
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 
 
@@ -32,7 +35,8 @@ class MainStateHolder(
     private val fileManager: FileManager,
     private val appinfoHelper: AndroidAppHelper,
     private val dataStoreHelper: DataStoreHelper,
-    private val logFileFinder: LogFileFinder
+    private val logFileFinder: LogFileFinder,
+    private val kimiRepository: KimiRepository
 ) {
 
     // 连接的设备列表
@@ -55,6 +59,10 @@ class MainStateHolder(
     private val _themeState = MutableStateFlow(ThemeState.DEFAULT)
     val themeStateStateFlow = _themeState.asStateFlow()
     private val themePreferencesKey = stringPreferencesKey("ThemeState")
+
+    // ai模型对话
+    private val _aiModelChatListState = MutableStateFlow(AiModelState())
+    val aiModelChatListStateFlow = _aiModelChatListState.asStateFlow()
 
     init {
         println("MainStateHolder init")
@@ -742,11 +750,48 @@ class MainStateHolder(
 
     fun getDesktopTempFolder() = PlatformAdapter.desktopTempFolder
 
+    /**
+     * 分析日志文件夹里的文件数据，解析出需要的字段合集
+     */
     fun processLogFiles(path: String, textToFind: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val resultPath = logFileFinder.processLogFilesByText(path, textToFind)
             LogUtils.printLog("resultPath: $resultPath")
             openFolder(resultPath.toString())
+        }
+    }
+
+    /**
+     * AI模型对话
+     */
+    fun chatWithAI(text: String) {
+        // 用户输入的内容
+        _aiModelChatListState.update {
+            it.copy(
+                chatList = it.chatList + listOf(ChatItem(content = text, isUser = true)),
+                listSize = it.listSize + 1
+            )
+        }
+        _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
+        // 在线call，等待AI模型生成回复
+        CoroutineScope(Dispatchers.IO).launch {
+            runCatching {
+                val result = kimiRepository.chatWithMoonShotKimi(text)
+                System.setOut(PrintStream(System.out, true, StandardCharsets.UTF_8))
+                result.choices.forEach { choice ->
+                    LogUtils.printLog(choice.message.content)
+                    // 回复的内容
+                    _aiModelChatListState.update {
+                        it.copy(
+                            chatList = it.chatList + listOf(ChatItem(content = choice.message.content, isUser = false)),
+                            listSize = it.listSize + 1
+                        )
+                    }
+                    _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
+                }
+            }.onFailure { e ->
+                LogUtils.printLog(e.message.toString(), LogUtils.LogLevel.ERROR)
+            }
         }
     }
 }

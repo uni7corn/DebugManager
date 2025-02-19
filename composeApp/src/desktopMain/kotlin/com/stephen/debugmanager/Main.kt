@@ -44,7 +44,6 @@ fun main() = application {
     LaunchedEffect(Unit) {
         // 获取存储的主题设置
         mainStateHolder.getThemeState()
-        KtorClient().getChatResultTest()
     }
 
     Window(

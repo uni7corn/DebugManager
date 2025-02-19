@@ -1,4 +1,4 @@
-package com.stephen.debugmanager.model
+package com.stephen.debugmanager.helper
 
 import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter

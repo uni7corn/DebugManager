@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
-import com.stephen.debugmanager.model.uistate.DeviceState
+import com.stephen.debugmanager.data.uistate.DeviceState
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText

@@ -1,4 +1,4 @@
-package com.stephen.debugmanager.model.uistate
+package com.stephen.debugmanager.data.uistate
 
 data class DeviceMapState(
     val deviceMap: Map<String, String> = mapOf(),

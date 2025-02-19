@@ -8,6 +8,7 @@ object Constants {
     const val FILE_MANAGE = "文件管理"
     const val PERFORMANCE = "性能监测"
     const val ABOUT = "关        于"
+    const val AI_MODEL = "AI大模型"
 
     // 向左的箭头
     const val LEFT_ARROW = "\u2190"
