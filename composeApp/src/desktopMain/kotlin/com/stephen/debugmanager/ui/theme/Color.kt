@@ -65,7 +65,7 @@ val DarkColorScheme = darkColors(
     onSecondary = Color(0xccc6c6cd),
     // 警告按钮或错误提示
     error = Color(0xffc04645),
-    // 背景之上的其余元素的颜色
+    // 背景之上的其余元素的颜色，目前只有分割线
     onBackground = Color(0xccc6c6cd),
     // 功能组选中的颜色
     onSurface = Color(0xff4d5972),
@@ -78,7 +78,7 @@ val LightColorScheme = lightColors(
     surface = Color(0xfff6d7b0),
     onPrimary = Color(0xff272727),
     error = Color(0xffff5370),
-    onSecondary = Color(0xff888477),
-    onBackground = Color(0xffd9d4c7),
+    onSecondary = Color(0xcc272727),
+    onBackground = Color(0xcc272727),
     onSurface = Color(0xffcfb694),
 )
