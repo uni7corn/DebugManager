@@ -1,6 +1,7 @@
 package com.stephen.debugmanager.data.bean
 
 import kotlinx.serialization.Serializable
+import org.mockito.internal.verification.Description
 
 
 @Serializable
@@ -18,8 +19,8 @@ data class RequestMessage(
     val role: String
 )
 
-object Role {
-    const val USER = "user"
-    const val ASSISTANT = "assistant"
-    const val SYSTEM = "system"
+enum class Role(val roleDescription: String) {
+    USER("user"),
+    ASSISTANT("assistant"),
+    SYSTEM("system")
 }

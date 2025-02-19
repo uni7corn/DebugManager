@@ -9,6 +9,7 @@ import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
+import com.stephen.debugmanager.data.bean.Role
 import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.helper.DataStoreHelper
 import com.stephen.debugmanager.helper.LogFileFinder
@@ -768,7 +769,7 @@ class MainStateHolder(
         // 用户输入的内容
         _aiModelChatListState.update {
             it.copy(
-                chatList = it.chatList + listOf(ChatItem(content = text, isUser = true)),
+                chatList = it.chatList + listOf(ChatItem(content = text, role = Role.USER)),
                 listSize = it.listSize + 1
             )
         }
@@ -776,6 +777,7 @@ class MainStateHolder(
         // 在线call，等待AI模型生成回复
         CoroutineScope(Dispatchers.IO).launch {
             runCatching {
+//                kimiRepository.test()
                 val result = kimiRepository.chatWithMoonShotKimi(text)
                 System.setOut(PrintStream(System.out, true, StandardCharsets.UTF_8))
                 result.choices.forEach { choice ->
@@ -783,7 +785,7 @@ class MainStateHolder(
                     // 回复的内容
                     _aiModelChatListState.update {
                         it.copy(
-                            chatList = it.chatList + listOf(ChatItem(content = choice.message.content, isUser = false)),
+                            chatList = it.chatList + listOf(ChatItem(content = choice.message.content, role = Role.ASSISTANT)),
                             listSize = it.listSize + 1
                         )
                     }
@@ -791,6 +793,14 @@ class MainStateHolder(
                 }
             }.onFailure { e ->
                 LogUtils.printLog(e.message.toString(), LogUtils.LogLevel.ERROR)
+                // 回复的内容
+                _aiModelChatListState.update {
+                    it.copy(
+                        chatList = it.chatList + listOf(ChatItem(content = "通信过程中出现异常", role = Role.ASSISTANT)),
+                        listSize = it.listSize + 1
+                    )
+                }
+                _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.stephen.debugmanager.data.uistate
 
+import com.stephen.debugmanager.data.bean.Role
+
 data class AiModelState(
     val chatList: List<ChatItem> = listOf(),
     val listSize:Int = chatList.size
@@ -9,5 +11,5 @@ data class AiModelState(
 
 data class ChatItem(
     val content: String,
-    val isUser: Boolean,
+    val role: Role,
 )

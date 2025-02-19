@@ -53,7 +53,7 @@ fun AboutPage() {
             "主题设置", style = groupTitleText,
             modifier = Modifier.padding(vertical = 10.dp)
         )
-        ThemeSwitcher(mainStateHolder, themeState.value) {
+        ThemeSwitcher(themeState.value) {
             mainStateHolder.setThemeState(it)
         }
 
@@ -83,7 +83,7 @@ fun AboutPage() {
 }
 
 @Composable
-fun ThemeSwitcher(mainStateHolder: MainStateHolder, currentTheme: Int, onThemeChange: (Int) -> Unit) {
+fun ThemeSwitcher(currentTheme: Int, onThemeChange: (Int) -> Unit) {
     val themeMap = mapOf<String, Int>(
         "深色" to ThemeState.DARK,
         "浅色" to ThemeState.LIGHT,

@@ -3,10 +3,52 @@ package com.stephen.debugmanager.ui.theme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
+import com.mikepenz.markdown.model.MarkdownColors
 
 // 网络链接颜色
 val networkTextColor = Color(0xff62bffc)
 
+val markDownDark = object : MarkdownColors {
+    override val text: Color
+        get() = DarkColorScheme.onPrimary
+    override val codeBackground: Color
+        get() = DarkColorScheme.surface
+    override val codeText: Color
+        get() = DarkColorScheme.onPrimary
+    override val dividerColor: Color
+        get() = DarkColorScheme.secondary
+    override val inlineCodeBackground: Color
+        get() = DarkColorScheme.surface
+    override val inlineCodeText: Color
+        get() = DarkColorScheme.onPrimary
+    override val linkText: Color
+        get() = networkTextColor
+    override val tableBackground: Color
+        get() = DarkColorScheme.surface
+    override val tableText: Color
+        get() = DarkColorScheme.onPrimary
+}
+
+val markDownLight = object : MarkdownColors {
+    override val text: Color
+        get() = LightColorScheme.onPrimary
+    override val codeBackground: Color
+        get() = LightColorScheme.surface
+    override val codeText: Color
+        get() = LightColorScheme.onPrimary
+    override val dividerColor: Color
+        get() = LightColorScheme.secondary
+    override val inlineCodeBackground: Color
+        get() = LightColorScheme.surface
+    override val inlineCodeText: Color
+        get() = LightColorScheme.onPrimary
+    override val linkText: Color
+        get() = networkTextColor
+    override val tableBackground: Color
+        get() = LightColorScheme.surface
+    override val tableText: Color
+        get() = LightColorScheme.onPrimary
+}
 
 val DarkColorScheme = darkColors(
     // 使用最多的按钮色

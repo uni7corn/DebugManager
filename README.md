@@ -43,6 +43,21 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 ### 关于页
 版本号，两个缓存文件夹的快速入口。现已加入主题切换功能。
 
+### AI体验
+现在的软件不集成下大模型，感觉都落伍了。
+
+本软件对接了Kimi开发者平台，使用ktor进行网络数据请求，与大模型对话。现已完善基本的Ui和通信架构。
+
+浅色
+
+![screenshot](screenshots/blogs_light_ai_model.png)
+
+深色
+
+![screenshot](screenshots/blogs_dark_ai_model.png)
+
+图片识别与搜索功能待完成。
+
 ## 跨平台运行截图
 ### 深浅主题优化
 
@@ -81,5 +96,3 @@ Desktop端调试车机android系统的软件，采用Compose Desktop。
 ### MacOS
 
 ![screenshot](screenshots/blogs_debugmanager_macos.jpg)
-
-
