@@ -4,8 +4,14 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
+import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.client.plugins.websocket.pingInterval
+import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlin.time.Duration
 
 class KtorClient {
 
@@ -19,6 +25,15 @@ class KtorClient {
                 isLenient = true
                 ignoreUnknownKeys = true
             })
+        }
+        install(WebSockets) {
+            pingInterval = Duration.parse("15s")
+        }
+    }
+
+    suspend fun connectWebSocket(url: String, block: suspend  DefaultClientWebSocketSession.() -> Unit) {
+        client.webSocket(url) {
+            block(this)
         }
     }
 

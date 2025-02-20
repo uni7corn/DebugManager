@@ -43,6 +43,7 @@ kotlin{
             implementation(libs.datastore)
             implementation(libs.datastore.preferences)
             implementation(libs.ktor.core)
+            implementation(libs.ktor.websockets)
             implementation(libs.ktor.client.cio)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.logging)
@@ -50,6 +51,7 @@ kotlin{
             implementation(libs.compose.markdown )
         }
         desktopMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
