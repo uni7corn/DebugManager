@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +41,7 @@ fun CustomTitleBar(
         modifier = modifier
             .fillMaxWidth()
             .height(32.dp)
-            .background(MaterialTheme.colors.surface),
+            .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center
     ) {
         Box(
@@ -54,7 +54,7 @@ fun CustomTitleBar(
                 Image(
                     contentDescription = "logo",
                     painter = painterResource(Res.drawable.ic_compose),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                     modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10))
                 )
                 CenterText(text = title, modifier = Modifier.padding(start = 4.dp))
@@ -64,20 +64,20 @@ fun CustomTitleBar(
                 Image(
                     contentDescription = "minimize",
                     painter = painterResource(Res.drawable.ic_minimize),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                     modifier = Modifier.clickable { onMinimize() }.size(32.dp).padding(5.dp)
                 )
                 Image(
                     contentDescription = "maximize",
                     painter = if (isMaximized) painterResource(Res.drawable.ic_floating)
                     else painterResource(Res.drawable.ic_maximize),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                     modifier = Modifier.clickable { onMaximize() }.size(32.dp).padding(5.dp)
                 )
                 Image(
                     contentDescription = "close",
                     painter = painterResource(Res.drawable.ic_close),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.error),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
                     modifier = Modifier.clickable { onClose() }.size(32.dp).padding(5.dp)
                 )
             }

@@ -5,7 +5,7 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -47,7 +47,7 @@ fun SplashScreen(appContent: @Composable () -> Unit) {
                         enter = fadeIn(),
                         exit = fadeOut()
                     )
-                    .background(MaterialTheme.colors.background)
+                    .background(MaterialTheme.colorScheme.background)
             )
         }
     }
@@ -62,7 +62,7 @@ fun SplashScreenContent(modifier: Modifier = Modifier) {
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_compose),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "Splash Logo",
                 modifier = Modifier.size(200.dp)
             )

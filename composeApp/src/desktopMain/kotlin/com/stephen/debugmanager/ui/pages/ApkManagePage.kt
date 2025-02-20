@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,7 +64,7 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
         Row(
             modifier = Modifier.padding(bottom = 10.dp)
                 .clip(RoundedCornerShape(10.dp)).fillMaxWidth(1f)
-                .background(MaterialTheme.colors.surface).padding(10.dp),
+                .background(MaterialTheme.colorScheme.surface).padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CenterText(
@@ -109,7 +109,7 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
         // app大列表
         Column(
             modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colors.surface).padding(10.dp)
+                .background(MaterialTheme.colorScheme.surface).padding(10.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 CenterText(
@@ -164,7 +164,7 @@ fun AppItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(1f).padding(vertical = 5.dp)
-            .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp)).padding(5.dp)
+            .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp)).padding(5.dp)
     ) {
         Image(
             painter = BitmapPainter(image = iconBitmap),
@@ -185,7 +185,7 @@ fun AppItem(
         Image(
             contentDescription = "app options",
             painter = painterResource(Res.drawable.ic_more),
-            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
             modifier = Modifier.padding(end = 10.dp)
                 .clip(RoundedCornerShape(10.dp)).clickable {
                     optionsDialogState.value = true
@@ -214,7 +214,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
     ) {
         Column(
             modifier = Modifier.width(380.dp).clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colors.surface),
+                .background(MaterialTheme.colorScheme.surface),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -222,7 +222,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
                     painter = painterResource(Res.drawable.ic_close),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                     contentDescription = "close",
                     modifier = Modifier.size(32.dp).padding(end = 10.dp, top = 10.dp).clip(RoundedCornerShape(50))
                         .clickable { dismiss() }
@@ -249,7 +249,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     dismiss()
                 },
                 modifier = Modifier.height(45.dp).padding(5.dp).fillMaxWidth(1f),
-                color = MaterialTheme.colors.error
+                color = MaterialTheme.colorScheme.error
             )
             CommonButton(
                 "提取APK",
@@ -274,9 +274,9 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     text = "选择 apk 路径: ${selectedPushApk?.absolutePath}",
                     style = defaultText,
                     modifier = Modifier.weight(1f)
-                        .border(2.dp, MaterialTheme.colors.onPrimary, RoundedCornerShape(10.dp))
+                        .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp))
                         .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colors.secondary).clickable {
+                        .background(MaterialTheme.colorScheme.secondary).clickable {
                             val fileChooser = FileDialog(
                                 Frame(),
                                 "Select a file",

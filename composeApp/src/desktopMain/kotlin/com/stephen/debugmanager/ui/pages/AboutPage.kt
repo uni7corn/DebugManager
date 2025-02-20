@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -94,7 +94,7 @@ fun ThemeSwitcher(currentTheme: Int, onThemeChange: (Int) -> Unit) {
         modifier = Modifier.padding(vertical = 10.dp)
             .width(IntrinsicSize.Max)
             .clip(RoundedCornerShape(50))
-            .background(MaterialTheme.colors.surface)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         themeMap.forEach {
@@ -105,7 +105,7 @@ fun ThemeSwitcher(currentTheme: Int, onThemeChange: (Int) -> Unit) {
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(50))
-                    .background(if (currentTheme == themeValue) MaterialTheme.colors.primary else Color.Transparent)
+                    .background(if (currentTheme == themeValue) MaterialTheme.colorScheme.primary else Color.Transparent)
                     .clickable {
                         onThemeChange(themeValue)
                     }

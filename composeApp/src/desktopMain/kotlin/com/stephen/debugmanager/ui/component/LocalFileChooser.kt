@@ -3,10 +3,9 @@ package com.stephen.debugmanager.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,9 +33,9 @@ fun LocalFileChooser(
     CenterText(
         text = "${tintText}: $path",
         style = defaultText,
-        modifier = modifier.border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
+        modifier = modifier.border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colors.secondary).clickable {
+            .background(MaterialTheme.colorScheme.secondary).clickable {
                 // 选择文件
                 if (isChooseFile) {
                     val fileChooser = FileDialog(

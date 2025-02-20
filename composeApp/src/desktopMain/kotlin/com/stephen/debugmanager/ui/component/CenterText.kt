@@ -1,8 +1,8 @@
 package com.stephen.debugmanager.ui.component
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +15,7 @@ fun CenterText(
     text: String,
     style: TextStyle = defaultText,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colors.onPrimary,
+    color: Color = MaterialTheme.colorScheme.onPrimary,
     alignment: Alignment = Alignment.Center
 ) {
     Box(

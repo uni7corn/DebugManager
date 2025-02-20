@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +21,7 @@ fun SingleConfirmDialog(title: String, onConfirm: () -> Unit, onDismiss: () -> U
     ) {
         Column(
             modifier = Modifier.width(320.dp).clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colors.onSecondary)
+                .background(MaterialTheme.colorScheme.onSecondary)
         ) {
             Row(
                 modifier = Modifier.padding(vertical = 10.dp),

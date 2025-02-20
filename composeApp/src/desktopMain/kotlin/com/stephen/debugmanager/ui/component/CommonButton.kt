@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,7 +19,7 @@ fun CommonButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    color:Color = MaterialTheme.colors.primary
+    color:Color = MaterialTheme.colorScheme.primary
 ) {
     CenterText(
         modifier = modifier

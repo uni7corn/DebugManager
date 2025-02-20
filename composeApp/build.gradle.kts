@@ -37,7 +37,7 @@ kotlin{
             implementation(libs.koin)
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(libs.datastore)

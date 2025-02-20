@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,8 +25,8 @@ import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.FileOperationType
-import com.stephen.debugmanager.helper.FileManager
 import com.stephen.debugmanager.data.uistate.DirectoryState
+import com.stephen.debugmanager.helper.FileManager
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText
@@ -35,9 +35,6 @@ import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
-import java.awt.FileDialog
-import java.awt.Frame
-import javax.swing.JFileChooser
 
 @Composable
 fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String) -> Unit) {
@@ -83,7 +80,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                 "当前操作中的文件：${androidSelectedFile}", style = defaultText,
                 modifier = Modifier.padding(vertical = 5.dp).fillMaxWidth(1f)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colors.surface)
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(5.dp)
             )
         }
@@ -92,7 +89,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
             Column(
                 modifier = Modifier.fillMaxHeight(1f).padding(end = 10.dp).weight(0.6f)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colors.surface)
+                    .background(MaterialTheme.colorScheme.surface)
             ) {
                 CenterText(
                     "${directoryState.deviceCode}:${directoryState.currentdirectory}",
@@ -121,7 +118,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                     // android端分隔符固定为/
                                     if (androidSelectedFile.split("/")
                                             .last() == it.path
-                                    ) MaterialTheme.colors.onSurface else Color.Transparent
+                                    ) MaterialTheme.colorScheme.onSurface else Color.Transparent
                                 )
                             )
                     }
@@ -137,7 +134,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                 "2. 文件操作的耗时无法监听，可以一段时间后再次进入刷新",
                         style = infoText,
                         modifier = Modifier.padding(bottom = 10.dp),
-                        color = MaterialTheme.colors.onSecondary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
                 item {
@@ -145,7 +142,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                         modifier = Modifier.fillParentMaxWidth(1f)
                             .padding(bottom = 10.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colors.surface).padding(10.dp)
+                            .background(MaterialTheme.colorScheme.surface).padding(10.dp)
                     ) {
                         CenterText("Android内操作", modifier = Modifier.padding(bottom = 10.dp), style = groupTitleText)
                         Row(
@@ -200,7 +197,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                     deleteConfirmDialogState.value = true
                                 },
                                 modifier = Modifier.weight(1f),
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colorScheme.error
                             )
                         }
 
@@ -277,7 +274,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                     Column(
                         modifier = Modifier.fillParentMaxWidth(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colors.surface).padding(10.dp)
+                            .background(MaterialTheme.colorScheme.surface).padding(10.dp)
                     ) {
                         CenterText(
                             "推送Desktop单文件",
@@ -395,8 +392,8 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                     text = "默认pull到: ${PlatformAdapter.desktopTempFolder}",
                                     modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp)
                                         .clip(RoundedCornerShape(10.dp))
-                                        .background(MaterialTheme.colors.secondary)
-                                        .border(2.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(10.dp))
+                                        .background(MaterialTheme.colorScheme.secondary)
+                                        .border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
                                         .padding(10.dp)
                                 )
                             }
@@ -439,7 +436,7 @@ fun FileViewItem(path: String, isDirectory: Boolean, modifier: Modifier) {
         Image(
             painter = if (isDirectory) painterResource(Res.drawable.ic_folder)
             else painterResource(Res.drawable.ic_file),
-            colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
             modifier = Modifier.size(15.dp),
             contentDescription = "file_icon"
         )

@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -166,7 +166,7 @@ fun SideTabBar(
                         icon = it.icon,
                         title = it.name,
                         modifier = Modifier.fillMaxWidth(1f).clip(RoundedCornerShape(10))
-                            .background(if (chooseTabItem == it) MaterialTheme.colors.surface else MaterialTheme.colors.background)
+                            .background(if (chooseTabItem == it) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.background)
                             .clickable {
                                 onItemClick(it)
                             },
@@ -187,7 +187,7 @@ fun SideTabItem(icon: DrawableResource, title: String, modifier: Modifier) {
             Image(
                 painter = painterResource(icon),
                 modifier = Modifier.padding(end = 10.dp).size(28.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "tab_icon"
             )
             CenterText(title, style = pageTitleText)

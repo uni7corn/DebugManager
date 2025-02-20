@@ -1,12 +1,10 @@
 package com.stephen.debugmanager.ui.pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,10 +14,8 @@ import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.uistate.DeviceState
 import com.stephen.debugmanager.ui.component.*
-import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import org.koin.core.context.GlobalContext
-import javax.swing.JFileChooser
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -44,7 +40,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                     Box(
                         modifier = Modifier.width(IntrinsicSize.Max)
                             .padding(5.dp)
-                            .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colors.surface)
+                            .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.surface)
                             .padding(10.dp)
                     ) {
                         CommonButton(
@@ -84,7 +80,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colors.surface)
+                            .background(MaterialTheme.colorScheme.surface)
                             .padding(10.dp)
                     ) {
                         CenterText(
@@ -114,7 +110,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.rebootRecovery()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colorScheme.error
                             )
 
                             CommonButton(
@@ -122,21 +118,21 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.rebootDevice()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colorScheme.error
                             )
                             CommonButton(
                                 "Fastboot", onClick = {
                                     mainStateHolder.rebootFastboot()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colorScheme.error
                             )
                             CommonButton(
                                 "关机", onClick = {
                                     mainStateHolder.powerOff()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colorScheme.error
                             )
                             CommonButton(
                                 "开始抓取trace", onClick = {
@@ -174,7 +170,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colors.surface)
+                            .background(MaterialTheme.colorScheme.surface)
                             .padding(10.dp)
                     ) {
                         CenterText(
@@ -230,7 +226,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colorScheme.error
                             )
 
                             CommonButton(
@@ -239,7 +235,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     toastState.show("已清空缓存，节省空间")
                                 },
                                 modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colorScheme.error
                             )
                         }
                     }
@@ -249,7 +245,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colors.surface)
+                            .background(MaterialTheme.colorScheme.surface)
                             .padding(10.dp)
                     ) {
                         CenterText(
@@ -298,7 +294,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             .fillMaxRowHeight()
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colors.surface)
+                            .background(MaterialTheme.colorScheme.surface)
                             .padding(10.dp)
                     ) {
                         CenterText(

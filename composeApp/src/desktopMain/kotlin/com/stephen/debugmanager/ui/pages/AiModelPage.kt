@@ -9,11 +9,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.Markdown
@@ -104,7 +105,7 @@ fun ChatItem(
     Box(modifier = Modifier.fillMaxWidth(1f)) {
         Row(
             modifier = Modifier.clip(RoundedCornerShape(10)).background(
-                if (role == Role.USER) MaterialTheme.colors.surface else MaterialTheme.colors.background
+                if (role == Role.USER) MaterialTheme.colorScheme.surface else Color.Transparent
             ).align(if (role == Role.USER) Alignment.CenterEnd else Alignment.CenterStart)
                 .padding(vertical = 5.dp, horizontal = 10.dp)
         ) {
@@ -123,7 +124,7 @@ fun ChatItem(
                     Image(
                         painter = painterResource(Res.drawable.ic_robot),
                         contentDescription = "logo",
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                         modifier = Modifier.padding(end = 8.dp).size(24.dp).clip(RoundedCornerShape(50))
                     )
                     SelectionContainer {

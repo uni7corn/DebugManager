@@ -5,9 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -32,7 +31,7 @@ fun DropdownSelector(
 
     var expanded by remember { mutableStateOf(false) }
 
-    val rotateAnimation by animateFloatAsState(if(expanded) 180f else 0f, label = "expand or collapse")
+    val rotateAnimation by animateFloatAsState(if (expanded) 180f else 0f, label = "expand or collapse")
 
     Column(modifier = modifier) {
         Row(
@@ -52,7 +51,7 @@ fun DropdownSelector(
             Image(
                 modifier = Modifier.size(16.dp).rotate(rotateAnimation),
                 painter = painterResource(Res.drawable.ic_expand),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "Dropdown"
             )
         }
@@ -64,17 +63,13 @@ fun DropdownSelector(
                     expanded = false
             },
             properties = PopupProperties(usePlatformDefaultWidth = false),
-            modifier = modifier.background(MaterialTheme.colors.surface)
+            modifier = modifier.background(MaterialTheme.colorScheme.surface).width(IntrinsicSize.Min)
         ) {
             options.forEach {
-                DropdownMenuItem(
-                    onClick = {
-                        onSelected(it.key)
-                        expanded = false
-                    },
-                ) {
-                    CenterText(it.value, modifier = Modifier.fillMaxWidth(1f))
-                }
+                CenterText(it.value, modifier = Modifier.fillMaxWidth(1f).clickable {
+                    onSelected(it.key)
+                    expanded = false
+                }.padding(vertical = 10.dp))
             }
         }
     }

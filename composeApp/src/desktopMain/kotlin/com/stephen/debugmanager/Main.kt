@@ -5,7 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.window.WindowDraggableArea
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,7 +16,6 @@ import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
-import com.stephen.debugmanager.net.KtorClient
 import com.stephen.debugmanager.ui.ContentView
 import com.stephen.debugmanager.ui.component.CommonDialog
 import com.stephen.debugmanager.ui.component.CustomTitleBar
@@ -58,14 +57,14 @@ fun main() = application {
         icon = painterResource(Res.drawable.app_logo),
     ) {
         MaterialTheme(
-            colors = when (themeState.value) {
+            colorScheme = when (themeState.value) {
                 ThemeState.DARK -> DarkColorScheme
                 ThemeState.LIGHT -> LightColorScheme
                 else -> if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme
             }
         ) {
             SplashScreen {
-                Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                     WindowDraggableArea {
                         CustomTitleBar(
                             title = "DebugManager by Stephen",

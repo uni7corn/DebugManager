@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,7 +21,7 @@ fun PerformancePage() {
         Row {
             Column(
                 modifier = Modifier.fillMaxHeight(1f).weight(0.3f).padding(end = 10.dp)
-                    .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colors.surface)
+                    .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.surface)
                     .padding(10.dp)
             ) {
                 CenterText(
@@ -32,7 +32,7 @@ fun PerformancePage() {
             }
             Column(
                 modifier = Modifier.fillMaxHeight(1f).weight(0.7f)
-                    .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colors.surface)
+                    .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.surface)
                     .padding(10.dp)
             ) {
                 CenterText(

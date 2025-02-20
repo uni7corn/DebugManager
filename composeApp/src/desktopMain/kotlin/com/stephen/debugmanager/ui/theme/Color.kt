@@ -1,7 +1,7 @@
 package com.stephen.debugmanager.ui.theme
 
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import com.mikepenz.markdown.model.MarkdownColors
 
@@ -50,7 +50,7 @@ val markDownLight = object : MarkdownColors {
         get() = LightColorScheme.onPrimary
 }
 
-val DarkColorScheme = darkColors(
+val DarkColorScheme = darkColorScheme(
     // 使用最多的按钮色
     primary = Color(0xff575e6e),
     //大背景
@@ -71,7 +71,7 @@ val DarkColorScheme = darkColors(
     onSurface = Color(0xff4d5972),
 )
 
-val LightColorScheme = lightColors(
+val LightColorScheme = lightColorScheme(
     primary = Color(0xffe7c496),
     secondary = Color(0xfffbead5),
     background = Color(0xFFfff8ed),
