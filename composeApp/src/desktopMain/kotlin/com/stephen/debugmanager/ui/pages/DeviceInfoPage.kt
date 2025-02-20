@@ -37,42 +37,41 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
         LazyColumn {
             item {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Box(
+                    Column(
                         modifier = Modifier.width(IntrinsicSize.Max)
                             .padding(5.dp)
                             .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.surface)
                             .padding(10.dp)
                     ) {
-                        CommonButton(
-                            onClick = { onRefresh() },
-                            text = "刷新",
-                            modifier = Modifier.align(Alignment.TopEnd)
-                        )
-                        Column {
-                            CenterText(
-                                "设备基础信息", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(modifier = Modifier.weight(1f).padding(bottom = 10.dp).align(Alignment.Top)) {
+                                CenterText("设备基础信息", style = groupTitleText)
+                            }
+                            CommonButton(
+                                onClick = { onRefresh() },
+                                text = "刷新",
                             )
-
-                            NameValueText("SerialNumber", deviceName.serial ?: "null")
-
-                            NameValueText("型号", deviceName.name ?: "null")
-
-                            NameValueText("内部代号", deviceName.innerName ?: "null")
-
-                            NameValueText("制造商", deviceName.manufacturer ?: "null")
-
-                            NameValueText("操作系统版本", deviceName.systemVersion ?: "null")
-
-                            NameValueText("版本构建类型", deviceName.buildType ?: "null")
-
-                            NameValueText("Android版本", deviceName.sdkVersion ?: "null")
-
-                            NameValueText("CPU架构", deviceName.cpuArch ?: "null")
-
-                            NameValueText("分辨率", deviceName.resolution ?: "null")
-
-                            NameValueText("显示密度", deviceName.density ?: "null")
                         }
+
+                        NameValueText("SerialNumber", deviceName.serial ?: "null")
+
+                        NameValueText("型号", deviceName.name ?: "null")
+
+                        NameValueText("内部代号", deviceName.innerName ?: "null")
+
+                        NameValueText("制造商", deviceName.manufacturer ?: "null")
+
+                        NameValueText("操作系统版本", deviceName.systemVersion ?: "null")
+
+                        NameValueText("版本构建类型", deviceName.buildType ?: "null")
+
+                        NameValueText("Android版本", deviceName.sdkVersion ?: "null")
+
+                        NameValueText("CPU架构", deviceName.cpuArch ?: "null")
+
+                        NameValueText("分辨率", deviceName.resolution ?: "null")
+
+                        NameValueText("显示密度", deviceName.density ?: "null")
                     }
 
                     Column(
@@ -110,7 +109,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.rebootRecovery()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colorScheme.error
+                                btnColor = MaterialTheme.colorScheme.error
                             )
 
                             CommonButton(
@@ -118,21 +117,21 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.rebootDevice()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colorScheme.error
+                                btnColor = MaterialTheme.colorScheme.error
                             )
                             CommonButton(
                                 "Fastboot", onClick = {
                                     mainStateHolder.rebootFastboot()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colorScheme.error
+                                btnColor = MaterialTheme.colorScheme.error
                             )
                             CommonButton(
                                 "关机", onClick = {
                                     mainStateHolder.powerOff()
                                 },
                                 modifier = itemModifier,
-                                color = MaterialTheme.colorScheme.error
+                                btnColor = MaterialTheme.colorScheme.error
                             )
                             CommonButton(
                                 "开始抓取trace", onClick = {
@@ -226,7 +225,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
-                                color = MaterialTheme.colorScheme.error
+                                btnColor = MaterialTheme.colorScheme.error
                             )
 
                             CommonButton(
@@ -235,7 +234,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     toastState.show("已清空缓存，节省空间")
                                 },
                                 modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
-                                color = MaterialTheme.colorScheme.error
+                                btnColor = MaterialTheme.colorScheme.error
                             )
                         }
                     }

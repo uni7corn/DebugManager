@@ -197,7 +197,7 @@ fun FileManagePage(directoryState: DirectoryState, destinationCall: (des: String
                                     deleteConfirmDialogState.value = true
                                 },
                                 modifier = Modifier.weight(1f),
-                                color = MaterialTheme.colorScheme.error
+                                btnColor = MaterialTheme.colorScheme.error
                             )
                         }
 

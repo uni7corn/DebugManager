@@ -249,7 +249,7 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     dismiss()
                 },
                 modifier = Modifier.height(45.dp).padding(5.dp).fillMaxWidth(1f),
-                color = MaterialTheme.colorScheme.error
+                btnColor = MaterialTheme.colorScheme.error
             )
             CommonButton(
                 "提取APK",
