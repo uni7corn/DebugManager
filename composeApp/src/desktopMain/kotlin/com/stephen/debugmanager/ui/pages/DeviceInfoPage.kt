@@ -88,39 +88,39 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         FlowRow(maxItemsInEachRow = 3, modifier = Modifier.width(IntrinsicSize.Max)) {
 
                             val itemModifier = Modifier
-                                .padding(10.dp)
+                                .fillMaxRowHeight(1f)
                                 .weight(1f)
+                                .padding(5.dp)
 
                             CommonButton(
-                                "获取ROOT", onClick = {
+                                "ROOT", onClick = {
                                     mainStateHolder.root()
                                 },
                                 modifier = itemModifier
                             )
                             CommonButton(
-                                "重载REMOUNT", onClick = {
+                                "REMOUNT", onClick = {
                                     mainStateHolder.remount()
                                     toastState.show("已执行，如果是刷完机首次remount，请先重启设备")
                                 },
                                 modifier = itemModifier
                             )
                             CommonButton(
-                                "Recovery", onClick = {
+                                "To Recovery", onClick = {
                                     mainStateHolder.rebootRecovery()
                                 },
                                 modifier = itemModifier,
                                 btnColor = MaterialTheme.colorScheme.error
                             )
-
                             CommonButton(
-                                "重启设备", onClick = {
+                                "REBOOT", onClick = {
                                     mainStateHolder.rebootDevice()
                                 },
                                 modifier = itemModifier,
                                 btnColor = MaterialTheme.colorScheme.error
                             )
                             CommonButton(
-                                "Fastboot", onClick = {
+                                "To Fastboot", onClick = {
                                     mainStateHolder.rebootFastboot()
                                 },
                                 modifier = itemModifier,
@@ -152,15 +152,6 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 },
                                 modifier = itemModifier
                             )
-                            CommonButton(
-                                "触发日志解压", onClick = {
-                                    mainStateHolder.processLogFiles(
-                                        "C:\\Users\\stephen\\Desktop\\AndroidTempFiles\\android",
-                                        "Hvac"
-                                    )
-                                },
-                                modifier = itemModifier
-                            )
                         }
                     }
 
@@ -176,7 +167,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                             "录屏与截屏", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
                         )
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            Row {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
                                 WrappedEditText(
                                     value = recordTime.value,
                                     tipText = "设置时长(s)",
@@ -302,8 +293,9 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                         FlowRow(maxItemsInEachRow = 3, modifier = Modifier.width(IntrinsicSize.Max)) {
 
                             val itemModifier = Modifier
-                                .padding(10.dp)
+                                .fillMaxRowHeight(1f)
                                 .weight(1f)
+                                .padding(5.dp)
 
                             CommonButton(
                                 "返回按键", onClick = {

@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -17,6 +15,8 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextOverflow
+import com.stephen.debugmanager.ui.theme.defaultText
 
 @Composable
 fun CommonButton(
@@ -27,13 +27,18 @@ fun CommonButton(
 ) {
     Button(
         onClick = { onClick() },
-        modifier = modifier.width(IntrinsicSize.Max).bounceClick(),
+        modifier = modifier.bounceClick(),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = btnColor,
             contentColor = btnColor
         )
     ) {
-        Text(text = text, color = MaterialTheme.colorScheme.onPrimary)
+        // 禁止换行
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = defaultText
+        )
     }
 }
 
