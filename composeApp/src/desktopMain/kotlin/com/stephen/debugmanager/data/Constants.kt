@@ -2,11 +2,12 @@ package com.stephen.debugmanager.data
 
 object Constants {
     //  主条目
-    const val BASE_INFO = "基本信息"
+    const val DEVICE_INFO = "设备信息"
     const val INSTALL = "软件管理"
     const val COMMAND = "命令模式"
     const val FILE_MANAGE = "文件管理"
     const val PERFORMANCE = "性能监测"
+    const val TOOLS = "实用工具"
     const val ABOUT = "关        于"
     const val AI_MODEL = "AI大模型"
 

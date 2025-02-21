@@ -29,10 +29,6 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
 
     val recordTime = remember { mutableStateOf("") }
 
-    var logFolderPath by remember { mutableStateOf("") }
-
-    val logTag = remember { mutableStateOf("") }
-
     BasePage("设备信息") {
         LazyColumn {
             item {
@@ -231,55 +227,6 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 modifier = btnModifier,
                                 btnColor = MaterialTheme.colorScheme.error
                             )
-                        }
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxRowHeight()
-                            .padding(5.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colorScheme.surface)
-                            .padding(10.dp)
-                    ) {
-                        CenterText(
-                            "日志文件处理", style = groupTitleText, modifier = Modifier.padding(bottom = 10.dp)
-                        )
-                        Column(modifier = Modifier.width(IntrinsicSize.Min)) {
-                            LocalFileChooser(
-                                tintText = "选择 日志 路径",
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
-                                path = logFolderPath,
-                                isChooseFile = false
-                            ) {
-                                logFolderPath = it
-                            }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
-                            ) {
-                                WrappedEditText(
-                                    value = logTag.value,
-                                    tipText = "待寻找的tag(区分大小写)",
-                                    onValueChange = {
-                                        logTag.value = it
-                                    },
-                                    modifier = Modifier.padding(horizontal = 5.dp).weight(1f)
-                                )
-                                CommonButton(
-                                    "开始处理", onClick = {
-                                        if (logFolderPath.isEmpty()) {
-                                            toastState.show("请先选择日志文件")
-                                        } else if (logTag.value.isEmpty()) {
-                                            toastState.show("请先输入待寻找的tag")
-                                        } else {
-                                            toastState.show("开始处理，完成后将自动打开所在文件夹")
-                                            mainStateHolder.processLogFiles(logFolderPath, logTag.value)
-                                        }
-                                    },
-                                    modifier = Modifier.padding(10.dp)
-                                )
-                            }
                         }
                     }
 

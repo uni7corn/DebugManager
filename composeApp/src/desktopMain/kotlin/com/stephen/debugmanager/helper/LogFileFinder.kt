@@ -44,7 +44,7 @@ class LogFileFinder {
         LogUtils.printLog("analysisLogFile -> 找到的匹配的词条数量: ${foundLines.size}")
         // 写回到同目录下的 txt 文件
         val ts = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(System.currentTimeMillis())
-        val outputFilePath = "${folder.parent}/${ts}_${textToFind}_logs.txt"
+        val outputFilePath = "${folder.absolutePath}/${ts}_${textToFind}_logs.txt"
         val outputFile = File(outputFilePath)
         FileWriter(outputFile).use { writer ->
             foundLines.forEach { line ->

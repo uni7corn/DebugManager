@@ -35,11 +35,12 @@ import org.koin.core.context.GlobalContext
 fun ContentView(onExitApplication: () -> Unit) {
 
     val mainItemList = listOf(
-        Constants.BASE_INFO to Res.drawable.ic_devices,
+        Constants.DEVICE_INFO to Res.drawable.ic_devices,
         Constants.INSTALL to Res.drawable.ic_software,
         Constants.FILE_MANAGE to Res.drawable.ic_file_manage,
         Constants.COMMAND to Res.drawable.ic_terminal,
         Constants.PERFORMANCE to Res.drawable.ic_performance,
+        Constants.TOOLS to Res.drawable.ic_tools,
         Constants.AI_MODEL to Res.drawable.ic_robot,
         Constants.ABOUT to Res.drawable.ic_about,
     ).map { (name, icon) -> MainTabItem(name, icon) }
@@ -93,8 +94,8 @@ fun ContentView(onExitApplication: () -> Unit) {
         SimpleDivider(modifier = Modifier.width(2.dp).fillMaxHeight(1f))
         // 右侧内容区
         Box(modifier = Modifier.weight(1f)) {
-            NavHost(navController, startDestination = Constants.BASE_INFO.toString()) {
-                composable(Constants.BASE_INFO.toString()) {
+            NavHost(navController, startDestination = Constants.DEVICE_INFO.toString()) {
+                composable(Constants.DEVICE_INFO.toString()) {
                     DeviceInfoPage(
                         deviceState,
                         onRefresh = {
@@ -123,6 +124,9 @@ fun ContentView(onExitApplication: () -> Unit) {
                 }
                 composable(Constants.PERFORMANCE.toString()) {
                     PerformancePage()
+                }
+                composable(Constants.TOOLS.toString()) {
+                    ToolsPage()
                 }
                 composable(Constants.ABOUT.toString()) {
                     AboutPage()
