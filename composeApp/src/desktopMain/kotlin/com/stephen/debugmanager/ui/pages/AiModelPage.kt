@@ -24,16 +24,19 @@ import com.stephen.composeapp.generated.resources.ic_robot
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.data.bean.Role
+import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonButton
 import com.stephen.debugmanager.ui.component.WrappedEditText
+import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.ui.theme.markDownDark
 import com.stephen.debugmanager.ui.theme.markDownLight
 import com.stephen.debugmanager.ui.theme.markdownDefaultText
 import com.stephen.debugmanager.ui.theme.markdownTypography
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
+import java.text.SimpleDateFormat
 
 @Composable
 fun AiModelPage() {
@@ -108,15 +111,15 @@ fun ChatItem(
 ) {
     Box(modifier = Modifier.fillMaxWidth(1f)) {
         Row(
-            modifier = Modifier.clip(RoundedCornerShape(10)).background(
-                if (role == Role.USER) MaterialTheme.colorScheme.surface else Color.Transparent
-            ).align(if (role == Role.USER) Alignment.CenterEnd else Alignment.CenterStart)
-                .padding(vertical = 5.dp, horizontal = 10.dp)
+            modifier = Modifier.align(if (role == Role.USER) Alignment.CenterEnd else Alignment.CenterStart)
         ) {
-            // 大模型显示头像，并使用markdown组件来显示内容
             when (role) {
                 Role.USER -> {
-                    SelectionContainer {
+                    SelectionContainer(
+                        modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.surface)
+                            .padding(10.dp)
+                    ) {
                         CenterText(
                             text = content,
                             style = markdownDefaultText
@@ -129,11 +132,33 @@ fun ChatItem(
                         painter = painterResource(Res.drawable.ic_robot),
                         contentDescription = "logo",
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                        modifier = Modifier.padding(end = 8.dp).size(24.dp).clip(RoundedCornerShape(50))
+                        modifier = Modifier.padding(end = 8.dp).size(26.dp).clip(RoundedCornerShape(50))
                     )
-                    SelectionContainer {
-                        Markdown(content = content, markDownColors, markdownTypography)
+                    Column {
+                        Row(
+                            modifier = Modifier.padding(bottom = 5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val ts = SimpleDateFormat("HH:mm").format(System.currentTimeMillis())
+
+                            CenterText(
+                                text = KimiRepository.MODEL_NAME,
+                                style = infoText,
+                                color = MaterialTheme.colorScheme.onSecondary,
+                            )
+                            CenterText(
+                                text = ts,
+                                style = infoText,
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                modifier = Modifier.padding(start = 5.dp)
+                            )
+                        }
+                        // 大模型回复主内容以markdown格式展示
+                        SelectionContainer {
+                            Markdown(content = content, markDownColors, markdownTypography)
+                        }
                     }
+
                 }
             }
         }

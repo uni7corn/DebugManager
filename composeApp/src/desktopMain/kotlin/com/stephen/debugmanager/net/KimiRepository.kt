@@ -17,6 +17,7 @@ class KimiRepository(private val ktorClient: KtorClient) {
         const val BASE_URL = "https://api.moonshot.cn/v1/chat/completions"
         const val COMMON_SYSTEM_PROMT = "你是一个人工智能系统，可以根据用户的输入来返回生成式的回复"
         const val API_KEY = "sk-XXXXXXXXXXXXXX"
+        const val MODEL_NAME = "moonshot-v1-32k-vision-preview"
     }
 
     suspend fun chatWithMoonShotKimi(text: String) = withContext(Dispatchers.IO) {
@@ -28,7 +29,7 @@ class KimiRepository(private val ktorClient: KtorClient) {
             }
             setBody(
                 AiRequestData(
-                    model = "moonshot-v1-32k-vision-preview",
+                    model = MODEL_NAME,
                     max_tokens = 2048,
                     temperature = 0.3,
                     stream = false,

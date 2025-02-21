@@ -198,12 +198,16 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                 )
                             }
 
+                            val btnModifier = Modifier
+                                .fillMaxWidth(1f)
+                                .padding(vertical = 5.dp)
+
                             CommonButton(
                                 "截屏保存", onClick = {
                                     mainStateHolder.screenshot()
                                     toastState.show(PULL_FILE_TOAST)
                                 },
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
+                                modifier = btnModifier
                             )
 
                             CommonButton(
@@ -215,7 +219,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                         toastState.show("已清空缓存，节省空间")
                                     }
                                 },
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
+                                modifier = btnModifier,
                                 btnColor = MaterialTheme.colorScheme.error
                             )
 
@@ -224,7 +228,7 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     mainStateHolder.clearScreenShotsCache()
                                     toastState.show("已清空缓存，节省空间")
                                 },
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
+                                modifier = btnModifier,
                                 btnColor = MaterialTheme.colorScheme.error
                             )
                         }
