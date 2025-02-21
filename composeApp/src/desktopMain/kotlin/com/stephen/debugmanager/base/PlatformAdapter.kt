@@ -169,3 +169,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         }
     }
 }
+
+fun getSystemEnv(key: String)= System.getenv(key).also {
+    println("getSystemEnv: $key = $it")
+}
