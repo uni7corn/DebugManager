@@ -76,10 +76,7 @@ fun main() = application {
                         )
                     }
 
-                    ContentView {
-                        mainStateHolder.uninstallToolsApp()
-                        exitApplication()
-                    }
+                    ContentView()
 
                     if (dialogState.value) {
                         CommonDialog(

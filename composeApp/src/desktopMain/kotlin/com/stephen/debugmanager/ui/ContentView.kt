@@ -22,9 +22,8 @@ import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.bean.MainTabItem
 import com.stephen.debugmanager.data.uistate.DirectoryState
 import com.stephen.debugmanager.ui.component.CenterText
-import com.stephen.debugmanager.ui.component.CommonDialog
-import com.stephen.debugmanager.ui.component.SimpleDivider
 import com.stephen.debugmanager.ui.component.DropdownSelector
+import com.stephen.debugmanager.ui.component.SimpleDivider
 import com.stephen.debugmanager.ui.pages.*
 import com.stephen.debugmanager.ui.theme.pageTitleText
 import org.jetbrains.compose.resources.DrawableResource
@@ -32,7 +31,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
 @Composable
-fun ContentView(onExitApplication: () -> Unit) {
+fun ContentView() {
 
     val mainItemList = listOf(
         Constants.DEVICE_INFO to Res.drawable.ic_devices,
