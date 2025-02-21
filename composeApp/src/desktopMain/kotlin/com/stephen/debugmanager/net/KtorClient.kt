@@ -4,12 +4,8 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
-import io.ktor.client.plugins.websocket.WebSockets
-import io.ktor.client.plugins.websocket.pingInterval
-import io.ktor.client.plugins.websocket.webSocket
+import io.ktor.client.plugins.websocket.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlin.time.Duration
 

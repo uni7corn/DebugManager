@@ -82,7 +82,11 @@ fun AiModelPage() {
                     value = userInputSting.value,
                     tipText = "输入对话文字",
                     onValueChange = { userInputSting.value = it },
-                    modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
+                    modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
+                    onEnterPressed = {
+                        mainStateHolder.chatWithAI(userInputSting.value)
+                        userInputSting.value = ""
+                    }
                 )
                 CommonButton(
                     "发送", onClick = {

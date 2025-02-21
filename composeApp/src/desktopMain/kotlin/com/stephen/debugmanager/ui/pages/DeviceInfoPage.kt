@@ -361,7 +361,11 @@ fun DeviceInfoPage(deviceName: DeviceState, onRefresh: () -> Unit) {
                                     value = mockInputSting.value,
                                     tipText = "模拟输入法(English Only)",
                                     onValueChange = { mockInputSting.value = it },
-                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
+                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
+                                    onEnterPressed = {
+                                        mainStateHolder.inputText(mockInputSting.value)
+                                        mockInputSting.value = ""
+                                    }
                                 )
                                 CommonButton(
                                     "确认", onClick = {

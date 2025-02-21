@@ -40,7 +40,10 @@ fun CommandPage() {
                     value = adbCommand,
                     tipText = "输入adb命令",
                     onValueChange = { adbCommand = it },
-                    modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f)
+                    modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
+                    onEnterPressed = {
+                        mainStateHolder.executeAdbCommand(adbCommand)
+                    }
                 )
                 CommonButton(
                     "执行", onClick = {
