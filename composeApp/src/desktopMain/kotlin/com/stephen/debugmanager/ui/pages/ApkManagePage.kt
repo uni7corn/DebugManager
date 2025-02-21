@@ -35,7 +35,11 @@ import java.awt.Frame
 import java.io.File
 
 @Composable
-fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
+fun ApkManagePage(
+    appListState: AppListState,
+    isDeviceConnected: Boolean,
+    onRefresh: (String) -> Unit
+) {
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
@@ -61,89 +65,96 @@ fun ApkManagePage(appListState: AppListState, onRefresh: (String) -> Unit) {
     val toastState = rememberToastState()
 
     BasePage("APP安装与管理") {
-        Row(
-            modifier = Modifier.padding(bottom = 10.dp)
-                .clip(RoundedCornerShape(10.dp)).fillMaxWidth(1f)
-                .background(MaterialTheme.colorScheme.surface).padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CenterText(
-                "软件安装",
-                style = groupTitleText
-            )
-            LocalFileChooser(
-                tintText = "选择 apk 路径",
-                path = selectedFile,
-                modifier = Modifier.padding(start = 20.dp).weight(1f),
-                isChooseFile = true,
-                fileType = "*.apk"
-            ) { path ->
-                selectedFile = path
-            }
-            Row(
-                modifier = Modifier.weight(0.5f).padding(start = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                DropdownSelector(
-                    installOptions,
-                    installParams,
-                    modifier = Modifier.width(130.dp)
+        Box {
+            Column {
+                Row(
+                    modifier = Modifier.padding(bottom = 10.dp)
+                        .clip(RoundedCornerShape(10.dp)).fillMaxWidth(1f)
+                        .background(MaterialTheme.colorScheme.surface).padding(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    installParams = it
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                CommonButton(
-                    text = "安装",
-                    onClick = {
-                        if (selectedFile.isNotEmpty()) {
-                            mainStateHolder.installApp(selectedFile, installParams)
-                        } else {
-                            toastState.show("请选择一个要安装 apk 文件")
-                        }
-                    },
-                    modifier = Modifier.padding(end = 10.dp)
-                )
-            }
-        }
-
-        // app大列表
-        Column(
-            modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colorScheme.surface).padding(10.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                CenterText(
-                    "APP列表",
-                    modifier = Modifier.padding(end = 10.dp),
-                    style = groupTitleText
-                )
-                DropdownSelector(
-                    apkFilter,
-                    apkFilterSelected,
-                    modifier = Modifier.width(130.dp)
-                ) {
-                    apkFilterSelected = it
-                    onRefresh(apkFilterSelected)
-                    toastState.show("列表数据量较大，请稍等")
-                }
-            }
-            WeSkeleton.Rectangle(appListState.appList.isEmpty()) {
-                LazyColumn {
-                    items(appListState.appList, key = { it.packageName }) {
-                        Box(
-                            modifier = Modifier.fillMaxWidth(1f).animateItem()
+                    CenterText(
+                        "软件安装",
+                        style = groupTitleText
+                    )
+                    LocalFileChooser(
+                        tintText = "选择 apk 路径",
+                        path = selectedFile,
+                        modifier = Modifier.padding(start = 20.dp).weight(1f),
+                        isChooseFile = true,
+                        fileType = "*.apk"
+                    ) { path ->
+                        selectedFile = path
+                    }
+                    Row(
+                        modifier = Modifier.weight(0.5f).padding(start = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        DropdownSelector(
+                            installOptions,
+                            installParams,
+                            modifier = Modifier.width(130.dp)
                         ) {
-                            AppItem(
-                                it.packageName,
-                                it.appLabel,
-                                it.version,
-                                it.icon,
-                                it.lastUpdateTime,
-                                toastState = toastState
-                            )
+                            installParams = it
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        CommonButton(
+                            text = "安装",
+                            onClick = {
+                                if (selectedFile.isNotEmpty()) {
+                                    mainStateHolder.installApp(selectedFile, installParams)
+                                } else {
+                                    toastState.show("请选择一个要安装 apk 文件")
+                                }
+                            },
+                            modifier = Modifier.padding(end = 10.dp)
+                        )
+                    }
+                }
+
+                // app大列表
+                Column(
+                    modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.surface).padding(10.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        CenterText(
+                            "APP列表",
+                            modifier = Modifier.padding(end = 10.dp),
+                            style = groupTitleText
+                        )
+                        DropdownSelector(
+                            apkFilter,
+                            apkFilterSelected,
+                            modifier = Modifier.width(130.dp)
+                        ) {
+                            apkFilterSelected = it
+                            onRefresh(apkFilterSelected)
+                            toastState.show("列表数据量较大，请稍等")
+                        }
+                    }
+                    WeSkeleton.Rectangle(appListState.appList.isEmpty()) {
+                        LazyColumn {
+                            items(appListState.appList, key = { it.packageName }) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(1f).animateItem()
+                                ) {
+                                    AppItem(
+                                        it.packageName,
+                                        it.appLabel,
+                                        it.version,
+                                        it.icon,
+                                        it.lastUpdateTime,
+                                        toastState = toastState
+                                    )
+                                }
+                            }
                         }
                     }
                 }
+            }
+            if (isDeviceConnected.not()) {
+                DeviceNoneConnectShade()
             }
         }
     }
@@ -164,7 +175,8 @@ fun AppItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(1f).padding(vertical = 5.dp)
-            .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp)).padding(5.dp)
+            .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp))
+            .padding(5.dp)
     ) {
         Image(
             painter = BitmapPainter(image = iconBitmap),
@@ -180,7 +192,11 @@ fun AppItem(
             }
         }
 
-        CenterText(text = "上次更新时间:$lastUpdateTime", style = defaultText, modifier = Modifier.weight(0.6f))
+        CenterText(
+            text = "上次更新时间:$lastUpdateTime",
+            style = defaultText,
+            modifier = Modifier.weight(0.6f)
+        )
 
         Image(
             contentDescription = "app options",
@@ -224,7 +240,8 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     painter = painterResource(Res.drawable.ic_close),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                     contentDescription = "close",
-                    modifier = Modifier.size(32.dp).padding(end = 10.dp, top = 10.dp).clip(RoundedCornerShape(50))
+                    modifier = Modifier.size(32.dp).padding(end = 10.dp, top = 10.dp)
+                        .clip(RoundedCornerShape(50))
                         .clickable { dismiss() }
                 )
             }
@@ -274,7 +291,11 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                     text = "选择 apk 路径: ${selectedPushApk?.absolutePath}",
                     style = defaultText,
                     modifier = Modifier.weight(1f)
-                        .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp))
+                        .border(
+                            2.dp,
+                            MaterialTheme.colorScheme.onPrimary,
+                            RoundedCornerShape(10.dp)
+                        )
                         .clip(RoundedCornerShape(10.dp))
                         .background(MaterialTheme.colorScheme.secondary).clickable {
                             val fileChooser = FileDialog(
@@ -285,7 +306,8 @@ fun OptionsDialog(label: String, packageName: String, toastState: ToastState, di
                                 file = "*.apk"
                             }
                             fileChooser.isVisible = true
-                            selectedPushApk = fileChooser.directory?.let { File(it, fileChooser.file) }
+                            selectedPushApk =
+                                fileChooser.directory?.let { File(it, fileChooser.file) }
                         }.padding(vertical = 10.dp, horizontal = 5.dp)
                 )
                 CommonButton(

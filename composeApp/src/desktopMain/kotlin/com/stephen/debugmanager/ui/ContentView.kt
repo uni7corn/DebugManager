@@ -62,19 +62,6 @@ fun ContentView(onExitApplication: () -> Unit) {
         mainStateHolder.getCurrentDeviceInfo()
     }
 
-    if (!deviceState.isConnected) {
-        CommonDialog(
-            "识别失败，ADB服务正在启动，请检查调试模式是否开启，USB线是否接好。点击确认按钮重试，点击取消退出程序",
-            onConfirm = {
-                mainStateHolder.getCurrentDeviceInfo()
-            },
-            onCancel = {
-                onExitApplication()
-            },
-            onDismiss = {}
-        )
-    }
-
     Row(modifier = Modifier.fillMaxSize(1f)) {
         val navController = rememberNavController()
         SideTabBar(
@@ -103,7 +90,7 @@ fun ContentView(onExitApplication: () -> Unit) {
                         })
                 }
                 composable(Constants.INSTALL.toString()) {
-                    ApkManagePage(appListState) {
+                    ApkManagePage(appListState, deviceState.isConnected) {
                         mainStateHolder.getPackageList(it)
                     }
                 }
@@ -114,16 +101,17 @@ fun ContentView(onExitApplication: () -> Unit) {
                             directoryState.currentdirectory,
                             directoryState.subdirectories,
                         ),
+                        deviceState.isConnected,
                         destinationCall = { destination ->
                             mainStateHolder.getFileList(destination)
                         }
                     )
                 }
                 composable(Constants.COMMAND.toString()) {
-                    CommandPage()
+                    CommandPage(deviceState.isConnected)
                 }
                 composable(Constants.PERFORMANCE.toString()) {
-                    PerformancePage()
+                    PerformancePage(deviceState.isConnected)
                 }
                 composable(Constants.TOOLS.toString()) {
                     ToolsPage()
