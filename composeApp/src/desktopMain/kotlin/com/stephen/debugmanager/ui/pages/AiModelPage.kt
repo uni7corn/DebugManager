@@ -59,9 +59,12 @@ fun AiModelPage() {
             else -> if (isSystemInDarkTheme()) markDownDark else markDownLight
         }
 
-        LaunchedEffect(chatListState.value.chatList.size) {
+        LaunchedEffect(Unit) {
             // 获取上一次记忆的模型
             mainStateHolder.getStoredAiModel()
+        }
+
+        LaunchedEffect(chatListState.value.chatList.size) {
             // 每次列表更新，都滚动到最底部
             if (chatListState.value.chatList.isNotEmpty())
                 listState.animateScrollToItem(chatListState.value.chatList.size - 1)
