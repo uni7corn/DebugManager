@@ -2,6 +2,7 @@ package com.stephen.debugmanager.net
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.plugins.websocket.*
@@ -12,6 +13,11 @@ import kotlin.time.Duration
 class KtorClient {
 
     val client = HttpClient(CIO) {
+        install(HttpTimeout){
+            requestTimeoutMillis = 30_000L
+            connectTimeoutMillis = 10_000L
+            socketTimeoutMillis = 30_000L
+        }
         install(Logging) {
             level = LogLevel.ALL
         }

@@ -24,6 +24,7 @@ import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.data.bean.Role
+import com.stephen.debugmanager.net.DeepSeekRepository
 import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.*
@@ -44,7 +45,7 @@ fun AiModelPage() {
             AIModels.KIMI to "Kimi"
         )
 
-        var selectedModel by remember { mutableStateOf(AIModels.DEEPSEEK) }
+        var selectedModel = mainStateHolder.aiStoreStateFlow.collectAsState()
 
         val userInputSting = remember { mutableStateOf("") }
 
@@ -55,10 +56,13 @@ fun AiModelPage() {
         val markDownColors = when (themeState.value) {
             ThemeState.DARK -> markDownDark
             ThemeState.LIGHT -> markDownLight
-            else -> if (isSystemInDarkTheme()) markDownLight else markDownDark
+            else -> if (isSystemInDarkTheme()) markDownDark else markDownLight
         }
 
         LaunchedEffect(chatListState.value.chatList.size) {
+            // 获取上一次记忆的模型
+            mainStateHolder.getStoredAiModel()
+            // 每次列表更新，都滚动到最底部
             if (chatListState.value.chatList.isNotEmpty())
                 listState.animateScrollToItem(chatListState.value.chatList.size - 1)
         }
@@ -67,9 +71,10 @@ fun AiModelPage() {
 
             DropdownSelector(
                 aiModelOptions,
-                selectedModel,
-                modifier = Modifier.width(130.dp)) {
-                selectedModel = it
+                selectedModel.value,
+                modifier = Modifier.width(130.dp)
+            ) {
+                mainStateHolder.storeAiModel(it)
             }
 
             LazyColumn(
@@ -80,6 +85,11 @@ fun AiModelPage() {
                     ChatItem(
                         content = chatItem.content,
                         role = chatItem.role,
+                        modelName = when (chatItem.modelName) {
+                            AIModels.DEEPSEEK -> DeepSeekRepository.MODEL_NAME
+                            AIModels.KIMI -> KimiRepository.MODEL_NAME
+                            else -> "Default"
+                        },
                         markDownColors = markDownColors
                     )
                     Spacer(modifier = Modifier.height(10.dp))
@@ -95,13 +105,13 @@ fun AiModelPage() {
                     onValueChange = { userInputSting.value = it },
                     modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
                     onEnterPressed = {
-                        mainStateHolder.chatWithAI(userInputSting.value)
+                        mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
                         userInputSting.value = ""
                     }
                 )
                 CommonButton(
                     "发送", onClick = {
-                        mainStateHolder.chatWithAI(userInputSting.value)
+                        mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
                         userInputSting.value = ""
                     },
                     modifier = Modifier.padding(10.dp)
@@ -115,6 +125,7 @@ fun AiModelPage() {
 fun ChatItem(
     content: String,
     role: Role,
+    modelName: String,
     markDownColors: MarkdownColors
 ) {
     Box(modifier = Modifier.fillMaxWidth(1f)) {
@@ -150,7 +161,7 @@ fun ChatItem(
                             val ts = SimpleDateFormat("HH:mm").format(System.currentTimeMillis())
 
                             CenterText(
-                                text = KimiRepository.MODEL_NAME,
+                                text = modelName,
                                 style = infoText,
                                 color = MaterialTheme.colorScheme.onSecondary,
                             )

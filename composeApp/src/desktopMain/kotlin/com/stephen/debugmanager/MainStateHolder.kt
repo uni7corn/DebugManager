@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
+import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
@@ -16,6 +17,7 @@ import com.stephen.debugmanager.helper.LogFileFinder
 import com.stephen.debugmanager.helper.AndroidAppHelper
 import com.stephen.debugmanager.helper.FileManager
 import com.stephen.debugmanager.data.uistate.*
+import com.stephen.debugmanager.net.DeepSeekRepository
 import com.stephen.debugmanager.utils.LogUtils
 import com.stephen.debugmanager.utils.getDateString
 import com.stephen.debugmanager.utils.size
@@ -37,7 +39,8 @@ class MainStateHolder(
     private val appinfoHelper: AndroidAppHelper,
     private val dataStoreHelper: DataStoreHelper,
     private val logFileFinder: LogFileFinder,
-    private val kimiRepository: KimiRepository
+    private val kimiRepository: KimiRepository,
+    private val deepSeekRepository: DeepSeekRepository
 ) {
 
     // 连接的设备列表
@@ -64,6 +67,9 @@ class MainStateHolder(
     // ai模型对话
     private val _aiModelChatListState = MutableStateFlow(AiModelState())
     val aiModelChatListStateFlow = _aiModelChatListState.asStateFlow()
+    private val _aiModelStore = MutableStateFlow(AIModels.DEEPSEEK)
+    val aiStoreStateFlow = _aiModelStore.asStateFlow()
+    private val aiModelPreferencesKey = stringPreferencesKey("AIModelStore")
 
     init {
         println("MainStateHolder init")
@@ -763,13 +769,40 @@ class MainStateHolder(
     }
 
     /**
+     * 设置选取的ai模型
+     */
+    fun storeAiModel(modelSelected: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreHelper.dataStore.edit {
+                it[aiModelPreferencesKey] = modelSelected.toString()
+            }
+        }
+        _aiModelStore.update {
+            modelSelected
+        }
+    }
+
+    fun getStoredAiModel() {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreHelper.dataStore.data.collect {
+                val aiModel = it[aiModelPreferencesKey]?.toInt() ?: AIModels.DEEPSEEK
+                LogUtils.printLog("getAiModel-> aiModel:$aiModel", LogUtils.LogLevel.INFO)
+                _aiModelStore.update {
+                    aiModel
+                }
+            }
+        }
+    }
+
+    /**
      * AI模型对话
      */
-    fun chatWithAI(text: String) {
+    fun chatWithAI(model: Int, text: String) {
+        LogUtils.printLog("chatWithAI -> model = $model, text = $text")
         // 用户输入的内容
         _aiModelChatListState.update {
             it.copy(
-                chatList = it.chatList + listOf(ChatItem(content = text, role = Role.USER)),
+                chatList = it.chatList + listOf(ChatItem(content = text, modelName = -1, role = Role.USER)),
                 listSize = it.listSize + 1
             )
         }
@@ -777,26 +810,37 @@ class MainStateHolder(
         // 在线call，等待AI模型生成回复
         CoroutineScope(Dispatchers.IO).launch {
             runCatching {
-//                kimiRepository.test()
-                val result = kimiRepository.chatWithMoonShotKimi(text)
-                System.setOut(PrintStream(System.out, true, StandardCharsets.UTF_8))
-                result.choices.forEach { choice ->
-                    LogUtils.printLog(choice.message.content)
-                    // 回复的内容
-                    _aiModelChatListState.update {
-                        it.copy(
-                            chatList = it.chatList + listOf(ChatItem(content = choice.message.content, role = Role.ASSISTANT)),
-                            listSize = it.listSize + 1
-                        )
-                    }
-                    _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
+                val result = when (model) {
+                    AIModels.DEEPSEEK -> deepSeekRepository.chatWithDeepSeek(text).choices[0].message.content
+                    AIModels.KIMI -> kimiRepository.chatWithMoonShotKimi(text).choices[0].message.content
+                    else -> "Error Occurred"
                 }
+                LogUtils.printLog(result)
+                // 回复的内容
+                _aiModelChatListState.update {
+                    it.copy(
+                        chatList = it.chatList + listOf(
+                            ChatItem(
+                                content = result,
+                                modelName = model,
+                                role = Role.ASSISTANT
+                            )
+                        ),
+                        listSize = it.listSize + 1
+                    )
+                }
+                _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
             }.onFailure { e ->
                 LogUtils.printLog(e.message.toString(), LogUtils.LogLevel.ERROR)
                 // 回复的内容
                 _aiModelChatListState.update {
                     it.copy(
-                        chatList = it.chatList + listOf(ChatItem(content = "通信过程中出现异常", role = Role.ASSISTANT)),
+                        chatList = it.chatList + listOf(
+                            ChatItem(
+                                content = "通信过程中出现异常",
+                                role = Role.ASSISTANT
+                            )
+                        ),
                         listSize = it.listSize + 1
                     )
                 }

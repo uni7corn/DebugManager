@@ -1,7 +1,7 @@
 package com.stephen.debugmanager.data
 
 
-enum class AIModels {
-    DEEPSEEK,
-    KIMI
+object AIModels {
+    const val DEEPSEEK = 0
+    const val KIMI = 1
 }

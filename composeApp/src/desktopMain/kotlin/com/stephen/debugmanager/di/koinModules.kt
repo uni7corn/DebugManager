@@ -15,7 +15,7 @@ import org.koin.dsl.module
 
 val koinModules = module {
     single<MainStateHolder> {
-        MainStateHolder(get(), get(), get(), get(), get(), get(), get())
+        MainStateHolder(get(), get(), get(), get(), get(), get(), get(),get())
     }
     single<PlatformAdapter> {
         PlatformAdapter(get())

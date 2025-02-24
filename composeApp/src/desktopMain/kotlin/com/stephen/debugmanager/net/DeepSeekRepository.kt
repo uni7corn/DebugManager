@@ -16,13 +16,13 @@ class DeepSeekRepository(private val ktorClient: KtorClient) {
 
     companion object {
         const val BASE_URL =
-            "v1/chat/completions"
+            "/v1/chat/completions"
         const val COMMON_SYSTEM_PROMT = "你是一个人工智能系统，可以根据用户的输入来返回生成式的回复"
-        const val API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        const val API_KEY = "xxxxxxxxxxx"
         const val MODEL_NAME = "DeepSeek-V3"
     }
 
-    suspend fun chatWithMoonShotKimi(text: String) = withContext(Dispatchers.IO) {
+    suspend fun chatWithDeepSeek(text: String) = withContext(Dispatchers.IO) {
         ktorClient.client.post(BASE_URL) {
             // 配置请求头
             headers {
@@ -46,7 +46,7 @@ class DeepSeekRepository(private val ktorClient: KtorClient) {
 
     fun test() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = chatWithMoonShotKimi("你好")
+            val result = chatWithDeepSeek("你好")
             PrintStream(System.out, true, "UTF-8").println(result)
         }
     }
