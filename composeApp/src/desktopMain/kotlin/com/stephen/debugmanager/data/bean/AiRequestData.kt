@@ -1,9 +1,11 @@
 package com.stephen.debugmanager.data.bean
 
 import kotlinx.serialization.Serializable
-import org.mockito.internal.verification.Description
 
 
+/**
+ * 各个模型应该为通用参数
+ */
 @Serializable
 data class AiRequestData(
     val max_tokens: Int,

@@ -8,6 +8,7 @@ import com.stephen.debugmanager.helper.DataStoreHelper
 import com.stephen.debugmanager.helper.LogFileFinder
 import com.stephen.debugmanager.helper.AndroidAppHelper
 import com.stephen.debugmanager.helper.FileManager
+import com.stephen.debugmanager.net.DeepSeekRepository
 import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.net.KtorClient
 import org.koin.dsl.module
@@ -33,4 +34,5 @@ val koinModules = module {
     factory { LogFileFinder() }
     factory { KtorClient() }
     factory { KimiRepository(get()) }
+    factory { DeepSeekRepository(get()) }
 }

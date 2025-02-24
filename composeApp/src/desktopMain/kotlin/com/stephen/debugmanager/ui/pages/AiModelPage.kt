@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.Markdown
@@ -22,18 +21,12 @@ import com.mikepenz.markdown.model.MarkdownColors
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_robot
 import com.stephen.debugmanager.MainStateHolder
+import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.data.bean.Role
 import com.stephen.debugmanager.net.KimiRepository
-import com.stephen.debugmanager.ui.component.BasePage
-import com.stephen.debugmanager.ui.component.CenterText
-import com.stephen.debugmanager.ui.component.CommonButton
-import com.stephen.debugmanager.ui.component.WrappedEditText
-import com.stephen.debugmanager.ui.theme.infoText
-import com.stephen.debugmanager.ui.theme.markDownDark
-import com.stephen.debugmanager.ui.theme.markDownLight
-import com.stephen.debugmanager.ui.theme.markdownDefaultText
-import com.stephen.debugmanager.ui.theme.markdownTypography
+import com.stephen.debugmanager.ui.component.*
+import com.stephen.debugmanager.ui.theme.*
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import java.text.SimpleDateFormat
@@ -45,6 +38,13 @@ fun AiModelPage() {
         val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
         val chatListState = mainStateHolder.aiModelChatListStateFlow.collectAsState()
+
+        val aiModelOptions = mapOf(
+            AIModels.DEEPSEEK to "DeepSeek",
+            AIModels.KIMI to "Kimi"
+        )
+
+        var selectedModel by remember { mutableStateOf(AIModels.DEEPSEEK) }
 
         val userInputSting = remember { mutableStateOf("") }
 
@@ -64,6 +64,14 @@ fun AiModelPage() {
         }
 
         Column(modifier = Modifier.fillMaxSize(1f)) {
+
+            DropdownSelector(
+                aiModelOptions,
+                selectedModel,
+                modifier = Modifier.width(130.dp)) {
+                selectedModel = it
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(1f).weight(1f).padding(vertical = 10.dp),
                 state = listState

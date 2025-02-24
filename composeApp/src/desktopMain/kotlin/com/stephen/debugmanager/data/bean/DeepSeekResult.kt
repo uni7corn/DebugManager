@@ -1,35 +1,38 @@
 package com.stephen.debugmanager.data.bean
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 
-@OptIn(ExperimentalSerializationApi::class)
 @Serializable
-data class KimiResult(
-    val choices: List<KimiChoice>,
+data class DeepSeekResult(
+    val choices: List<Choice>,
     val created: Int,
     val id: String,
     val model: String,
     val `object`: String,
-    val usage: KimiUsage
+    val prompt_logprobs: String?,
+    val usage: Usage
 )
 
 @Serializable
-data class KimiChoice(
+data class Choice(
     val finish_reason: String,
     val index: Int,
-    val message: KimiResultMessage
+    val logprobs: String?,
+    val message: Message,
+    val stop_reason: String?
 )
 
 @Serializable
-data class KimiUsage(
+data class Usage(
     val completion_tokens: Int,
     val prompt_tokens: Int,
     val total_tokens: Int
 )
 
 @Serializable
-data class KimiResultMessage(
+data class Message(
     val content: String,
-    val role: String
+    val reasoning_content: String?,
+    val role: String,
+    val tool_calls: List<String?>
 )
