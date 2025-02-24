@@ -63,10 +63,7 @@ fun FileManagePage(
 
     BasePage("文件管理器") {
         Box {
-
             Column {
-
-
                 Row {
                     CommonButton(
                         onClick = { destinationCall(FileManager.LAST_DIR) },
@@ -138,15 +135,6 @@ fun FileManagePage(
                     LazyColumn(
                         modifier = Modifier.weight(0.4f)
                     ) {
-                        item {
-                            Text(
-                                "1. 文件操作均会覆盖旧的同名文件，请小心操作，最好提前备份" + "\n" +
-                                        "2. 文件操作的耗时无法监听，可以一段时间后再次进入刷新",
-                                style = infoText,
-                                modifier = Modifier.padding(bottom = 10.dp),
-                                color = MaterialTheme.colorScheme.onSecondary
-                            )
-                        }
                         item {
                             Column(
                                 modifier = Modifier.fillParentMaxWidth(1f)
