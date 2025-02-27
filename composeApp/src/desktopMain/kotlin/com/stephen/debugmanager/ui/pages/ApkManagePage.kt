@@ -60,7 +60,7 @@ fun ApkManagePage(
 
     var apkFilterSelected by remember { mutableStateOf(PackageFilter.SIMPLE.param) }
 
-    var selectedFile by remember { mutableStateOf("") }
+    var selectedApkFileState = mainStateHolder.selectedApkFileStateFlow.collectAsState()
 
     val toastState = rememberToastState()
 
@@ -69,6 +69,7 @@ fun ApkManagePage(
             Column {
                 Row(
                     modifier = Modifier.padding(bottom = 10.dp)
+                        .height(IntrinsicSize.Max)
                         .clip(RoundedCornerShape(10.dp)).fillMaxWidth(1f)
                         .background(MaterialTheme.colorScheme.surface).padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -77,14 +78,17 @@ fun ApkManagePage(
                         "软件安装",
                         style = groupTitleText
                     )
-                    LocalFileChooser(
-                        tintText = "选择 apk 路径",
-                        path = selectedFile,
-                        modifier = Modifier.padding(start = 20.dp).weight(1f),
+                    FileChooseWidget(
+                        tintText = "拖动 APK 文件到此处 或 点击选取",
+                        path = selectedApkFileState.value,
+                        modifier = Modifier.padding(start = 20.dp).fillMaxHeight(1f).weight(1f),
                         isChooseFile = true,
-                        fileType = "*.apk"
+                        fileType = "*.apk",
+                        onErrorOccur = {
+                            toastState.show(it)
+                        },
                     ) { path ->
-                        selectedFile = path
+                        mainStateHolder.setSelectedApkFile(path)
                     }
                     Row(
                         modifier = Modifier.weight(0.5f).padding(start = 10.dp),
@@ -101,8 +105,8 @@ fun ApkManagePage(
                         CommonButton(
                             text = "安装",
                             onClick = {
-                                if (selectedFile.isNotEmpty()) {
-                                    mainStateHolder.installApp(selectedFile, installParams)
+                                if (selectedApkFileState.value.isNotEmpty()) {
+                                    mainStateHolder.installApp(selectedApkFileState.value, installParams)
                                 } else {
                                     toastState.show("请选择一个要安装 apk 文件")
                                 }

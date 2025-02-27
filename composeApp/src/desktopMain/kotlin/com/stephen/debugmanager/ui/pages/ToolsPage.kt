@@ -25,8 +25,7 @@ import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonButton
-import com.stephen.debugmanager.ui.component.FileDragTarget
-import com.stephen.debugmanager.ui.component.LocalFileChooser
+import com.stephen.debugmanager.ui.component.FileChooseWidget
 import com.stephen.debugmanager.ui.component.WrappedEditText
 import com.stephen.debugmanager.ui.component.rememberToastState
 import com.stephen.debugmanager.ui.theme.groupTitleText
@@ -61,9 +60,9 @@ fun ToolsPage() {
                             modifier = Modifier.padding(bottom = 10.dp)
                         )
                         Column(modifier = Modifier.width(IntrinsicSize.Min)) {
-                            LocalFileChooser(
-                                tintText = "选择 日志 路径",
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp),
+                            FileChooseWidget(
+                                tintText = "将日志文件夹拖到此处 或 点击选取",
+                                modifier = Modifier.fillMaxWidth(1f).weight(0.5f).padding(10.dp),
                                 path = logFolderPath,
                                 isChooseFile = false
                             ) {
@@ -71,11 +70,11 @@ fun ToolsPage() {
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
+                                modifier = Modifier.fillMaxWidth(1f).weight(0.5f).padding(10.dp)
                             ) {
                                 WrappedEditText(
                                     value = logTag.value,
-                                    tipText = "待寻找的tag(区分大小写)",
+                                    tipText = "Tag(区分大小写)",
                                     onValueChange = {
                                         logTag.value = it
                                     },
@@ -100,9 +99,6 @@ fun ToolsPage() {
                             }
                         }
                     }
-
-                    FileDragTarget(modifier = Modifier.width(300.dp).height(100.dp))
-
                 }
             }
 

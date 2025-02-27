@@ -33,10 +33,10 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
         Box {
             LazyColumn {
                 item {
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Column(
                             modifier = Modifier.width(IntrinsicSize.Max)
-                                .padding(5.dp)
+                                .padding(vertical = 5.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.surface)
                                 .padding(10.dp)
@@ -78,7 +78,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                         Column(
                             modifier = Modifier
                                 .fillMaxRowHeight()
-                                .padding(5.dp)
+                                .padding(vertical = 5.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.surface)
                                 .padding(10.dp)
@@ -164,7 +164,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                         Column(
                             modifier = Modifier
                                 .fillMaxRowHeight()
-                                .padding(5.dp)
+                                .padding(vertical = 5.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.surface)
                                 .padding(10.dp)
@@ -245,7 +245,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                         Column(
                             modifier = Modifier
                                 .fillMaxRowHeight()
-                                .padding(5.dp)
+                                .padding(vertical = 5.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.surface)
                                 .padding(10.dp)

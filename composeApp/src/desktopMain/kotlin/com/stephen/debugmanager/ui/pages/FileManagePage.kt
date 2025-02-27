@@ -303,13 +303,13 @@ fun FileManagePage(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Column(
-                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-                                            .weight(1f)
+                                        modifier = Modifier.weight(1f).padding(end = 10.dp)
                                     ) {
-                                        LocalFileChooser(
-                                            tintText = "选取文件",
+                                        FileChooseWidget(
+                                            tintText = "将文件拖到此处 或 点击选取",
                                             path = desktopSelectedFile,
-                                            isChooseFile = true
+                                            isChooseFile = true,
+                                            modifier = Modifier.fillMaxWidth(1f),
                                         ) {
                                             desktopSelectedFile = it
                                         }
@@ -321,7 +321,6 @@ fun FileManagePage(
 
                                     CommonButton(
                                         text = "PUSH",
-                                        modifier = Modifier.width(100.dp),
                                         onClick = {
                                             if (desktopSelectedFile.isNotEmpty()) {
                                                 toastState.show("开始推送文件，请勿多次点击")
@@ -357,13 +356,13 @@ fun FileManagePage(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Column(
-                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-                                            .weight(1f)
+                                        modifier = Modifier.weight(1f).padding(end = 10.dp)
                                     ) {
-                                        LocalFileChooser(
-                                            tintText = "选取文件夹",
+                                        FileChooseWidget(
+                                            tintText = "将文件夹拖到此处 或 点击选取",
                                             path = desktopSelectedFolderPath,
-                                            isChooseFile = false
+                                            isChooseFile = false,
+                                            modifier = Modifier.fillMaxWidth(1f),
                                         ) {
                                             desktopSelectedFolderPath = it
                                         }
@@ -375,7 +374,6 @@ fun FileManagePage(
 
                                     CommonButton(
                                         text = "PUSH",
-                                        modifier = Modifier.width(100.dp),
                                         onClick = {
                                             if (desktopSelectedFolderPath.isNotEmpty()) {
                                                 toastState.show("开始推送文件夹，请勿多次点击")
@@ -408,8 +406,7 @@ fun FileManagePage(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Column(
-                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-                                            .weight(1f)
+                                        modifier = Modifier.weight(1f).padding(end = 10.dp)
                                     ) {
                                         CenterText(
                                             text = "待拉取的文件: $androidSelectedFile",
@@ -418,12 +415,7 @@ fun FileManagePage(
 
                                         CenterText(
                                             text = "默认pull到: ${PlatformAdapter.desktopTempFolder}",
-                                            modifier = Modifier.padding(
-                                                start = 10.dp,
-                                                end = 10.dp,
-                                                top = 10.dp
-                                            )
-                                                .clip(RoundedCornerShape(10.dp))
+                                            modifier = Modifier.clip(RoundedCornerShape(10.dp))
                                                 .background(MaterialTheme.colorScheme.secondary)
                                                 .border(
                                                     2.dp,
@@ -435,7 +427,6 @@ fun FileManagePage(
                                     }
                                     CommonButton(
                                         text = "PULL",
-                                        modifier = Modifier.padding(top = 10.dp).width(100.dp),
                                         onClick = {
                                             mainStateHolder.pullFileFromAndroid(androidSelectedFile)
                                             toastState.show(PULL_FILE_TOAST)

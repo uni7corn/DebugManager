@@ -27,8 +27,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
-import java.io.PrintStream
-import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 
 
@@ -54,6 +52,8 @@ class MainStateHolder(
     // 设备文件列表信息
     private val _fileState = MutableStateFlow(DirectoryState())
     val directoryStateStateFlow = _fileState.asStateFlow()
+    private val _selectedApkFileState = MutableStateFlow("")
+    val selectedApkFileStateFlow = _selectedApkFileState.asStateFlow()
 
     // 设备app列表
     private val _appListState = MutableStateFlow(AppListState())
@@ -482,6 +482,15 @@ class MainStateHolder(
             }.onFailure { e ->
                 LogUtils.printLog("获取文件列表失败:${e.message}", LogUtils.LogLevel.ERROR)
             }
+        }
+    }
+
+    /**
+     * hold住选取的apk文件路径
+     */
+    fun setSelectedApkFile(apkFilePath: String) {
+        _selectedApkFileState.update {
+            apkFilePath
         }
     }
 
