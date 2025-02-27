@@ -564,6 +564,14 @@ class MainStateHolder(
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("startMainActivity: $packageName")
             platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell monkey -p $packageName -c android.intent.category.LAUNCHER 1")
+
+            // adapt specific method of start main activity
+            val mainActivity =
+                adbClient.getExecuteResult(
+                    adbClient.choosedDevicePosition,
+                    "dumpsys package $packageName | grep $packageName/"
+                ).split("filter").first().drop(16)
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell am start -n $mainActivity")
         }
     }
 
