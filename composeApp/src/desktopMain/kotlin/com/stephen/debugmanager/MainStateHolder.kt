@@ -71,6 +71,10 @@ class MainStateHolder(
     val aiStoreStateFlow = _aiModelStore.asStateFlow()
     private val aiModelPreferencesKey = stringPreferencesKey("AIModelStore")
 
+    // 设备性能占用
+    private val _performanceState = MutableStateFlow(PerformanceState())
+    val performanceStateStateFlow = _performanceState.asStateFlow()
+
     init {
         println("MainStateHolder init")
         recycleCheckConnection()
@@ -863,6 +867,93 @@ class MainStateHolder(
                 }
                 _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
             }
+        }
+    }
+
+    suspend fun getTotalPerformanceResult() = withContext(Dispatchers.IO) {
+        while (true) {
+            runCatching {
+                var cpuTotal = ""
+                var cpuUser = ""
+                var cpuIdle = ""
+                var cpuNice = ""
+                var cpuSys = ""
+                var cpuIOWait = ""
+                var cpuIRQ = ""
+                var cpuSoftIRQ = ""
+                var cpuHost = ""
+                var memTotal = ""
+                var memFree = ""
+                var memUsed = ""
+
+                val memInfo = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "top -b -n 1 | grep \"Mem:\"")
+                memInfo.split(',').forEach {
+                    if (it.contains("total")) {
+                        memTotal = it.replace("Mem:  ", "").replace(" total", "")
+                    } else if (it.contains("used")) {
+                        memUsed = it.replace(" used", "")
+                    } else if (it.contains("free")) {
+                        memFree = it.replace(" free", "")
+                    }
+                }
+                LogUtils.printLog("getTotalPerformanceResult -> memTotal:$memTotal, memUsed:$memUsed, memFree:$memFree")
+
+                val cpuInfo = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "top -b -n 1 | grep \"%cpu\"")
+                // 以host分割，扔掉最后一段无用数据
+                cpuInfo.split("%host").first().split(' ').filter { it.isNotEmpty() }.forEach {
+                    /**
+                     * println("cpu:$it")
+                     * cpu:800%cpu
+                     * cpu:85%user
+                     * cpu:0%nice
+                     * cpu:107%sys
+                     * cpu:596%idle
+                     * cpu:0%iow
+                     * cpu:7%irq
+                     * cpu:4%sirq
+                     * cpu:0
+                     */
+                    if (it.contains("%cpu")) {
+                        cpuTotal = it.replace("cpu", "")
+                    } else if (it.contains("%user")) {
+                        cpuUser = it.replace("user", "")
+                    } else if (it.contains("%idle")) {
+                        cpuIdle = it.replace("idle", "")
+                    } else if (it.contains("%nice")) {
+                        cpuNice = it.replace("nice", "")
+                    } else if (it.contains("%sys")) {
+                        cpuSys = it.replace("sys", "")
+                    } else if (it.contains("%iow")) {
+                        cpuIOWait = it.replace("iow", "")
+                    } else if (it.contains("%irq")) {
+                        cpuIRQ = it.replace("irq", "")
+                    } else if (it.contains("%sirq")) {
+                        cpuSoftIRQ = it.replace("sirq", "")
+                    } else {
+                        cpuHost = "$it%"
+                    }
+                }
+                _performanceState.update {
+                    it.copy(
+                        cpuTotal = cpuTotal,
+                        cpuIRQ = cpuIRQ,
+                        cpuSoftIRQ = cpuSoftIRQ,
+                        cpuIOWait = cpuIOWait,
+                        cpuSys = cpuSys,
+                        cpuNice = cpuNice,
+                        cpuHost = cpuHost,
+                        cpuUser = cpuUser,
+                        cpuIdle = cpuIdle,
+                        memTotal = memTotal,
+                        memUsed = memUsed,
+                        memFree = memFree
+                    )
+                }
+                _performanceState.value = _performanceState.value.toUiState()
+            }.onFailure { e ->
+                LogUtils.printLog("getTopResult error: ${e.message}")
+            }
+            delay(2000L)
         }
     }
 }
