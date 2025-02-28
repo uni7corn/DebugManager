@@ -1,5 +1,6 @@
 package com.stephen.debugmanager.ui.pages
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,23 +15,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
-import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.ic_more
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.uistate.AppListState
+import com.stephen.debugmanager.data.uistate.ProcessPerfState
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.DeviceNoneConnectShade
 import com.stephen.debugmanager.ui.component.NameValueText
-import com.stephen.debugmanager.ui.component.rememberToastState
 import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.itemKeyText
-import org.jetbrains.compose.resources.painterResource
+import com.stephen.debugmanager.ui.theme.itemValueText
 import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -41,10 +39,17 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
 
     val performanceState = mainStateHolder.performanceStateStateFlow.collectAsState()
 
-    val toastState = rememberToastState()
+    var prcessPerfListState = remember { mutableListOf<ProcessPerfState>() }
+
+    var choosedApp by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         mainStateHolder.getTotalPerformanceResult()
+    }
+
+    LaunchedEffect(choosedApp) {
+        println("change app: $choosedApp")
+        prcessPerfListState = mainStateHolder.getProcessPerformanceResult(choosedApp)
     }
 
     BasePage("性能测试") {
@@ -122,7 +127,12 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
                                     it.packageName,
                                     it.appLabel,
                                     it.version,
-                                    it.icon
+                                    it.icon,
+                                    isNeedToExpand = (choosedApp == it.packageName),
+                                    perfState = prcessPerfListState,
+                                    onClick = {
+                                        choosedApp = it
+                                    }
                                 )
                             }
                         }
@@ -142,25 +152,57 @@ fun PerformanceAppItem(
     packageName: String,
     label: String,
     version: String,
-    iconBitmap: ImageBitmap
+    iconBitmap: ImageBitmap,
+    perfState: List<ProcessPerfState>,
+    isNeedToExpand: Boolean = false,
+    onClick: (String) -> Unit = {}
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth(1f).padding(vertical = 5.dp)
+    Column(
+        modifier = Modifier.animateContentSize().fillMaxWidth(1f).padding(vertical = 5.dp)
             .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp))
-            .padding(5.dp)
+            .clickable {
+                onClick(packageName)
+            }.padding(5.dp)
     ) {
-        Image(
-            painter = BitmapPainter(image = iconBitmap),
-            modifier = Modifier.padding(start = 5.dp).size(50.dp),
-            contentDescription = "app icon"
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(bottom = 10.dp)
+        ) {
+            Image(
+                painter = BitmapPainter(image = iconBitmap),
+                modifier = Modifier.padding(start = 5.dp).size(50.dp),
+                contentDescription = "app icon"
+            )
 
-        Column(modifier = Modifier.padding(start = 10.dp).weight(0.4f)) {
-            CenterText(text = label, style = itemKeyText)
-            CenterText(text = version, style = defaultText)
-            SelectionContainer {
-                CenterText(text = packageName, style = defaultText)
+            Column(modifier = Modifier.padding(start = 10.dp).weight(0.4f)) {
+                CenterText(text = label, style = itemKeyText)
+                CenterText(text = version, style = defaultText)
+                SelectionContainer {
+                    CenterText(text = packageName, style = defaultText)
+                }
+            }
+        }
+
+        if (isNeedToExpand) {
+            Column(modifier = Modifier.fillMaxWidth(1f)) {
+                Row(modifier = Modifier.padding(bottom = 10.dp)) {
+                    CenterText(text = "用户ID", style = itemKeyText, modifier = Modifier.weight(2f))
+                    CenterText(text = "PID", style = itemKeyText, modifier = Modifier.weight(1f))
+                    CenterText(text = "虚拟内存", style = itemKeyText, modifier = Modifier.weight(2f))
+                    CenterText(text = "物理内存", style = itemKeyText, modifier = Modifier.weight(2f))
+                    CenterText(text = "CPU", style = itemKeyText, modifier = Modifier.weight(1f))
+                    CenterText(text = "进程名", style = itemKeyText, modifier = Modifier.weight(6f))
+                }
+                perfState.forEach {
+                    Row(modifier = Modifier.padding(bottom = 10.dp)) {
+                        CenterText(text = it.userId, style = itemValueText, modifier = Modifier.weight(2f))
+                        CenterText(text = it.pid, style = itemValueText, modifier = Modifier.weight(1f))
+                        CenterText(text = it.vsz, style = itemValueText, modifier = Modifier.weight(2f))
+                        CenterText(text = it.rss, style = itemValueText, modifier = Modifier.weight(2f))
+                        CenterText(text = it.cpu, style = itemValueText, modifier = Modifier.weight(1f))
+                        CenterText(text = it.processName, style = itemValueText, modifier = Modifier.weight(6f))
+                    }
+                }
             }
         }
     }

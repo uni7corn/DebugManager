@@ -956,4 +956,33 @@ class MainStateHolder(
             delay(2000L)
         }
     }
+
+    suspend fun getProcessPerformanceResult(packageName: String) = withContext(Dispatchers.IO) {
+        val memResult = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "ps -A | grep $packageName")
+        LogUtils.printLog("getProcessPerformanceResult -> memResult:$memResult")
+        val userId = "test001"
+        val pid = "32425"
+        val vsz = "45346"
+        val rss = "5647"
+        val cpu = "63%"
+        val processName = packageName
+        mutableListOf(
+            ProcessPerfState(
+                userId = userId,
+                pid = pid,
+                vsz = vsz,
+                rss = rss,
+                cpu = cpu,
+                processName = processName
+            ),
+            ProcessPerfState(
+                userId = userId,
+                pid = pid,
+                vsz = vsz,
+                rss = rss,
+                cpu = cpu,
+                processName = processName
+            )
+        )
+    }
 }
