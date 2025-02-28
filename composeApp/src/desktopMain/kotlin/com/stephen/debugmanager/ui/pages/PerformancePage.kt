@@ -29,6 +29,8 @@ import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.ui.theme.itemValueText
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -39,17 +41,17 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
 
     val performanceState = mainStateHolder.performanceStateStateFlow.collectAsState()
 
-    var prcessPerfListState = remember { mutableListOf<ProcessPerfState>() }
+    var prcessPerfListState = mainStateHolder.processPerfListStateStateFlow.collectAsState()
 
-    var choosedApp by remember { mutableStateOf("") }
+    var selectedApp by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        mainStateHolder.getTotalPerformanceResult()
-    }
-
-    LaunchedEffect(choosedApp) {
-        println("change app: $choosedApp")
-        prcessPerfListState = mainStateHolder.getProcessPerformanceResult(choosedApp)
+        launch {
+            mainStateHolder.getTotalPerformanceResult()
+        }
+        launch {
+            mainStateHolder.startLoopGetProcessPerf()
+        }
     }
 
     BasePage("性能测试") {
@@ -128,10 +130,11 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
                                     it.appLabel,
                                     it.version,
                                     it.icon,
-                                    isNeedToExpand = (choosedApp == it.packageName),
-                                    perfState = prcessPerfListState,
+                                    isNeedToExpand = (selectedApp == it.packageName),
+                                    perfState = prcessPerfListState.value,
                                     onClick = {
-                                        choosedApp = it
+                                        selectedApp = it
+                                        mainStateHolder.setProcessPackage(it)
                                     }
                                 )
                             }
@@ -153,7 +156,7 @@ fun PerformanceAppItem(
     label: String,
     version: String,
     iconBitmap: ImageBitmap,
-    perfState: List<ProcessPerfState>,
+    perfState: MutableList<ProcessPerfState>,
     isNeedToExpand: Boolean = false,
     onClick: (String) -> Unit = {}
 ) {
@@ -186,21 +189,19 @@ fun PerformanceAppItem(
         if (isNeedToExpand) {
             Column(modifier = Modifier.fillMaxWidth(1f)) {
                 Row(modifier = Modifier.padding(bottom = 10.dp)) {
-                    CenterText(text = "用户ID", style = itemKeyText, modifier = Modifier.weight(2f))
+                    CenterText(text = "用户ID", style = itemKeyText, modifier = Modifier.weight(1f))
                     CenterText(text = "PID", style = itemKeyText, modifier = Modifier.weight(1f))
-                    CenterText(text = "虚拟内存", style = itemKeyText, modifier = Modifier.weight(2f))
-                    CenterText(text = "物理内存", style = itemKeyText, modifier = Modifier.weight(2f))
+                    CenterText(text = "物理内存", style = itemKeyText, modifier = Modifier.weight(1f))
                     CenterText(text = "CPU", style = itemKeyText, modifier = Modifier.weight(1f))
-                    CenterText(text = "进程名", style = itemKeyText, modifier = Modifier.weight(6f))
+                    CenterText(text = "进程名", style = itemKeyText, modifier = Modifier.weight(3f))
                 }
                 perfState.forEach {
                     Row(modifier = Modifier.padding(bottom = 10.dp)) {
-                        CenterText(text = it.userId, style = itemValueText, modifier = Modifier.weight(2f))
+                        CenterText(text = it.userId, style = itemValueText, modifier = Modifier.weight(1f))
                         CenterText(text = it.pid, style = itemValueText, modifier = Modifier.weight(1f))
-                        CenterText(text = it.vsz, style = itemValueText, modifier = Modifier.weight(2f))
-                        CenterText(text = it.rss, style = itemValueText, modifier = Modifier.weight(2f))
+                        CenterText(text = it.rss, style = itemValueText, modifier = Modifier.weight(1f))
                         CenterText(text = it.cpu, style = itemValueText, modifier = Modifier.weight(1f))
-                        CenterText(text = it.processName, style = itemValueText, modifier = Modifier.weight(6f))
+                        CenterText(text = it.processName, style = itemValueText, modifier = Modifier.weight(3f))
                     }
                 }
             }

@@ -20,7 +20,6 @@ import com.stephen.debugmanager.data.uistate.*
 import com.stephen.debugmanager.net.DeepSeekRepository
 import com.stephen.debugmanager.utils.LogUtils
 import com.stephen.debugmanager.utils.getDateString
-import com.stephen.debugmanager.utils.size
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -74,6 +73,9 @@ class MainStateHolder(
     // 设备性能占用
     private val _performanceState = MutableStateFlow(PerformanceState())
     val performanceStateStateFlow = _performanceState.asStateFlow()
+    private val _processPerfListState = MutableStateFlow(mutableListOf<ProcessPerfState>())
+    val processPerfListStateStateFlow = _processPerfListState.asStateFlow()
+
 
     init {
         println("MainStateHolder init")
@@ -670,18 +672,6 @@ class MainStateHolder(
         }
     }
 
-    @Deprecated("Unused")
-    private fun getMemInfo() {
-        val totalMem =
-            (adbClient.getExecuteResult(adbClient.choosedDevicePosition, "cat /proc/meminfo | grep MemTotal")
-                .split(":").last().dropLast(3)
-                .replace(" ", "").toLong() * 1024).size()
-        val freeMem = (adbClient.getExecuteResult(adbClient.choosedDevicePosition, "cat /proc/meminfo | grep MemFree")
-            .split(":").last().dropLast(3)
-            .replace(" ", "").toLong() * 1024).size()
-        LogUtils.printLog("totalMem:$totalMem freeMem:$freeMem")
-    }
-
     /**
      * 刷新文件列表
      */
@@ -957,32 +947,59 @@ class MainStateHolder(
         }
     }
 
-    suspend fun getProcessPerformanceResult(packageName: String) = withContext(Dispatchers.IO) {
-        val memResult = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "ps -A | grep $packageName")
-        LogUtils.printLog("getProcessPerformanceResult -> memResult:$memResult")
-        val userId = "test001"
-        val pid = "32425"
-        val vsz = "45346"
-        val rss = "5647"
-        val cpu = "63%"
-        val processName = packageName
-        mutableListOf(
-            ProcessPerfState(
-                userId = userId,
-                pid = pid,
-                vsz = vsz,
-                rss = rss,
-                cpu = cpu,
-                processName = processName
-            ),
-            ProcessPerfState(
-                userId = userId,
-                pid = pid,
-                vsz = vsz,
-                rss = rss,
-                cpu = cpu,
-                processName = processName
-            )
-        )
+    private var _localPackageName = ""
+
+    fun setProcessPackage(packageName: String) {
+        // 先清空性能数据
+        println("setProcessPackage -> packageName: $packageName")
+        _processPerfListState.value = mutableListOf<ProcessPerfState>()
+        _localPackageName = packageName
+    }
+
+    /**
+     * 开始轮询进程的性能数据
+     */
+    suspend fun startLoopGetProcessPerf() = withContext(Dispatchers.IO) {
+        println("startLoopGetProcessPerf -> packageName: $_localPackageName")
+        while (true) {
+            runCatching {
+                val tempList = mutableListOf<ProcessPerfState>()
+                val memResult =
+                    adbClient.getExecuteResult(
+                        adbClient.choosedDevicePosition,
+                        "ps -A | grep $_localPackageName",
+                        false
+                    )
+                /**
+                 * husky:/ $ ps -A | grep "filmsimu"
+                 * 用户id        pid fatherpid     vsz     rss     cpu 状态  优先级 进程名
+                 * u0_a331       4551  1072   16858320 200328 0                   0 S com.stephen.filmsimulation
+                 * u0_a331       4748  1072   17198524 171580 0                   0 S com.stephen.filmsimulation:remote
+                 */
+                memResult.split('\n').filter { it.isNotEmpty() }.forEach {
+                    val processPerf = it.split(' ').filter { it.isNotEmpty() }
+                    println("processPerf: $processPerf")
+                    val pid = processPerf[1]
+                    val cpuPerfByPid = adbClient.getExecuteResult(
+                        adbClient.choosedDevicePosition,
+                        "top -b -n 1 -p $pid | grep $pid",
+                        false
+                    ).split(' ').filter { it.isNotEmpty() }
+                    tempList.add(
+                        ProcessPerfState(
+                            userId = processPerf[0],
+                            pid = pid,
+                            rss = cpuPerfByPid[5],
+                            cpu = cpuPerfByPid[8],
+                            processName = processPerf[processPerf.size - 1]
+                        )
+                    )
+                }
+                _processPerfListState.value = tempList
+            }.onFailure { e ->
+                println("getProcessPerf error: ${e.message}")
+            }
+            delay(2000L)
+        }
     }
 }

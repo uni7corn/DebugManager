@@ -11,6 +11,8 @@ object Constants {
     const val ABOUT = "关        于"
     const val AI_MODEL = "AI大模型"
 
+    const val DEFAULT = "DEFAULT"
+
     // 向左的箭头
     const val LEFT_ARROW = "\u2190"
 

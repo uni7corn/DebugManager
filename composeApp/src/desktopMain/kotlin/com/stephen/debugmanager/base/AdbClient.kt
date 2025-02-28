@@ -74,12 +74,15 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
     /**
      * 获取$localAdbPath Shell执行结果
      */
-    fun getExecuteResult(position: Int, command: String): String {
+    fun getExecuteResult(position: Int, command: String, isRemoveReturn: Boolean = true): String {
         synchronized(this) {
             return runCatching {
                 if (jadbClient.devices.isNotEmpty())
                     jadbClient.devices[position].execute(command).reader().use {
-                        it.readText().replace(Regex("\\r?\\n"), "")
+                        if (isRemoveReturn)
+                            it.readText().replace(Regex("\\r?\\n"), "")
+                        else
+                            it.readText()
                     }
                 else "NULL"
             }.onFailure { e ->
