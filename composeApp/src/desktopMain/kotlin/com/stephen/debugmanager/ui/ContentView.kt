@@ -110,7 +110,7 @@ fun ContentView() {
                     CommandPage(deviceState.isConnected)
                 }
                 composable(Constants.PERFORMANCE.toString()) {
-                    PerformancePage(deviceState.isConnected)
+                    PerformancePage(deviceState.isConnected, appListState)
                 }
                 composable(Constants.TOOLS.toString()) {
                     ToolsPage()
