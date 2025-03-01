@@ -2,12 +2,14 @@ package com.stephen.debugmanager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -22,9 +24,11 @@ import com.stephen.debugmanager.ui.component.CustomTitleBar
 import com.stephen.debugmanager.ui.pages.SplashScreen
 import com.stephen.debugmanager.ui.theme.DarkColorScheme
 import com.stephen.debugmanager.ui.theme.LightColorScheme
+import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
+import java.awt.Dimension
 
 fun main() = application {
 
@@ -56,6 +60,9 @@ fun main() = application {
         state = windowState,
         icon = painterResource(Res.drawable.app_logo),
     ) {
+        // set the minimum size
+        window.minimumSize = Dimension(600, 650)
+
         MaterialTheme(
             colorScheme = when (themeState.value) {
                 ThemeState.DARK -> DarkColorScheme
@@ -64,30 +71,36 @@ fun main() = application {
             }
         ) {
             SplashScreen {
-                Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-                    WindowDraggableArea {
-                        CustomTitleBar(
-                            title = "DebugManager by Stephen",
-                            windowState = windowState,
-                            onClose = {
-                                dialogState.value = true
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
+                BoxWithConstraints {
+                    val width = maxWidth
+                    val height = maxHeight
+                    println("width: $width, height: $height")
 
-                    ContentView()
+                    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+                        WindowDraggableArea {
+                            CustomTitleBar(
+                                title = "DebugManager by Stephen",
+                                windowState = windowState,
+                                onClose = {
+                                    dialogState.value = true
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
 
-                    if (dialogState.value) {
-                        CommonDialog(
-                            title = "确认退出应用程序？",
-                            onConfirm = {
-                                mainStateHolder.uninstallToolsApp()
-                                exitApplication()
-                            },
-                            onCancel = { dialogState.value = false },
-                            onDismiss = { dialogState.value = false }
-                        )
+                        ContentView()
+
+                        if (dialogState.value) {
+                            CommonDialog(
+                                title = "确认退出应用程序？",
+                                onConfirm = {
+                                    mainStateHolder.uninstallToolsApp()
+                                    exitApplication()
+                                },
+                                onCancel = { dialogState.value = false },
+                                onDismiss = { dialogState.value = false }
+                            )
+                        }
                     }
                 }
             }
