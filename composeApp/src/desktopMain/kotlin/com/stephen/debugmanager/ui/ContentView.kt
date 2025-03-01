@@ -1,5 +1,7 @@
 package com.stephen.debugmanager.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,6 +46,8 @@ fun ContentView() {
         Constants.ABOUT to Res.drawable.ic_about,
     ).map { (name, icon) -> MainTabItem(name, icon) }
 
+    val isMenuExpanded = remember { mutableStateOf(true) }
+
     val choosedTab = remember { mutableStateOf(mainItemList[0]) }
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
@@ -63,23 +67,30 @@ fun ContentView() {
 
     Row(modifier = Modifier.fillMaxSize(1f)) {
         val navController = rememberNavController()
-        SideTabBar(
-            deviceMapState.deviceMap,
-            deviceMapState.currentChoosedDevice.toString(),
-            onDeviceSelect = {
-                mainStateHolder.setChooseDevice(it.toInt())
-                mainStateHolder.getCurrentDeviceInfo()
-            },
-            mainItemList,
-            onItemClick = {
-                navController.navigate(it.name)
-                choosedTab.value = it
-            },
-            chooseTabItem = choosedTab.value,
-        )
-        SimpleDivider(modifier = Modifier.width(2.dp).fillMaxHeight(1f))
+        AnimatedContent(targetState = isMenuExpanded.value) { expanded ->
+            if (expanded) {
+                Row {
+                    SideTabBar(
+                        deviceMapState.deviceMap,
+                        deviceMapState.currentChoosedDevice.toString(),
+                        onDeviceSelect = {
+                            mainStateHolder.setChooseDevice(it.toInt())
+                            mainStateHolder.getCurrentDeviceInfo()
+                        },
+                        mainItemList,
+                        onItemClick = {
+                            navController.navigate(it.name)
+                            choosedTab.value = it
+                        },
+                        chooseTabItem = choosedTab.value,
+                        modifier = Modifier.fillMaxHeight(1f).animateContentSize()
+                    )
+                    SimpleDivider(modifier = Modifier.width(2.dp).fillMaxHeight(1f))
+                }
+            }
+        }
         // 右侧内容区
-        Box(modifier = Modifier.weight(1f)) {
+        Box(modifier = Modifier.weight(1f).animateContentSize()) {
             NavHost(navController, startDestination = Constants.DEVICE_INFO.toString()) {
                 composable(Constants.DEVICE_INFO.toString()) {
                     DeviceInfoPage(
@@ -122,6 +133,18 @@ fun ContentView() {
                     AiModelPage()
                 }
             }
+
+            Image(
+                painter = painterResource(
+                    if (isMenuExpanded.value) Res.drawable.ic_menu_collapse
+                    else Res.drawable.ic_menu_expand
+                ),
+                contentDescription = "menu_adjust",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                modifier = Modifier.padding(10.dp).size(30.dp).clickable {
+                    isMenuExpanded.value = !isMenuExpanded.value
+                }.align(Alignment.TopStart)
+            )
         }
     }
 }
@@ -133,9 +156,10 @@ fun SideTabBar(
     onDeviceSelect: (String) -> Unit,
     mainItemList: List<MainTabItem>,
     onItemClick: (name: MainTabItem) -> Unit,
-    chooseTabItem: MainTabItem
+    chooseTabItem: MainTabItem,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         item {
             DropdownSelector(
                 deviceMap,
