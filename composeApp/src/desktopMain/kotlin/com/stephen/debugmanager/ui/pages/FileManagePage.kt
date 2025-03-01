@@ -344,10 +344,10 @@ fun FileManagePage(
                         }
                     }
                 }
-                // 设备未连接提示
-                if (isDeviceConnected.not()) {
-                    DeviceNoneConnectShade()
-                }
+            }
+            // 设备未连接提示
+            if (isDeviceConnected.not()) {
+                DeviceNoneConnectShade()
             }
 
             // 删除确认弹窗
