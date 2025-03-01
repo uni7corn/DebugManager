@@ -9,7 +9,6 @@ import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -24,7 +23,6 @@ import com.stephen.debugmanager.ui.component.CustomTitleBar
 import com.stephen.debugmanager.ui.pages.SplashScreen
 import com.stephen.debugmanager.ui.theme.DarkColorScheme
 import com.stephen.debugmanager.ui.theme.LightColorScheme
-import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
@@ -72,10 +70,7 @@ fun main() = application {
         ) {
             SplashScreen {
                 BoxWithConstraints {
-                    val width = maxWidth
-                    val height = maxHeight
-                    println("width: $width, height: $height")
-
+                    val windowWidth = maxWidth
                     Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                         WindowDraggableArea {
                             CustomTitleBar(
@@ -88,7 +83,7 @@ fun main() = application {
                             )
                         }
 
-                        ContentView()
+                        ContentView(windowWidth)
 
                         if (dialogState.value) {
                             CommonDialog(

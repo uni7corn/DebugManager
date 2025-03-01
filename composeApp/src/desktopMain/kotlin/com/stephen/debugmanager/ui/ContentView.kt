@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,7 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
 @Composable
-fun ContentView() {
+fun ContentView(windowWith: Dp) {
 
     val mainItemList = listOf(
         Constants.DEVICE_INFO to Res.drawable.ic_devices,
@@ -47,6 +48,12 @@ fun ContentView() {
     ).map { (name, icon) -> MainTabItem(name, icon) }
 
     val isMenuExpanded = remember { mutableStateOf(true) }
+
+    LaunchedEffect(windowWith) {
+        if (windowWith.value < 650) {
+            isMenuExpanded.value = false
+        }
+    }
 
     val choosedTab = remember { mutableStateOf(mainItemList[0]) }
 
