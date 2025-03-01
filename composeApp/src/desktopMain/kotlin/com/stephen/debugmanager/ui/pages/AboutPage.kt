@@ -2,6 +2,9 @@ package com.stephen.debugmanager.ui.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -23,6 +26,7 @@ import com.stephen.debugmanager.ui.component.CommonButton
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import org.koin.core.context.GlobalContext
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AboutPage() {
     BasePage("关于DebugManager") {
@@ -58,10 +62,15 @@ fun AboutPage() {
         }
 
         CenterText("缓存文件", style = groupTitleText, modifier = Modifier.padding(vertical = 10.dp))
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 10.dp)) {
+
+        FlowRow(
+            verticalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(bottom = 10.dp)
+        ) {
             CenterText(
                 mainStateHolder.getUserTempFilePath(),
-                modifier = Modifier.padding(end = 20.dp),
+                modifier = Modifier.padding(end = 20.dp).fillMaxRowHeight(1f),
                 alignment = Alignment.CenterStart
             )
             CommonButton(
@@ -69,10 +78,14 @@ fun AboutPage() {
                 onClick = { mainStateHolder.openFolder(mainStateHolder.getUserTempFilePath()) })
         }
         CenterText("PULL的Android文件存储目录", style = groupTitleText, modifier = Modifier.padding(vertical = 10.dp))
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 10.dp)) {
+        FlowRow(
+            verticalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(bottom = 10.dp)
+        ) {
             CenterText(
                 mainStateHolder.getDesktopTempFolder(),
-                modifier = Modifier.padding(end = 20.dp),
+                modifier = Modifier.padding(end = 20.dp).fillMaxRowHeight(1f),
                 alignment = Alignment.CenterStart
             )
             CommonButton(
