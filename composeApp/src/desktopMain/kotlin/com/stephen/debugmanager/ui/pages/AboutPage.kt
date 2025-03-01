@@ -108,7 +108,7 @@ fun ThemeSwitcher(currentTheme: Int, onThemeChange: (Int) -> Unit) {
             .width(IntrinsicSize.Max)
             .clip(RoundedCornerShape(50))
             .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .padding(5.dp)
     ) {
         themeMap.forEach {
             val themeName = it.key
