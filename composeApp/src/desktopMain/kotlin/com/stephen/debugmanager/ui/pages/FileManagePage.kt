@@ -34,6 +34,7 @@ import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FileManagePage(
     directoryState: DirectoryState,
@@ -53,16 +54,14 @@ fun FileManagePage(
 
     var androidSelectedFile by remember { mutableStateOf("") }
 
-    var createAndroidFolderName by remember { mutableStateOf("") }
-
-    var createAndroidFileContent by remember { mutableStateOf("") }
-
-    var createAndroidFileName by remember { mutableStateOf("") }
-
     BasePage("文件管理器") {
         Box {
             Column {
-                Row {
+                FlowRow(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(bottom = 10.dp)
+                ) {
                     CommonButton(
                         onClick = { destinationCall(FileManager.LAST_DIR) },
                         text = "${Constants.LEFT_ARROW}返回上一级"
@@ -83,10 +82,10 @@ fun FileManagePage(
                 Row {
                     CenterText(
                         "当前操作中的文件：${androidSelectedFile}", style = defaultText,
-                        modifier = Modifier.padding(vertical = 5.dp).fillMaxWidth(1f)
+                        modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth(1f)
                             .clip(RoundedCornerShape(10.dp))
                             .background(MaterialTheme.colorScheme.surface)
-                            .padding(5.dp)
+                            .padding(10.dp)
                     )
                 }
 
@@ -131,14 +130,13 @@ fun FileManagePage(
                     }
 
                     LazyColumn(
-                        modifier = Modifier.weight(0.4f)
+                        modifier = Modifier.weight(0.4f).clip(RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.surface).padding(10.dp)
                     ) {
                         item {
                             Column(
                                 modifier = Modifier.fillParentMaxWidth(1f)
                                     .padding(bottom = 10.dp)
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(MaterialTheme.colorScheme.surface).padding(10.dp)
                             ) {
                                 CenterText(
                                     "Android内操作",
@@ -204,89 +202,13 @@ fun FileManagePage(
                                         btnColor = MaterialTheme.colorScheme.error
                                     )
                                 }
-
-                                SimpleDivider(
-                                    modifier = Modifier.fillParentMaxWidth(1f)
-                                        .padding(vertical = 10.dp, horizontal = 10.dp)
-                                        .height(1.dp)
-                                )
-
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    WrappedEditText(
-                                        value = createAndroidFolderName,
-                                        tipText = "输入文件夹名称",
-                                        onValueChange = { createAndroidFolderName = it },
-                                        modifier = Modifier.padding(horizontal = 10.dp).weight(1f)
-                                    )
-
-                                    CommonButton(
-                                        text = "创建文件夹",
-                                        onClick = {
-                                            if (createAndroidFolderName.isNotEmpty()) {
-                                                mainStateHolder.createDirectory("${directoryState.currentdirectory}/$createAndroidFolderName")
-                                                createAndroidFolderName = ""
-                                                directoryState.currentdirectory?.let {
-                                                    mainStateHolder.updateFileList(
-                                                        it
-                                                    )
-                                                }
-                                            } else toastState.show("请输入文件夹名称")
-                                        }
-                                    )
-                                }
-
-                                SimpleDivider(
-                                    modifier = Modifier.fillParentMaxWidth(1f)
-                                        .padding(vertical = 10.dp, horizontal = 10.dp)
-                                        .height(1.dp)
-                                )
-
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        WrappedEditText(
-                                            value = createAndroidFileName,
-                                            tipText = "输入文件名",
-                                            onValueChange = { createAndroidFileName = it },
-                                            modifier = Modifier.padding(
-                                                start = 10.dp,
-                                                end = 10.dp,
-                                                bottom = 10.dp
-                                            )
-                                        )
-
-                                        WrappedEditText(
-                                            value = createAndroidFileContent,
-                                            tipText = "输入文件内容",
-                                            onValueChange = { createAndroidFileContent = it },
-                                            modifier = Modifier.padding(horizontal = 10.dp)
-                                        )
-                                    }
-
-                                    CommonButton(
-                                        text = "创建文件",
-                                        onClick = {
-                                            if (createAndroidFileName.isNotEmpty()) {
-                                                mainStateHolder.createFile(
-                                                    createAndroidFileContent,
-                                                    "${directoryState.currentdirectory}/$createAndroidFileName"
-                                                )
-                                                createAndroidFileContent = ""
-                                                createAndroidFileName = ""
-                                                directoryState.currentdirectory?.let {
-                                                    mainStateHolder.updateFileList(
-                                                        it
-                                                    )
-                                                }
-                                            } else
-                                                toastState.show("请输入文件名")
-                                        }
-                                    )
-                                }
                             }
+
+                            SimpleDivider(
+                                modifier = Modifier.fillParentMaxWidth(1f)
+                                    .padding(bottom = 10.dp, end = 10.dp, start = 10.dp)
+                                    .height(1.dp)
+                            )
                         }
                         item {
                             Column(
@@ -299,51 +221,45 @@ fun FileManagePage(
                                     modifier = Modifier.padding(bottom = 10.dp),
                                     style = groupTitleText
                                 )
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Column(
-                                        modifier = Modifier.weight(1f).padding(end = 10.dp)
-                                    ) {
-                                        FileChooseWidget(
-                                            tintText = "将文件拖到此处 或 点击选取",
-                                            path = desktopSelectedFile,
-                                            isChooseFile = true,
-                                            modifier = Modifier.fillMaxWidth(1f),
-                                        ) {
-                                            desktopSelectedFile = it
-                                        }
-                                        CenterText(
-                                            text = "待接收的Android路径: ${directoryState.currentdirectory}",
-                                            modifier = Modifier.padding(10.dp)
-                                        )
-                                    }
 
-                                    CommonButton(
-                                        text = "PUSH",
-                                        onClick = {
-                                            if (desktopSelectedFile.isNotEmpty()) {
-                                                toastState.show("开始推送文件，请勿多次点击")
-                                                mainStateHolder.pushFileToAndroid(
-                                                    desktopSelectedFile,
-                                                    "${directoryState.currentdirectory}/${
-                                                        desktopSelectedFile.split(PlatformAdapter.sp)
-                                                            .last()
-                                                    }"
-                                                )
-                                                directoryState.currentdirectory?.let { it1 ->
-                                                    mainStateHolder.updateFileList(it1)
-                                                }
-                                            } else {
-                                                toastState.show("请选择电脑端要推送到Android的文件")
-                                            }
-                                        }
-                                    )
+                                FileChooseWidget(
+                                    tintText = "将文件拖到此处 或 点击选取",
+                                    path = desktopSelectedFile,
+                                    isChooseFile = true,
+                                    modifier = Modifier.fillMaxWidth(1f).padding(bottom = 10.dp)
+                                ) {
+                                    desktopSelectedFile = it
                                 }
+                                CenterText(
+                                    text = "待接收的Android路径: ${directoryState.currentdirectory}",
+                                    modifier = Modifier.padding(bottom = 10.dp)
+                                )
+
+                                CommonButton(
+                                    text = "PUSH",
+                                    modifier = Modifier.padding(bottom = 10.dp),
+                                    onClick = {
+                                        if (desktopSelectedFile.isNotEmpty()) {
+                                            toastState.show("开始推送文件，请勿多次点击")
+                                            mainStateHolder.pushFileToAndroid(
+                                                desktopSelectedFile,
+                                                "${directoryState.currentdirectory}/${
+                                                    desktopSelectedFile.split(PlatformAdapter.sp)
+                                                        .last()
+                                                }"
+                                            )
+                                            directoryState.currentdirectory?.let { it1 ->
+                                                mainStateHolder.updateFileList(it1)
+                                            }
+                                        } else {
+                                            toastState.show("请选择电脑端要推送到Android的文件")
+                                        }
+                                    }
+                                )
 
                                 SimpleDivider(
                                     modifier = Modifier.fillParentMaxWidth(1f)
-                                        .padding(vertical = 10.dp, horizontal = 10.dp)
+                                        .padding(bottom = 10.dp, end = 10.dp, start = 10.dp)
                                         .height(1.dp)
                                 )
 
@@ -352,48 +268,42 @@ fun FileManagePage(
                                     modifier = Modifier.padding(bottom = 10.dp),
                                     style = groupTitleText
                                 )
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Column(
-                                        modifier = Modifier.weight(1f).padding(end = 10.dp)
-                                    ) {
-                                        FileChooseWidget(
-                                            tintText = "将文件夹拖到此处 或 点击选取",
-                                            path = desktopSelectedFolderPath,
-                                            isChooseFile = false,
-                                            modifier = Modifier.fillMaxWidth(1f),
-                                        ) {
-                                            desktopSelectedFolderPath = it
-                                        }
-                                        CenterText(
-                                            text = "待接收的Android路径: ${directoryState.currentdirectory}",
-                                            modifier = Modifier.padding(10.dp)
-                                        )
-                                    }
 
-                                    CommonButton(
-                                        text = "PUSH",
-                                        onClick = {
-                                            if (desktopSelectedFolderPath.isNotEmpty()) {
-                                                toastState.show("开始推送文件夹，请勿多次点击")
-                                                mainStateHolder.pushFolderToAndroid(
-                                                    desktopSelectedFolderPath,
-                                                    "${directoryState.currentdirectory}/${
-                                                        desktopSelectedFolderPath.split(
-                                                            PlatformAdapter.sp
-                                                        ).last()
-                                                    }"
-                                                )
-                                            } else {
-                                                toastState.show("请选择电脑端要推送到Android的文件夹")
-                                            }
-                                        }
-                                    )
+                                FileChooseWidget(
+                                    tintText = "将文件夹拖到此处 或 点击选取",
+                                    path = desktopSelectedFolderPath,
+                                    isChooseFile = false,
+                                    modifier = Modifier.fillMaxWidth(1f).padding(bottom = 10.dp),
+                                ) {
+                                    desktopSelectedFolderPath = it
                                 }
+                                CenterText(
+                                    text = "待接收的Android路径: ${directoryState.currentdirectory}",
+                                    modifier = Modifier.padding(bottom = 10.dp)
+                                )
+
+                                CommonButton(
+                                    text = "PUSH",
+                                    modifier = Modifier.padding(bottom = 10.dp),
+                                    onClick = {
+                                        if (desktopSelectedFolderPath.isNotEmpty()) {
+                                            toastState.show("开始推送文件夹，请勿多次点击")
+                                            mainStateHolder.pushFolderToAndroid(
+                                                desktopSelectedFolderPath,
+                                                "${directoryState.currentdirectory}/${
+                                                    desktopSelectedFolderPath.split(
+                                                        PlatformAdapter.sp
+                                                    ).last()
+                                                }"
+                                            )
+                                        } else {
+                                            toastState.show("请选择电脑端要推送到Android的文件夹")
+                                        }
+                                    }
+                                )
                                 SimpleDivider(
                                     modifier = Modifier.fillParentMaxWidth(1f)
-                                        .padding(vertical = 10.dp, horizontal = 10.dp)
+                                        .padding(bottom = 10.dp)
                                         .height(1.dp)
                                 )
                                 // pull界面
@@ -402,60 +312,57 @@ fun FileManagePage(
                                     modifier = Modifier.padding(bottom = 10.dp),
                                     style = groupTitleText
                                 )
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Column(
-                                        modifier = Modifier.weight(1f).padding(end = 10.dp)
-                                    ) {
-                                        CenterText(
-                                            text = "待拉取的文件: $androidSelectedFile",
-                                            modifier = Modifier.padding(10.dp)
-                                        )
 
-                                        CenterText(
-                                            text = "默认pull到: ${PlatformAdapter.desktopTempFolder}",
-                                            modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                                                .background(MaterialTheme.colorScheme.secondary)
-                                                .border(
-                                                    2.dp,
-                                                    MaterialTheme.colorScheme.onSecondary,
-                                                    RoundedCornerShape(10.dp)
-                                                )
-                                                .padding(10.dp)
+                                CenterText(
+                                    text = "待拉取的文件: $androidSelectedFile",
+                                    modifier = Modifier.padding(bottom = 10.dp)
+                                )
+
+                                CenterText(
+                                    text = "默认pull到: ${PlatformAdapter.desktopTempFolder}",
+                                    modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                                        .padding(bottom = 10.dp)
+                                        .background(MaterialTheme.colorScheme.secondary)
+                                        .border(
+                                            2.dp,
+                                            MaterialTheme.colorScheme.onSecondary,
+                                            RoundedCornerShape(10.dp)
                                         )
+                                        .padding(10.dp)
+                                )
+
+                                CommonButton(
+                                    text = "PULL",
+                                    modifier = Modifier.padding(bottom = 10.dp),
+                                    onClick = {
+                                        mainStateHolder.pullFileFromAndroid(androidSelectedFile)
+                                        toastState.show(PULL_FILE_TOAST)
                                     }
-                                    CommonButton(
-                                        text = "PULL",
-                                        onClick = {
-                                            mainStateHolder.pullFileFromAndroid(androidSelectedFile)
-                                            toastState.show(PULL_FILE_TOAST)
-                                        }
-                                    )
-                                }
+                                )
 
                             }
                         }
                     }
                 }
+                // 设备未连接提示
+                if (isDeviceConnected.not()) {
+                    DeviceNoneConnectShade()
+                }
             }
-            if (isDeviceConnected.not()) {
-                DeviceNoneConnectShade()
-            }
-        }
 
-        // 删除确认弹窗
-        if (deleteConfirmDialogState.value)
-            CommonDialog(
-                title = "确认删除${androidSelectedFile}？",
-                onConfirm = {
-                    deleteConfirmDialogState.value = false
-                    mainStateHolder.deleteFileOrFolder(mainStateHolder.getSelectedPath())
-                    directoryState.currentdirectory?.let { mainStateHolder.updateFileList(it) }
-                },
-                onCancel = { deleteConfirmDialogState.value = false },
-                onDismiss = { deleteConfirmDialogState.value = false }
-            )
+            // 删除确认弹窗
+            if (deleteConfirmDialogState.value)
+                CommonDialog(
+                    title = "确认删除${androidSelectedFile}？",
+                    onConfirm = {
+                        deleteConfirmDialogState.value = false
+                        mainStateHolder.deleteFileOrFolder(mainStateHolder.getSelectedPath())
+                        directoryState.currentdirectory?.let { mainStateHolder.updateFileList(it) }
+                    },
+                    onCancel = { deleteConfirmDialogState.value = false },
+                    onDismiss = { deleteConfirmDialogState.value = false }
+                )
+        }
     }
 }
 

@@ -101,6 +101,6 @@ fun FileChooseWidget(
             }.dragAndDropTarget(
                 shouldStartDragAndDrop = { event -> true },
                 target = callback
-            ).padding(horizontal = 10.dp, vertical = 5.dp)
+            ).padding(10.dp)
     )
 }
