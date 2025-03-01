@@ -951,9 +951,11 @@ class MainStateHolder(
 
     fun setProcessPackage(packageName: String) {
         // 先清空性能数据
-        println("setProcessPackage -> packageName: $packageName")
-        _processPerfListState.value = mutableListOf<ProcessPerfState>()
-        _localPackageName = packageName
+        println("setProcessPackage -> packageName: $packageName _localPackageName: $_localPackageName")
+        if (packageName != _localPackageName) {
+            _processPerfListState.value = mutableListOf<ProcessPerfState>()
+            _localPackageName = packageName
+        }
     }
 
     /**
