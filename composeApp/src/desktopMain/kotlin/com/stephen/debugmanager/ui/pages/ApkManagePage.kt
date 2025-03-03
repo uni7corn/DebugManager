@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -34,6 +35,7 @@ import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ApkManagePage(
     appListState: AppListState,
@@ -68,9 +70,8 @@ fun ApkManagePage(
         Box {
             Column {
                 Row(
-                    modifier = Modifier.padding(bottom = 10.dp)
-                        .height(IntrinsicSize.Max)
-                        .clip(RoundedCornerShape(10.dp)).fillMaxWidth(1f)
+                    modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth(1f)
+                        .clip(RoundedCornerShape(10.dp))
                         .background(MaterialTheme.colorScheme.surface).padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -78,41 +79,46 @@ fun ApkManagePage(
                         "软件安装",
                         style = groupTitleText
                     )
-                    FileChooseWidget(
-                        tintText = "拖动 APK 文件到此处 或 点击选取",
-                        path = selectedApkFileState.value,
-                        modifier = Modifier.padding(start = 20.dp).fillMaxHeight(1f).weight(1f),
-                        isChooseFile = true,
-                        fileType = "*.apk",
-                        onErrorOccur = {
-                            toastState.show(it)
-                        },
-                    ) { path ->
-                        mainStateHolder.setSelectedApkFile(path)
-                    }
-                    Row(
-                        modifier = Modifier.weight(0.5f).padding(start = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier.padding(start = 20.dp).weight(1f),
                     ) {
-                        DropdownSelector(
-                            installOptions,
-                            installParams,
-                            modifier = Modifier.width(130.dp)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(1f).padding(bottom = 5.dp)
                         ) {
-                            installParams = it
+                            FileChooseWidget(
+                                tintText = "拖动 APK 文件到此处 或 点击选取",
+                                path = selectedApkFileState.value,
+                                modifier = Modifier.fillMaxWidth(1f),
+                                isChooseFile = true,
+                                fileType = "*.apk",
+                                onErrorOccur = {
+                                    toastState.show(it)
+                                },
+                            ) { path ->
+                                mainStateHolder.setSelectedApkFile(path)
+                            }
                         }
-                        Spacer(modifier = Modifier.weight(1f))
-                        CommonButton(
-                            text = "安装",
-                            onClick = {
-                                if (selectedApkFileState.value.isNotEmpty()) {
-                                    mainStateHolder.installApp(selectedApkFileState.value, installParams)
-                                } else {
-                                    toastState.show("请选择一个要安装 apk 文件")
-                                }
-                            },
-                            modifier = Modifier.padding(end = 10.dp)
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            DropdownSelector(
+                                installOptions,
+                                installParams,
+                                modifier = Modifier.width(120.dp)
+                            ) {
+                                installParams = it
+                            }
+                            CommonButton(
+                                text = "安装",
+                                onClick = {
+                                    if (selectedApkFileState.value.isNotEmpty()) {
+                                        mainStateHolder.installApp(selectedApkFileState.value, installParams)
+                                    } else {
+                                        toastState.show("请选择一个要安装 apk 文件")
+                                    }
+                                },
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                        }
                     }
                 }
 
