@@ -1,6 +1,5 @@
 package com.stephen.debugmanager
 
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.stephen.debugmanager.base.AdbClient
@@ -25,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.decodeToImageBitmap
 import java.text.SimpleDateFormat
 
 
@@ -521,8 +519,7 @@ class MainStateHolder(
                 .sortedBy { (packageLabelMap[it] ?: "default") }.forEach {
                     runCatching {
                         // suspend方法，只有读取完成后才会往下走，否则会阻塞
-                        val iconFile = appinfoHelper.getIconFile(it)
-                        val imageBitmap: ImageBitmap = iconFile.inputStream().readAllBytes().decodeToImageBitmap()
+                        val iconFilePath = appinfoHelper.getIconFile(it)
                         // 读取label
                         val label = packageLabelMap[it] ?: "default"
                         // 读取版本
@@ -542,7 +539,7 @@ class MainStateHolder(
                                 packageName = it,
                                 appLabel = label,
                                 version = version,
-                                icon = imageBitmap,
+                                iconFilePath = iconFilePath,
                                 lastUpdateTime = lastUpdateTime
                             )
                         )
@@ -739,6 +736,7 @@ class MainStateHolder(
     /**
      * 创建文件夹
      */
+    @Suppress("unused")
     fun createDirectory(path: String) {
         fileManager.createDirectory(path)
     }
@@ -746,6 +744,7 @@ class MainStateHolder(
     /**
      * 创建文件
      */
+    @Suppress("unused")
     fun createFile(content: String, path: String) {
         fileManager.createFile(content, path)
     }

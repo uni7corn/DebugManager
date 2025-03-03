@@ -66,9 +66,9 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         var file = File(path)
         while (!file.exists()) {
             delay(1000L)
-            file = File(path)
         }
-        file
+        // 返回文件路径
+        path
     }
 
     suspend fun analyzeAppLabel() = withContext(Dispatchers.IO) {

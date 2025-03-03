@@ -15,9 +15,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
+import coil3.compose.LocalPlatformContext
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.uistate.AppListState
 import com.stephen.debugmanager.data.uistate.ProcessPerfState
@@ -30,8 +31,8 @@ import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.ui.theme.itemValueText
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import org.koin.core.context.GlobalContext
+import java.io.File
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -129,7 +130,7 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
                                     it.packageName,
                                     it.appLabel,
                                     it.version,
-                                    it.icon,
+                                    it.iconFilePath,
                                     isNeedToExpand = (selectedApp == it.packageName),
                                     perfState = prcessPerfListState.value,
                                     onClick = {
@@ -155,7 +156,7 @@ fun PerformanceAppItem(
     packageName: String,
     label: String,
     version: String,
-    iconBitmap: ImageBitmap,
+    iconFilePath: String,
     perfState: MutableList<ProcessPerfState>,
     isNeedToExpand: Boolean = false,
     onClick: (String) -> Unit = {}
@@ -171,12 +172,16 @@ fun PerformanceAppItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(bottom = 10.dp)
         ) {
+            val coilAsyncPainter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalPlatformContext.current)
+                    .data(File(iconFilePath))
+                    .build()
+            )
             Image(
-                painter = BitmapPainter(image = iconBitmap),
+                painter = coilAsyncPainter,
                 modifier = Modifier.padding(start = 5.dp).size(50.dp),
                 contentDescription = "app icon"
             )
-
             Column(modifier = Modifier.padding(start = 10.dp).weight(0.4f)) {
                 CenterText(text = label, style = itemKeyText)
                 CenterText(text = version, style = defaultText)

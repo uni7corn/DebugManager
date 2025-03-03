@@ -49,6 +49,7 @@ kotlin{
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.compose.markdown )
+            implementation(libs.coil.compose)
         }
         desktopMain.dependencies {
             implementation(libs.ktor.client.okhttp)

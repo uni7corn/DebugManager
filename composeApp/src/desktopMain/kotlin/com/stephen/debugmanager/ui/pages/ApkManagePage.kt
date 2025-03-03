@@ -11,13 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import coil3.compose.LocalPlatformContext
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_close
 import com.stephen.composeapp.generated.resources.ic_more
@@ -153,7 +153,7 @@ fun ApkManagePage(
                                         it.packageName,
                                         it.appLabel,
                                         it.version,
-                                        it.icon,
+                                        it.iconFilePath,
                                         it.lastUpdateTime,
                                         toastState = toastState
                                     )
@@ -175,7 +175,7 @@ fun AppItem(
     packageName: String,
     label: String,
     version: String,
-    iconBitmap: ImageBitmap,
+    iconFilePath: String,
     lastUpdateTime: String,
     toastState: ToastState
 ) {
@@ -188,12 +188,16 @@ fun AppItem(
             .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp))
             .padding(5.dp)
     ) {
+        val coilAsyncPainter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalPlatformContext.current)
+                .data(File(iconFilePath))
+                .build()
+        )
         Image(
-            painter = BitmapPainter(image = iconBitmap),
+            painter = coilAsyncPainter,
             modifier = Modifier.padding(start = 5.dp).size(50.dp),
             contentDescription = "app icon"
         )
-
         Column(modifier = Modifier.padding(start = 10.dp).weight(0.4f)) {
             CenterText(text = label, style = itemKeyText)
             CenterText(text = version, style = defaultText)
