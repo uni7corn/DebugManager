@@ -53,8 +53,8 @@ class MainStateHolder(
     val selectedApkFileStateFlow = _selectedApkFileState.asStateFlow()
 
     // 设备app列表
-    private val _appListState = MutableStateFlow(AppListState())
-    val appListStateStateFlow = _appListState.asStateFlow()
+    private val _appMapListState = MutableStateFlow(AppListState())
+    val appListStateStateFlow = _appMapListState.asStateFlow()
 
     // 主题
     private val _themeState = MutableStateFlow(ThemeState.DEFAULT)
@@ -504,54 +504,64 @@ class MainStateHolder(
     @OptIn(ExperimentalResourceApi::class)
     fun getPackageList(filterParams: String = PackageFilter.SIMPLE.param) {
         LogUtils.printLog("getPackageList $filterParams")
+        // 获取当前设备的app信息
         CoroutineScope(Dispatchers.IO).launch {
-            appinfoHelper.pullAppInfoToComputer()
-            // 把label和packageName的数据读取到map中，挂起方法，读取完毕再进行下一步
-            val packageLabelMap = appinfoHelper.analyzeAppLabel()
-            val installedApps = adbClient.getExecuteResult(
-                adbClient.choosedDevicePosition,
-                if (filterParams == PackageFilter.SIMPLE.param) "pm list package -3"
-                else "pm list package"
-            )
-            val tempList = mutableListOf<AppItemData>()
-            installedApps.split("package:")
-                .filter { it.isNotEmpty() }
-                .sortedBy { (packageLabelMap[it] ?: "default") }.forEach {
-                    runCatching {
-                        // suspend方法，只有读取完成后才会往下走，否则会阻塞
-                        val iconFilePath = appinfoHelper.getIconFile(it)
-                        // 读取label
-                        val label = packageLabelMap[it] ?: "default"
-                        // 读取版本
-                        val version =
-                            adbClient.getExecuteResult(
-                                adbClient.choosedDevicePosition,
-                                "dumpsys package $it | grep versionName"
-                            ).split("=").last()
-                        // 上次1更新时间
-                        val lastUpdateTime =
-                            adbClient.getExecuteResult(
-                                adbClient.choosedDevicePosition,
-                                "dumpsys package $it | grep lastUpdateTime"
-                            ).split("=").last()
-                        tempList.add(
-                            AppItemData(
-                                packageName = it,
-                                appLabel = label,
-                                version = version,
-                                iconFilePath = iconFilePath,
-                                lastUpdateTime = lastUpdateTime
-                            )
-                        )
-                        _appListState.update {
-                            it.copy(appList = tempList, tempList.size)
-                        }
-                        _appListState.value = _appListState.value.toUiState()
-                    }.onFailure { e ->
-                        LogUtils.printLog("获取app信息失败:${e.message}", LogUtils.LogLevel.ERROR)
-                    }
-                }
+            appinfoHelper.pullAppInfoToComputer {
+                // 文件已拉取完毕，再次刷新应用列表
+                updateAppInfo(filterParams)
+            }
         }
+        // 使用缓存的app信息，最快速加载，当无数据时，使用默认loading值
+        CoroutineScope(Dispatchers.IO).launch {
+            updateAppInfo(filterParams)
+        }
+    }
+
+    private fun updateAppInfo(filterParams: String = PackageFilter.SIMPLE.param) {
+        // 把label和packageName的数据读取到map中，挂起方法，读取完毕再进行下一步
+        val packageLabelMap = appinfoHelper.analyzeAppLabel()
+        val installedApps = adbClient.getExecuteResult(
+            adbClient.choosedDevicePosition,
+            if (filterParams == PackageFilter.SIMPLE.param) "pm list package -3"
+            else "pm list package"
+        )
+        val appInfoMap = mutableMapOf<String, AppItemData>()
+        installedApps.split("package:")
+            .filter { it.isNotEmpty() }
+            .sortedBy { (packageLabelMap[it] ?: "default") }.forEach {
+                runCatching {
+                    // suspend方法，只有读取完成后才会往下走，否则会阻塞
+                    val iconFilePath = appinfoHelper.getIconFilePath(it)
+                    // 读取label
+                    val label = packageLabelMap[it]
+                    // 读取版本
+                    val version =
+                        adbClient.getExecuteResult(
+                            adbClient.choosedDevicePosition,
+                            "dumpsys package $it | grep versionName"
+                        ).split("=").last()
+                    // 上次1更新时间
+                    val lastUpdateTime =
+                        adbClient.getExecuteResult(
+                            adbClient.choosedDevicePosition,
+                            "dumpsys package $it | grep lastUpdateTime"
+                        ).split("=").last()
+                    appInfoMap[it] =
+                        AppItemData(
+                            packageName = it,
+                            appLabel = label ?: "Loading...",
+                            version = version,
+                            iconFilePath = iconFilePath,
+                            lastUpdateTime = lastUpdateTime
+                        )
+                    _appMapListState.update {
+                        it.copy(appMap = appInfoMap, appInfoMap.size)
+                    }
+                    _appMapListState.value = _appMapListState.value.toUiState()
+                }.onFailure { e ->
+                    LogUtils.printLog("获取app信息失败:${e.message}", LogUtils.LogLevel.ERROR)
+                }
+            }
     }
 
     fun executeAdbCommand(command: String) {

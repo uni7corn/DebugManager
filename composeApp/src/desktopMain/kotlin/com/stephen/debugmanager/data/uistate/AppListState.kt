@@ -1,10 +1,10 @@
 package com.stephen.debugmanager.data.uistate
 
 data class AppListState(
-    val appList: List<AppItemData> = listOf(),
-    val listSize:Int = appList.size
+    val appMap: Map<String, AppItemData> = mapOf(),
+    val listSize: Int = appMap.size
 ) {
-    fun toUiState() = AppListState(appList = appList, listSize = listSize)
+    fun toUiState() = AppListState(appMap = appMap, listSize = listSize)
 }
 
 data class AppItemData(

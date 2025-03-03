@@ -49,44 +49,34 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         }
     }
 
-    suspend fun pullAppInfoToComputer() = withContext(Dispatchers.IO) {
+    suspend fun pullAppInfoToComputer(whenFilePulled: () -> Unit) = withContext(Dispatchers.IO) {
         LogUtils.printLog("pullAppInfoToComputer")
         tryToLaunchSaveAppInfoService()
         val androidPath = "/storage/emulated/0/Android/data/com.stephen.appinfoservice/files"
         platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $androidPath ${PlatformAdapter.userAndroidTempFiles}")
         delay(3000L)
+        whenFilePulled()
     }
 
     /**
      * 循环读取图标文件，直到存在为止
      */
-    suspend fun getIconFile(packageName: String) = withContext(Dispatchers.IO) {
-        val path =
-            "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}files${PlatformAdapter.sp}$packageName.png"
-        var file = File(path)
-        while (!file.exists()) {
-            delay(1000L)
-        }
-        // 返回文件路径
-        path
-    }
+    fun getIconFilePath(packageName: String) =
+        "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}files${PlatformAdapter.sp}$packageName.png"
 
-    suspend fun analyzeAppLabel() = withContext(Dispatchers.IO) {
+    fun analyzeAppLabel(): Map<String, String> {
         val path =
             "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}files${PlatformAdapter.sp}packageMap.txt"
         val packageLabelMap = mutableMapOf<String, String>()
         // 读取到文件为止
         var file = File(path)
-        while (!file.exists()) {
-            LogUtils.printLog("packageMap.txt is not exist!")
-            delay(1000L)
-            file = File(path)
+        if (file.exists()) {
+            file.readLines(Charsets.UTF_8).forEach { line ->
+                val (packageName, label) = line.split("=")
+                packageLabelMap[packageName] = label
+            }
         }
-        file.readLines(Charsets.UTF_8).forEach { line ->
-            val (packageName, label) = line.split("=")
-            packageLabelMap[packageName] = label
-        }
-        packageLabelMap
+        return packageLabelMap
     }
 
     /**

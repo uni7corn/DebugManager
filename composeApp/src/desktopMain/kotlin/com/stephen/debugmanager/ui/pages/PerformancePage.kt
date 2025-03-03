@@ -122,22 +122,24 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
                         style = groupTitleText
                     )
                     LazyColumn {
-                        items(appListState.appList, key = { it.packageName }) {
+                        items (appListState.appMap.keys.toList(), key = { it }) {
                             Box(
                                 modifier = Modifier.fillMaxWidth(1f).animateItem()
                             ) {
-                                PerformanceAppItem(
-                                    it.packageName,
-                                    it.appLabel,
-                                    it.version,
-                                    it.iconFilePath,
-                                    isNeedToExpand = (selectedApp == it.packageName),
-                                    perfState = prcessPerfListState.value,
-                                    onClick = {
-                                        selectedApp = it
-                                        mainStateHolder.setProcessPackage(it)
-                                    }
-                                )
+                                appListState.appMap[it]?.let {
+                                    PerformanceAppItem(
+                                        it.packageName,
+                                        it.appLabel,
+                                        it.version,
+                                        it.iconFilePath,
+                                        isNeedToExpand = (selectedApp == it.packageName),
+                                        perfState = prcessPerfListState.value,
+                                        onClick = {
+                                            selectedApp = it
+                                            mainStateHolder.setProcessPackage(it)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -168,10 +170,7 @@ fun PerformanceAppItem(
                 onClick(packageName)
             }.padding(5.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 10.dp)
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             val coilAsyncPainter = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(LocalPlatformContext.current)
                     .data(File(iconFilePath))
@@ -192,7 +191,7 @@ fun PerformanceAppItem(
         }
 
         if (isNeedToExpand) {
-            Column(modifier = Modifier.fillMaxWidth(1f)) {
+            Column(modifier = Modifier.fillMaxWidth(1f).padding(top = 10.dp)) {
                 Row(modifier = Modifier.padding(bottom = 10.dp)) {
                     CenterText(text = "用户ID", style = itemKeyText, modifier = Modifier.weight(1f))
                     CenterText(text = "PID", style = itemKeyText, modifier = Modifier.weight(1f))
