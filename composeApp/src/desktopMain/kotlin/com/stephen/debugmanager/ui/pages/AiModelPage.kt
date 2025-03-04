@@ -59,6 +59,8 @@ fun AiModelPage() {
             else -> if (isSystemInDarkTheme()) markDownDark else markDownLight
         }
 
+        val toastState = rememberToastState()
+
         LaunchedEffect(Unit) {
             // 获取上一次记忆的模型
             mainStateHolder.getStoredAiModel()
@@ -108,14 +110,22 @@ fun AiModelPage() {
                     onValueChange = { userInputSting.value = it },
                     modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
                     onEnterPressed = {
-                        mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
-                        userInputSting.value = ""
+                        if (userInputSting.value.isEmpty()) {
+                            toastState.show("请先输入对话内容")
+                        } else {
+                            mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
+                            userInputSting.value = ""
+                        }
                     }
                 )
                 CommonButton(
                     "发送", onClick = {
-                        mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
-                        userInputSting.value = ""
+                        if (userInputSting.value.isEmpty()) {
+                            toastState.show("请先输入对话内容")
+                        } else {
+                            mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
+                            userInputSting.value = ""
+                        }
                     },
                     modifier = Modifier.padding(10.dp)
                 )
