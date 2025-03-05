@@ -10,10 +10,6 @@ import java.io.File
 
 class AndroidAppHelper(private val adbClient: AdbClient, private val platformAdapter: PlatformAdapter) {
 
-    init {
-        println("AndroidAppHelper init")
-    }
-
     /**
      * 安装AppInfoService
      * 有时候执行会返回一个1，不能用String.empty来判断，改为用返回值的长度来判断

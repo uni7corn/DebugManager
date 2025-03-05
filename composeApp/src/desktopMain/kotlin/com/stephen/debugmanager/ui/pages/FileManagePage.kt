@@ -115,8 +115,6 @@ fun FileManagePage(
                                             if (DoubleClickUtils.isFastDoubleClick()) {
                                                 if (it.isDirectory)
                                                     destinationCall(it.path)
-                                                else
-                                                    println("点击文件：${it.path}")
                                             }
                                         }.fillParentMaxWidth().background(
                                             // android端分隔符固定为/

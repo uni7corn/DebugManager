@@ -6,10 +6,6 @@ import com.stephen.debugmanager.utils.LogUtils
 
 class AdbClient(private val platformAdapter: PlatformAdapter) {
 
-    init {
-        println("AdbClient init")
-    }
-
     lateinit var jadbClient: JadbConnection
         private set
 

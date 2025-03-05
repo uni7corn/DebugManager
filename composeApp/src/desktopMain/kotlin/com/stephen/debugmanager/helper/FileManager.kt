@@ -13,10 +13,6 @@ import java.io.File
 
 class FileManager(private val adbClient: AdbClient, private val platformAdapter: PlatformAdapter) {
 
-    init {
-        println("FileManager init")
-    }
-
     companion object {
         const val ROOT_DIR = "/"
         const val SDCARD_DIR = "/sdcard"

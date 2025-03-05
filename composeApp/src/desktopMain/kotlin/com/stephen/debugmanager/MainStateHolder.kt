@@ -76,7 +76,7 @@ class MainStateHolder(
 
 
     init {
-        println("MainStateHolder init")
+        LogUtils.printLog("MainStateHolder init")
         recycleCheckConnection()
         dataStoreHelper.init(dataStoreFileName)
         platformAdapter.init()
@@ -466,6 +466,7 @@ class MainStateHolder(
      * 获取当前目录，和目录下的文件列表
      */
     fun getFileList(path: String = FileManager.ROOT_DIR) {
+        LogUtils.printLog("getFileList -> destination: $path")
         CoroutineScope(Dispatchers.IO).launch {
             fileManager.prepareDirPath(path)
             runCatching {
@@ -901,7 +902,6 @@ class MainStateHolder(
                 // 以host分割，扔掉最后一段无用数据
                 cpuInfo.split("%host").first().split(' ').filter { it.isNotEmpty() }.forEach {
                     /**
-                     * println("cpu:$it")
                      * cpu:800%cpu
                      * cpu:85%user
                      * cpu:0%nice
@@ -960,7 +960,7 @@ class MainStateHolder(
 
     fun setProcessPackage(packageName: String) {
         // 先清空性能数据
-        println("setProcessPackage -> packageName: $packageName _localPackageName: $_localPackageName")
+        LogUtils.printLog("setProcessPackage -> packageName: $packageName _localPackageName: $_localPackageName")
         if (packageName != _localPackageName) {
             _processPerfListState.value = mutableListOf<ProcessPerfState>()
             _localPackageName = packageName
@@ -971,7 +971,7 @@ class MainStateHolder(
      * 开始轮询进程的性能数据
      */
     suspend fun startLoopGetProcessPerf() = withContext(Dispatchers.IO) {
-        println("startLoopGetProcessPerf -> packageName: $_localPackageName")
+        LogUtils.printLog("startLoopGetProcessPerf -> packageName: $_localPackageName")
         while (true) {
             runCatching {
                 val tempList = mutableListOf<ProcessPerfState>()
@@ -989,7 +989,7 @@ class MainStateHolder(
                  */
                 memResult.split('\n').filter { it.isNotEmpty() }.forEach {
                     val processPerf = it.split(' ').filter { it.isNotEmpty() }
-                    println("processPerf: $processPerf")
+                    LogUtils.printLog("processPerf: $processPerf")
                     val pid = processPerf[1]
                     val cpuPerfByPid = adbClient.getExecuteResult(
                         adbClient.choosedDevicePosition,
@@ -1008,7 +1008,7 @@ class MainStateHolder(
                 }
                 _processPerfListState.value = tempList
             }.onFailure { e ->
-                println("getProcessPerf error: ${e.message}")
+                LogUtils.printLog("getProcessPerf error: ${e.message}")
             }
             delay(2000L)
         }

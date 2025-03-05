@@ -15,10 +15,6 @@ import java.util.*
 
 class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
-    init {
-        println("PlatformAdapter init")
-    }
-
     fun init() {
         createInitTempFile()
         singleInstanceApp.initCheckFileLock(lockFilePath)
@@ -170,6 +166,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
     }
 }
 
-fun getSystemEnv(key: String)= System.getenv(key).also {
-    println("getSystemEnv: $key = $it")
+@Suppress("unused")
+fun getSystemEnv(key: String): String? = System.getenv(key).also {
+    LogUtils.printLog("getSystemEnv: $key = $it")
 }
