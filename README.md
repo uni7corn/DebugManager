@@ -85,3 +85,20 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 ![](/screenshots/blogs_dark_about.png)
 
 ![](/screenshots/blogs_light_about.png)
+
+### 自适应布局
+支持自适应布局，采用了最小窗口尺寸设定、流式布局和自动折叠侧边栏等策略。
+
+保证在不同窗口尺寸下，也能有较好的交互和页面表现。
+
+一下是部分页面自适应的运行情况：
+
+![](/screenshots/blogs_cmp_debugmanager_device_narrow_screen.png)
+
+![](/screenshots/blogs_cmp_debugmanager_app_narrow_screen.png)
+
+![](/screenshots/blogs_cmp_debugmanager_file_narrow_screen.png)
+
+![](/screenshots/blogs_cmp_debugmanager_perf_narrow_screen.png)
+
+![](/screenshots/blogs_cmp_debugmanager_about_narrow_screen.png)
