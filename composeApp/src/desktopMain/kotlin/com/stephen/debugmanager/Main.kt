@@ -74,7 +74,7 @@ fun main() = application {
                     Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                         WindowDraggableArea {
                             CustomTitleBar(
-                                title = "DebugManager by Stephen",
+                                title = "DebugManager",
                                 windowState = windowState,
                                 onClose = {
                                     dialogState.value = true
