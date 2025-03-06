@@ -93,11 +93,17 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 
 一下是部分页面自适应的运行情况：
 
-<img src="/screenshots/blogs_cmp_debugmanager_device_narrow_screen.png" alt="Image 1" style="width:45%; margin-right: 5%;">
-<img src="/screenshots/blogs_cmp_debugmanager_app_narrow_screen.png" alt="Image 2" style="width:45%;">
+<div style="display: flex; justify-content: center;">
+  <img src="/screenshots/blogs_cmp_debugmanager_device_narrow_screen.png" alt="Image 1" style="width: 45%; margin-right: 5%;">
+  <img src="/screenshots/blogs_cmp_debugmanager_app_narrow_screen.png" alt="Image 2" style="width: 45%;">
+</div>
 
-<img src="/screenshots/blogs_cmp_debugmanager_file_narrow_screen.png" alt="Image 1" style="width:40%; margin-right: 5%;">
-<img src="/screenshots/blogs_cmp_debugmanager_perf_narrow_screen.png" alt="Image 2" style="width:40%;">
+<div style="display: flex; justify-content: center;">
+  <img src="/screenshots/blogs_cmp_debugmanager_file_narrow_screen.png" alt="Image 1" style="width: 45%; margin-right: 5%;">
+  <img src="/screenshots/blogs_cmp_debugmanager_perf_narrow_screen.png" alt="Image 2" style="width: 45%;">
+</div>
 
-<img src="/screenshots/blogs_cmp_debugmanager_ai_narrow_screen.png" alt="Image 1" style="width:40%; margin-right: 5%;">
-<img src="/screenshots/blogs_cmp_debugmanager_about_narrow_screen.png" alt="Image 2" style="width:40%;">
+<div style="display: flex; justify-content: center;">
+  <img src="/screenshots/blogs_cmp_debugmanager_ai_narrow_screen.png" alt="Image 1" style="width: 45%; margin-right: 5%;">
+  <img src="/screenshots/blogs_cmp_debugmanager_about_narrow_screen.png" alt="Image 2" style="width: 45%;">
+</div>
