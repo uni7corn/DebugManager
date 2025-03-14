@@ -81,6 +81,9 @@ fun CustomTitleBar(
                     modifier = Modifier.clickable { onClose() }.size(32.dp).padding(5.dp)
                 )
             }
+            SimpleDivider(
+                modifier = Modifier.fillMaxWidth(1f).height(1.dp).align(Alignment.BottomCenter)
+            )
         }
     }
 }
