@@ -1,6 +1,13 @@
 package com.stephen.debugmanager.ui.pages
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,12 +16,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.ic_refresh
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.uistate.DeviceState
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.groupTitleText
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -22,6 +36,8 @@ import org.koin.core.context.GlobalContext
 fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
+
+    val scope = rememberCoroutineScope()
 
     val toastState = rememberToastState()
 
@@ -41,16 +57,38 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 .background(MaterialTheme.colorScheme.surface)
                                 .padding(10.dp)
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier.weight(1f).padding(bottom = 10.dp)
-                                        .align(Alignment.Top)
-                                ) {
-                                    CenterText("设备基础信息", style = groupTitleText)
-                                }
-                                CommonButton(
-                                    onClick = { onRefresh() },
-                                    text = "刷新",
+                            Row(
+                                modifier = Modifier.fillMaxWidth(1f).padding(bottom = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val rotateState = remember { mutableStateOf(false) }
+                                val rotateAnimation by animateFloatAsState(
+                                    targetValue = if (rotateState.value) 720f else 0f,  // 修改为720度
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(1000),  // 修改为500毫秒
+                                        repeatMode = RepeatMode.Restart
+                                    )
+                                )
+                                CenterText("设备基础信息", style = groupTitleText)
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_refresh),
+                                    contentDescription = "刷新",
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                                    modifier = Modifier
+                                        .padding(start = 10.dp)
+                                        .size(20.dp)
+                                        .rotate(if (rotateState.value) rotateAnimation else 0f)  // 仅在rotateState为true时应用动画
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = null,
+                                        ) {
+                                            onRefresh()
+                                            scope.launch {
+                                                rotateState.value = true
+                                                delay(2000)
+                                                rotateState.value = false
+                                            }
+                                        }
                                 )
                             }
 
@@ -216,7 +254,8 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                             }
                                         },
                                         modifier = Modifier.padding(10.dp),
-                                        textModifier = itemButtonTextModifier
+                                        textModifier = itemButtonTextModifier,
+                                        btnColor = MaterialTheme.colorScheme.tertiary
                                     )
                                 }
 
@@ -343,7 +382,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 )
                             }
                             Row(
-                                modifier = Modifier.fillMaxWidth(1f),
+                                modifier = Modifier.fillMaxWidth(1f).padding(5.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 WrappedEditText(
@@ -363,17 +402,18 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                         mockInputSting.value = ""
                                     },
                                     modifier = Modifier.padding(10.dp),
-                                    textModifier = itemButtonTextModifier
+                                    textModifier = itemButtonTextModifier,
+                                    btnColor = MaterialTheme.colorScheme.tertiary
                                 )
                             }
                         }
                     }
                 }
             }
-        }
-        // 设备未连接，显示提示文案
-        if (deviceState.isConnected.not()) {
-            DeviceNoneConnectShade()
+            // 设备未连接，显示提示文案
+            if (deviceState.isConnected.not()) {
+                DeviceNoneConnectShade()
+            }
         }
     }
 }

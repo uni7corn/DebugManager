@@ -51,7 +51,8 @@ fun CommandPage(isDeviceConnected: Boolean) {
                         "执行", onClick = {
                             mainStateHolder.executeAdbCommand(adbCommand)
                         },
-                        modifier = Modifier.padding(10.dp).width(150.dp)
+                        modifier = Modifier.padding(10.dp).width(150.dp),
+                        btnColor = MaterialTheme.colorScheme.tertiary
                     )
                 }
             }

@@ -52,33 +52,36 @@ val markDownLight = object : MarkdownColors {
 
 val DarkColorScheme = darkColorScheme(
     // 使用最多的按钮色
-    primary = Color(0xff575e6e),
+    primary = Color(0xff404040),
     //大背景
-    background = Color(0xFF303845),
+    background = Color(0xFF1a1a1a),
     // 功能组背景
-    surface = Color(0xff3e4653),
+    surface = Color(0xff282828),
     // 文字颜色
-    onPrimary = Color(0xffc6c6cd),
+    onPrimary = Color(0xffebebeb),
     // 路径框，输入框
-    secondary = Color(0xFF2e3643),
+    secondary = Color(0xFF1a1a1a),
+    // 特殊按钮颜色二
+    tertiary = Color(0xff3d77c2),
     // 置灰文字，提示文字颜色
-    onSecondary = Color(0xccc6c6cd),
+    onSecondary = Color(0xff999999),
     // 警告按钮或错误提示
-    error = Color(0xffc04645),
+    error = Color(0xffe53c3c),
     // 背景之上的其余元素的颜色，目前只有分割线
-    onBackground = Color(0xccc6c6cd),
+    onBackground = Color(0xff323232),
     // 功能组选中的颜色
-    onSurface = Color(0xff4d5972),
+    onSurface = Color(0xff404040),
 )
 
 val LightColorScheme = lightColorScheme(
-    primary = Color(0xffe7c496),
-    secondary = Color(0xfffbead5),
-    background = Color(0xFFfff8ed),
-    surface = Color(0xfff6d7b0),
-    onPrimary = Color(0xff272727),
-    error = Color(0xffff5370),
-    onSecondary = Color(0xcc272727),
-    onBackground = Color(0xcc272727),
-    onSurface = Color(0xffcfb694),
+    primary = Color(0xfffefeff),
+    background = Color(0xffe2e9f8),
+    surface = Color(0xffeff2fd),
+    onPrimary = Color(0xff2b2f35),
+    secondary = Color(0xffe2e9f8),
+    tertiary =Color(0xff62bffc) ,
+    onSecondary = Color(0xff9197a1),
+    error = Color(0xffe8563d),
+    onBackground = Color(0xffe2e5f0),
+    onSurface = Color(0xffd6deec),
 )

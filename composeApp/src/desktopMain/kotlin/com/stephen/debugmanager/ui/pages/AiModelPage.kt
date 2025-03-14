@@ -127,7 +127,8 @@ fun AiModelPage() {
                             userInputSting.value = ""
                         }
                     },
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier.padding(10.dp),
+                    btnColor = MaterialTheme.colorScheme.tertiary
                 )
             }
         }

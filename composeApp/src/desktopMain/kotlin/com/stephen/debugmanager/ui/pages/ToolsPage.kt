@@ -94,6 +94,7 @@ fun ToolsPage() {
                                             )
                                         }
                                     },
+                                    btnColor = MaterialTheme.colorScheme.tertiary,
                                     modifier = Modifier.padding(10.dp)
                                 )
                             }

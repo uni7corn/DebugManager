@@ -38,7 +38,7 @@ fun CommonButton(
             text = text,
             color = MaterialTheme.colorScheme.onPrimary,
             style = defaultText,
-            modifier =textModifier,
+            modifier = textModifier,
         )
     }
 }

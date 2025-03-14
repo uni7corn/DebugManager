@@ -19,7 +19,7 @@ val infoText = TextStyle(
 )
 
 val pageTitleText = TextStyle(
-    fontSize = 22.sp,
+    fontSize = 20.sp,
     fontWeight = FontWeight.Bold,
     textAlign = TextAlign.Center,
 )

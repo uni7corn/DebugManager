@@ -68,7 +68,7 @@ fun <T> DropdownSelector(
             modifier = modifier.background(MaterialTheme.colorScheme.surface).width(IntrinsicSize.Min)
         ) {
             options.forEach {
-                CenterText(it.value, modifier = Modifier.fillMaxWidth(1f).clickable {
+                CenterText(it.value, modifier = modifier.fillMaxWidth(1f).clickable {
                     onSelected(it.key)
                     expanded = false
                 }.padding(vertical = 10.dp))

@@ -14,7 +14,7 @@ fun BasePage(title: String, content: @Composable () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(1f).padding(10.dp)) {
         CenterText(
             title,
-            modifier = Modifier.padding(bottom = 20.dp).align(Alignment.CenterHorizontally),
+            modifier = Modifier.padding(bottom = 10.dp).align(Alignment.CenterHorizontally),
             style = pageTitleText,
         )
         content()

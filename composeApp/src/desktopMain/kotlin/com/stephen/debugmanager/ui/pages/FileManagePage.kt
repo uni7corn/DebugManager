@@ -60,7 +60,6 @@ fun FileManagePage(
                 FlowRow(
                     verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.padding(bottom = 10.dp)
                 ) {
                     CommonButton(
                         onClick = { destinationCall(FileManager.LAST_DIR) },
@@ -236,6 +235,7 @@ fun FileManagePage(
                                 CommonButton(
                                     text = "PUSH",
                                     modifier = Modifier.padding(bottom = 10.dp),
+                                    btnColor = MaterialTheme.colorScheme.tertiary,
                                     onClick = {
                                         if (desktopSelectedFile.isNotEmpty()) {
                                             toastState.show("开始推送文件，请勿多次点击")
@@ -283,6 +283,7 @@ fun FileManagePage(
                                 CommonButton(
                                     text = "PUSH",
                                     modifier = Modifier.padding(bottom = 10.dp),
+                                    btnColor = MaterialTheme.colorScheme.tertiary,
                                     onClick = {
                                         if (desktopSelectedFolderPath.isNotEmpty()) {
                                             toastState.show("开始推送文件夹，请勿多次点击")
@@ -335,7 +336,8 @@ fun FileManagePage(
                                     onClick = {
                                         mainStateHolder.pullFileFromAndroid(androidSelectedFile)
                                         toastState.show(PULL_FILE_TOAST)
-                                    }
+                                    },
+                                    btnColor = MaterialTheme.colorScheme.tertiary
                                 )
 
                             }

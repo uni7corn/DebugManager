@@ -125,7 +125,8 @@ fun ApkManagePage(
                                     toastState.show("请选择一个要安装 apk 文件")
                                 }
                             },
-                            modifier = Modifier.weight(1f).padding(start = 10.dp)
+                            modifier = Modifier.weight(1f).padding(start = 10.dp),
+                            btnColor = MaterialTheme.colorScheme.tertiary
                         )
                     }
                 }
@@ -195,7 +196,7 @@ fun AppItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(1f).padding(vertical = 5.dp)
-            .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp))
+            .border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
             .padding(5.dp)
     ) {
         val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }

@@ -75,6 +75,7 @@ fun AboutPage() {
             )
             CommonButton(
                 "打开缓存目录",
+                btnColor = MaterialTheme.colorScheme.tertiary,
                 onClick = { mainStateHolder.openFolder(mainStateHolder.getUserTempFilePath()) })
         }
         CenterText("PULL的Android文件存储目录", style = groupTitleText, modifier = Modifier.padding(vertical = 10.dp))
@@ -90,6 +91,7 @@ fun AboutPage() {
             )
             CommonButton(
                 "打开Android缓存目录",
+                btnColor = MaterialTheme.colorScheme.tertiary,
                 onClick = { mainStateHolder.openFolder(mainStateHolder.getDesktopTempFolder()) })
         }
     }

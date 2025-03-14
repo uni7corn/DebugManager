@@ -165,7 +165,7 @@ fun PerformanceAppItem(
 ) {
     Column(
         modifier = Modifier.animateContentSize().fillMaxWidth(1f).padding(vertical = 5.dp)
-            .border(2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp))
+            .border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
             .clickable {
                 onClick(packageName)
             }.padding(5.dp)

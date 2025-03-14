@@ -42,7 +42,9 @@ fun WrappedEditText(
             focusedTextColor = MaterialTheme.colorScheme.onPrimary,
             cursorColor = MaterialTheme.colorScheme.onPrimary,
             focusedIndicatorColor = MaterialTheme.colorScheme.onPrimary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.onPrimary
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.onPrimary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
         ),
         label = { Text(tipText, color = MaterialTheme.colorScheme.onSecondary) },
         onValueChange = {
@@ -53,7 +55,7 @@ fun WrappedEditText(
         modifier = modifier
             .widthIn(max = 200.dp, min = 100.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(MaterialTheme.colorScheme.background)
             .border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
             .focusRequester(focusRequester)
             .onKeyEvent {
