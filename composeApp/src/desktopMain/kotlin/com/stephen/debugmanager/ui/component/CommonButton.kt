@@ -15,7 +15,6 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.style.TextOverflow
 import com.stephen.debugmanager.ui.theme.defaultText
 
 @Composable
@@ -23,7 +22,8 @@ fun CommonButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    btnColor: Color = MaterialTheme.colorScheme.primary
+    btnColor: Color = MaterialTheme.colorScheme.primary,
+    textModifier: Modifier = Modifier,
 ) {
     Button(
         onClick = { onClick() },
@@ -37,7 +37,8 @@ fun CommonButton(
         Text(
             text = text,
             color = MaterialTheme.colorScheme.onPrimary,
-            style = defaultText
+            style = defaultText,
+            modifier =textModifier,
         )
     }
 }
