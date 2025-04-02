@@ -15,28 +15,32 @@ class LogFileFinder {
     /**
      * 处理日志文件
      * @param path 日志文件路径
-     * @param textToFind 要查找的文本
+     * @param tagListToFind 要查找的文本列表
      * @return 处理后的新日志文件路径
      */
-    suspend fun processLogFilesByText(path: String, textToFind: String) = withContext(Dispatchers.IO) {
-        LogUtils.printLog("processLogFilesByText -> start to process, path: $path, textToFind: $textToFind")
+    suspend fun processLogFilesByText(path: String, tagListToFind: List<String>) = withContext(Dispatchers.IO) {
+        LogUtils.printLog(
+            "processLogFilesByText -> path: $path, textToFind: ${tagListToFind.joinToString(",")}"
+        )
         val folder = File(path)
         unzipGzFilesInFolder(folder)
-        val resultPath = analysisLogFile(folder, textToFind)
+        val resultPath = analysisLogFile(folder, tagListToFind)
         resultPath
     }
 
     /**
      * analysis log file, find all qualified log, generate a new txt file
      */
-    suspend fun analysisLogFile(folder: File, textToFind: String): String? = withContext(Dispatchers.IO) {
+    suspend fun analysisLogFile(folder: File, tagListToFind: List<String>): String? = withContext(Dispatchers.IO) {
         val foundLines = mutableListOf<String>()
         // 遍历识别所有前缀带有.logcat 的文件，将其内容写入到同目录下的 txt 文件
         folder.listFiles()?.forEach { file ->
             if (file.isFile && file.name.startsWith("logcat.")) {
                 file.forEachLine { line ->
-                    if (line.contains(textToFind)) {
-                        foundLines.add(line)
+                    tagListToFind.forEach { tag ->
+                        if (line.contains(tag)) {
+                            foundLines.add(line)
+                        }
                     }
                 }
             }
@@ -44,7 +48,7 @@ class LogFileFinder {
         LogUtils.printLog("analysisLogFile -> 找到的匹配的词条数量: ${foundLines.size}")
         // 写回到同目录下的 txt 文件
         val ts = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(System.currentTimeMillis())
-        val outputFilePath = "${folder.absolutePath}/${ts}_${textToFind}_logs.txt"
+        val outputFilePath = "${folder.absolutePath}/${ts}_matched_logs.txt"
         val outputFile = File(outputFilePath)
         FileWriter(outputFile).use { writer ->
             foundLines.forEach { line ->

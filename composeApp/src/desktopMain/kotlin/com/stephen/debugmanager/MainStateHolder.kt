@@ -781,9 +781,9 @@ class MainStateHolder(
     /**
      * 分析日志文件夹里的文件数据，解析出需要的字段合集
      */
-    fun processLogFiles(path: String, textToFind: String) {
+    fun processLogFiles(path: String, tagListToFind: List<String>) {
         CoroutineScope(Dispatchers.IO).launch {
-            val resultPath = logFileFinder.processLogFilesByText(path, textToFind)
+            val resultPath = logFileFinder.processLogFilesByText(path, tagListToFind)
             LogUtils.printLog("resultPath: $resultPath")
             openFolder(resultPath.toString())
         }
