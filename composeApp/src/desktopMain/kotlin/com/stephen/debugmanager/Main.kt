@@ -5,10 +5,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -53,6 +55,7 @@ fun main() = application {
                 windowState.isMinimized = false
             dialogState.value = true
         },
+        transparent = true,
         title = "DebugManager",
         undecorated = true,
         state = windowState,
@@ -71,7 +74,7 @@ fun main() = application {
             SplashScreen {
                 BoxWithConstraints {
                     val windowWidth = maxWidth
-                    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+                    Column(modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.background)) {
                         WindowDraggableArea {
                             CustomTitleBar(
                                 title = "DebugManager",
