@@ -45,6 +45,8 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
 
     val recordTime = remember { mutableStateOf("") }
 
+    val displayidString = remember { mutableStateOf("") }
+
     BasePage("设备信息") {
         Box {
             LazyColumn {
@@ -201,12 +203,40 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(1f),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                WrappedEditText(
+                                    value = displayidString.value,
+                                    tipText = "输入DisplayId(默认为0)",
+                                    onValueChange = { displayidString.value = it },
+                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                                        .weight(1f),
+                                    onEnterPressed = {
+                                        if (displayidString.value.isEmpty()) {
+                                            toastState.show("参数为空，默认设置displayid为0")
+                                            mainStateHolder.openScrcpyById()
+                                        } else {
+                                            mainStateHolder.openScrcpyById(displayidString.value)
+                                            displayidString.value = ""
+                                        }
+                                    }
+                                )
                                 CommonButton(
                                     "Scrcpy投屏", onClick = {
-                                        mainStateHolder.openScreenCopy()
+                                        if (displayidString.value.isEmpty()) {
+                                            toastState.show("参数为空，默认设置displayid为0")
+                                            mainStateHolder.openScrcpyById()
+                                        } else {
+                                            mainStateHolder.openScrcpyById(displayidString.value)
+                                            displayidString.value = ""
+                                        }
                                     },
-                                    modifier = itemButtonModifier,
-                                    textModifier = itemButtonTextModifier
+                                    modifier = Modifier.padding(10.dp),
+                                    textModifier = itemButtonTextModifier,
+                                    btnColor = MaterialTheme.colorScheme.tertiary
                                 )
                             }
                         }

@@ -335,11 +335,11 @@ class MainStateHolder(
     }
 
     /**
-     * 打开投屏
+     * 根据id投屏
      */
-    fun openScreenCopy() {
+    fun openScrcpyById(displayId: String = "0") {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localScrcpyPath} ${adbClient.serial}")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localScrcpyPath} ${adbClient.serial} --display-id=${displayId}")
         }
     }
 
