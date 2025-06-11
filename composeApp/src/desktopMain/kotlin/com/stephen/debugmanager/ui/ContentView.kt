@@ -89,7 +89,10 @@ fun ContentView(windowWith: Dp) {
                         },
                         mainItemList,
                         onItemClick = {
-                            navController.navigate(it.name)
+                            // 检查当前是否已经在目标页面，如果不是则进行导航
+                            if (navController.currentDestination?.route != it.name) {
+                                navController.navigate(it.name)
+                            }
                             choosedTab.value = it
                         },
                         chooseTabItem = choosedTab.value,

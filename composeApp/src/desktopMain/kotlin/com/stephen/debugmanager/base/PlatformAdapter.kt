@@ -86,22 +86,23 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
      * 创建配置文件缓存文件夹
      */
     private fun createInitTempFile() {
-        CoroutineScope(Dispatchers.IO).launch {
-            runCatching {
-                // 创建本地log文件夹
-                val localLogFile = Paths.get("${userLogConfigFile}${sp}thisisaemptyfile")
-                Files.createDirectories(localLogFile.parent)
-                // 创建android拉取图标等数据文件夹
-                val androidTemp = Paths.get("${userAndroidTempFiles}${sp}thisisaemptyfile")
-                Files.createDirectories(androidTemp.parent)
-                // 创建桌面的缓存文件
-                val desktopTemp = Paths.get("${desktopTempFolder}${sp}thisisaemptyfile")
-                Files.createDirectories(desktopTemp.parent)
-                // 目录创建完成，程序开启
-                LogUtils.printLog("\n\n\n=====>Application start<======")
-            }.onFailure { e ->
-                LogUtils.printLog("创建配置文件失败：${e.message}")
-            }
+        runCatching {
+            // 创建本地log文件夹
+            val localLogFile = Paths.get("${userLogConfigFile}${sp}thisisaemptyfile")
+            Files.createDirectories(localLogFile.parent)
+            // 创建android拉取图标等数据文件夹
+            val androidTemp = Paths.get("${userAndroidTempFiles}${sp}thisisaemptyfile")
+            Files.createDirectories(androidTemp.parent)
+            // 创建桌面的缓存文件
+            val desktopTemp = Paths.get("${desktopTempFolder}${sp}thisisaemptyfile")
+            Files.createDirectories(desktopTemp.parent)
+            // 进程锁文件
+            val lockFile = Paths.get(lockFilePath)
+            Files.createDirectories(lockFile.parent)
+            // 目录创建完成，程序开启
+            LogUtils.printLog("\n\n\n=====>Application start<======")
+        }.onFailure { e ->
+            LogUtils.printLog("创建配置文件失败：${e.message}")
         }
     }
 

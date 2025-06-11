@@ -16,7 +16,7 @@ class SingleInstanceApp {
     fun initCheckFileLock(lockFilePath: String) {
         LogUtils.printLog("initCheckFileLock")
         val file = File(lockFilePath)
-        channel = RandomAccessFile(file, "rw").getChannel()
+        channel = RandomAccessFile(file, "rw").channel
         lock = channel?.tryLock()
         if (lock == null) {
             LogUtils.printLog("Another instance is already running.", LogUtils.LogLevel.ERROR)

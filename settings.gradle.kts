@@ -14,7 +14,8 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-       maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://mirrors.tencent.com/nexus/repository/maven-public/")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven("https://jitpack.io")
         google()
         mavenCentral()
