@@ -60,9 +60,9 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
         val deviceMap = mutableMapOf<String, String>()
         setChoosedDevice(0)
         LogUtils.printLog("Connected Device Number:${jadbClient.devices.size}")
-        for (i in 0 until jadbClient.devices.size) {
-            val deviceName = getExecuteResult(i, "getprop ro.product.model")
-            deviceMap[i.toString()] = deviceName
+        jadbClient.devices.forEachIndexed { index, device ->
+            val deviceName = getExecuteResult(index, "getprop ro.product.model")
+            deviceMap[index.toString()] = deviceName
         }
         deviceMap
     }
