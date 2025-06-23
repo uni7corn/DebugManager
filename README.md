@@ -2,7 +2,7 @@
 
 ## 最新版本
 
-[Github Release v1.4.2](https://github.com/stepheneasyshot/DebugManager/releases/tag/v1.4.2)
+[Github Release v2.1.0](https://github.com/stepheneasyshot/DebugManager/releases/tag/v2.1.0)
 
 ## 介绍
 
