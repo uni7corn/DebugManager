@@ -12,8 +12,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberNotification
+import androidx.compose.ui.window.rememberTrayState
 import androidx.compose.ui.window.rememberWindowState
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
@@ -49,6 +52,31 @@ fun main() = application {
         mainStateHolder.getThemeState()
     }
 
+    val trayState = rememberTrayState()
+    val notification = rememberNotification("Notification", "Message from MyApp!")
+
+    Tray(
+        state = trayState,
+        icon = painterResource(Res.drawable.app_logo),
+        tooltip = "DebugManager",
+        onAction = {
+            windowState.isMinimized = false
+        },
+        menu = {
+            Item("打开主界面", onClick = {
+                windowState.isMinimized = false
+            })
+            Item("发通知测试", onClick = {
+                trayState.sendNotification(notification)
+            })
+            Item("退出应用", onClick = {
+                if (windowState.isMinimized)
+                    windowState.isMinimized = false
+                dialogState.value = true
+            })
+        }
+    )
+
     Window(
         onCloseRequest = {
             if (windowState.isMinimized)
@@ -74,7 +102,10 @@ fun main() = application {
             SplashScreen {
                 BoxWithConstraints {
                     val windowWidth = maxWidth
-                    Column(modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.background)) {
+                    Column(
+                        modifier = Modifier.clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.background)
+                    ) {
                         WindowDraggableArea {
                             CustomTitleBar(
                                 title = "DebugManager",
