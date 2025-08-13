@@ -8,6 +8,7 @@ import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
+import com.stephen.debugmanager.data.RemoteFile
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.data.bean.Role
 import com.stephen.debugmanager.net.KimiRepository
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import java.text.SimpleDateFormat
+import kotlin.collections.listOf
 
 
 class MainStateHolder(
@@ -117,10 +119,14 @@ class MainStateHolder(
      */
     fun getDeviceMap() {
         CoroutineScope(Dispatchers.IO).launch {
+            val deviceNameMap = mutableMapOf<String, String>()
+            adbClient.getDeviceMap().entries.forEach {
+                deviceNameMap[it.value.serial] = it.value.name
+            }
             _deviceMapState.update {
                 it.copy(
-                    deviceMap = adbClient.getDeviceMap(),
-                    currentChoosedDevice = adbClient.choosedDevicePosition
+                    deviceMap = deviceNameMap,
+                    choosedSerial = adbClient.serial
                 )
             }
             _deviceMapState.value = _deviceMapState.value.toUiState()
@@ -130,11 +136,11 @@ class MainStateHolder(
     /**
      * 设置选中的设备
      */
-    fun setChooseDevice(postion: Int) {
-        adbClient.setChoosedDevice(postion)
+    fun setChooseDevice(serial: String) {
+        adbClient.setChoosedDevice(serial)
         _deviceMapState.update {
             it.copy(
-                currentChoosedDevice = adbClient.choosedDevicePosition
+                choosedSerial = adbClient.serial
             )
         }
         _deviceMapState.value = _deviceMapState.value.toUiState()
@@ -172,32 +178,32 @@ class MainStateHolder(
      * 获取设备基本信息
      */
     fun getCurrentDeviceInfo() {
-        LogUtils.printLog("getDeviceInfo", LogUtils.LogLevel.INFO)
+        LogUtils.printLog("getCurrentDeviceInfo", LogUtils.LogLevel.INFO)
         runCatching {
             adbClient.runRootScript()
             adbClient.runRemountScript()
             // 根据选中设备的位置拿取设备信息
             CoroutineScope(Dispatchers.IO).launch {
                 prepareEnv()
-                val deviceName = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.product.model")
+                val deviceName = adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.model")
                 val sdkVersion =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.build.version.release")
+                    adbClient.getExecuteResult(adbClient.serial, "getprop ro.build.version.release")
                 val manufacturer =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.product.brand")
+                    adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.brand")
                 val systemVersion =
                     adbClient.getExecuteResult(
-                        adbClient.choosedDevicePosition,
+                        adbClient.serial,
                         "getprop ro.vendor.build.version.incremental"
                     )
                 val buildType =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.vendor.build.type")
-                val innerName = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.product.device")
+                    adbClient.getExecuteResult(adbClient.serial, "getprop ro.vendor.build.type")
+                val innerName = adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.device")
                 val architecture =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.product.cpu.abi")
+                    adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.cpu.abi")
                 val displayResolution =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "wm size").split(": ").last()
+                    adbClient.getExecuteResult(adbClient.serial, "wm size").split(": ").last()
                 val displayDensity =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "wm density").split(": ").last()
+                    adbClient.getExecuteResult(adbClient.serial, "wm density").split(": ").last()
                 val serialNum = adbClient.serial.split(" ").last()
                 _deviceState.update {
                     it.copy(
@@ -227,7 +233,7 @@ class MainStateHolder(
      */
     fun mockBackPressed() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 4")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 4")
         }
     }
 
@@ -236,7 +242,7 @@ class MainStateHolder(
      */
     fun mockHomePressed() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 3")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 3")
         }
     }
 
@@ -245,7 +251,7 @@ class MainStateHolder(
      */
     fun mockRecentPressed() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 187")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 187")
         }
     }
 
@@ -255,10 +261,10 @@ class MainStateHolder(
     fun screenshot() {
         CoroutineScope(Dispatchers.IO).launch {
             val androidFileName = "/sdcard/ScreenShot_${getDateString()}.png"
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell screencap -p $androidFileName")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell screencap -p $androidFileName")
             delay(1000L)
             // 预留1s，等文件生成完毕，再pull
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $androidFileName ${PlatformAdapter.desktopTempFolder}")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $androidFileName ${PlatformAdapter.desktopTempFolder}")
         }
     }
 
@@ -267,7 +273,7 @@ class MainStateHolder(
      */
     fun clearScreenShotsCache() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell rm /sdcard/ScreenShot_*")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell rm /sdcard/ScreenShot_*")
         }
     }
 
@@ -276,7 +282,7 @@ class MainStateHolder(
      */
     fun turnOnScreen() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 224")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 224")
         }
     }
 
@@ -285,7 +291,7 @@ class MainStateHolder(
      */
     fun turnOffScreen() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 223")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 223")
         }
     }
 
@@ -294,7 +300,7 @@ class MainStateHolder(
      */
     fun lockScreen() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 82")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 82")
         }
     }
 
@@ -303,7 +309,7 @@ class MainStateHolder(
      */
     fun muteDevice() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 164")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 164")
         }
     }
 
@@ -312,7 +318,7 @@ class MainStateHolder(
      */
     fun volumeUp() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 24")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 24")
         }
     }
 
@@ -321,7 +327,7 @@ class MainStateHolder(
      */
     fun volumeDown() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input keyevent 25")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input keyevent 25")
         }
     }
 
@@ -330,7 +336,7 @@ class MainStateHolder(
      */
     fun inputText(text: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell input text $text")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell input text $text")
         }
     }
 
@@ -339,7 +345,7 @@ class MainStateHolder(
      */
     fun openScrcpyById(displayId: String = "0") {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localScrcpyPath} ${adbClient.serial} --display-id=${displayId}")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localScrcpyPath} -s ${adbClient.serial} --display-id=${displayId}")
         }
     }
 
@@ -361,14 +367,14 @@ class MainStateHolder(
             val androidFilePath = "/sdcard/Record_${getDateString()}.mp4"
             LogUtils.printLog("recordTime: $recordTime")
             // 先打开显示触摸点
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell settings put system show_touches 1")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell screenrecord --time-limit $recordTime $androidFilePath")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell settings put system show_touches 1")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell screenrecord --time-limit $recordTime $androidFilePath")
             // 多余1s，等文件生成完毕，再pull
             delay((recordTime + 1) * 1000L)
             LogUtils.printLog("startScreenRecord time up")
             // 关闭显示触摸点
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell settings put system show_touches 0")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $androidFilePath ${PlatformAdapter.desktopTempFolder}")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell settings put system show_touches 0")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $androidFilePath ${PlatformAdapter.desktopTempFolder}")
             delay(recordTime * 1000L)
             isRecording = false
             platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
@@ -380,7 +386,7 @@ class MainStateHolder(
      */
     fun clearRecordCache() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell rm /sdcard/Record_*.mp4")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell rm /sdcard/Record_*.mp4")
         }
     }
 
@@ -390,7 +396,7 @@ class MainStateHolder(
     fun rebootRecovery() {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("rebootRecovery")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} reboot recovery")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} reboot recovery")
         }
     }
 
@@ -400,7 +406,7 @@ class MainStateHolder(
     fun rebootFastboot() {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("rebootFastboot")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} reboot bootloader")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} reboot bootloader")
         }
     }
 
@@ -413,11 +419,11 @@ class MainStateHolder(
             runCatching {
                 val traceLogName =
                     "trace_log_" + SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(System.currentTimeMillis())
-                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell setprop persist.traced.enable 1")
-                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell perfetto -o /data/misc/perfetto-traces/$traceLogName -t 10s -b 100mb -s 150mb sched freq idle am wm gfx view input")
+                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell setprop persist.traced.enable 1")
+                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell perfetto -o /data/misc/perfetto-traces/$traceLogName -t 10s -b 100mb -s 150mb sched freq idle am wm gfx view input")
                 delay(10_000L)
-                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull /data/misc/perfetto-traces/$traceLogName ${PlatformAdapter.desktopTempFolder}")
-                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell rm /data/misc/perfetto-traces/$traceLogName")
+                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull /data/misc/perfetto-traces/$traceLogName ${PlatformAdapter.desktopTempFolder}")
+                platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell rm /data/misc/perfetto-traces/$traceLogName")
                 platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
             }.onFailure { e ->
                 LogUtils.printLog("抓取trace出错：${e.message}", LogUtils.LogLevel.ERROR)
@@ -430,7 +436,7 @@ class MainStateHolder(
      */
     fun openAndroidSettings() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell am start -a android.settings.SETTINGS")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell am start -a android.settings.SETTINGS")
         }
     }
 
@@ -439,7 +445,7 @@ class MainStateHolder(
      */
     fun rebootDevice() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} reboot")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} reboot")
         }
     }
 
@@ -448,7 +454,7 @@ class MainStateHolder(
      */
     fun powerOff() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} reboot -p")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} reboot -p")
         }
     }
 
@@ -457,8 +463,8 @@ class MainStateHolder(
      */
     fun installApp(filePath: String, installParams: String = "") {
         CoroutineScope(Dispatchers.IO).launch {
-            LogUtils.printLog("${platformAdapter.localAdbPath} ${adbClient.serial} install $installParams $filePath")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} install $installParams $filePath")
+            LogUtils.printLog("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams $filePath")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams $filePath")
         }
     }
 
@@ -471,11 +477,18 @@ class MainStateHolder(
             fileManager.prepareDirPath(path)
             runCatching {
                 val deviceCode =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.product.device")
-                val subdirectories =
-                    adbClient.getAdbClient(adbClient.choosedDevicePosition)
-                        ?.list(fileManager.getDirPath().joinToString("/"))
-                        ?: listOf()
+                    adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.device")
+                val subdirectories = mutableListOf<RemoteFile>()
+                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls ${fileManager.getDirPath().joinToString("/")} -l").apply {
+                    this.split("\n").forEach {
+                        val fileName = it.split(" ").last()
+                        val isDirectory = it.startsWith("d") || it.startsWith("l")
+                        val path = fileManager.getDirPath().joinToString("/") + "/" + fileName
+                        println("fileName: $fileName, isDirectory: $isDirectory, path: $path")
+                        val remoteFile = RemoteFile(fileName, isDirectory, path)
+                        subdirectories.add(remoteFile)
+                    }
+                }
                 _fileState.update {
                     it.copy(
                         deviceCode = deviceCode,
@@ -518,11 +531,11 @@ class MainStateHolder(
         }
     }
 
-    private fun updateAppInfo(filterParams: String = PackageFilter.SIMPLE.param) {
+    private suspend fun updateAppInfo(filterParams: String = PackageFilter.SIMPLE.param) {
         // 把label和packageName的数据读取到map中，挂起方法，读取完毕再进行下一步
         val packageLabelMap = appinfoHelper.analyzeAppLabel()
         val installedApps = adbClient.getExecuteResult(
-            adbClient.choosedDevicePosition,
+            adbClient.serial,
             if (filterParams == PackageFilter.SIMPLE.param) "pm list package -3"
             else "pm list package"
         )
@@ -538,13 +551,13 @@ class MainStateHolder(
                     // 读取版本
                     val version =
                         adbClient.getExecuteResult(
-                            adbClient.choosedDevicePosition,
+                            adbClient.serial,
                             "dumpsys package $it | grep versionName"
                         ).split("=").last()
                     // 上次1更新时间
                     val lastUpdateTime =
                         adbClient.getExecuteResult(
-                            adbClient.choosedDevicePosition,
+                            adbClient.serial,
                             "dumpsys package $it | grep lastUpdateTime"
                         ).split("=").last()
                     appInfoMap[it] =
@@ -577,15 +590,15 @@ class MainStateHolder(
     fun startMainActivity(packageName: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("startMainActivity: $packageName")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell monkey -p $packageName -c android.intent.category.LAUNCHER 1")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell monkey -p $packageName -c android.intent.category.LAUNCHER 1")
 
             // adapt specific method of start main activity
             val mainActivity =
                 adbClient.getExecuteResult(
-                    adbClient.choosedDevicePosition,
+                    adbClient.serial,
                     "dumpsys package $packageName | grep $packageName/"
                 ).split("filter").first().drop(16)
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell am start -n $mainActivity")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell am start -n $mainActivity")
         }
     }
 
@@ -595,7 +608,7 @@ class MainStateHolder(
     fun uninstallApp(packageName: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("uninstallApp: $packageName")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} uninstall $packageName")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} uninstall $packageName")
         }
     }
 
@@ -605,11 +618,11 @@ class MainStateHolder(
     fun pushApk(packageName: String, apkPath: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val installedApkPath =
-                adbClient.getExecuteResult(adbClient.choosedDevicePosition, "pm path $packageName")
+                adbClient.getExecuteResult(adbClient.serial, "pm path $packageName")
                     .split("package:").last()
             val installedApkFolderPath = installedApkPath.split("/").dropLast(1).joinToString("/")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell rm $installedApkPath")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} push $apkPath $installedApkFolderPath")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell rm $installedApkPath")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} push $apkPath $installedApkFolderPath")
         }
     }
 
@@ -619,9 +632,9 @@ class MainStateHolder(
     fun pullInstalledApk(packageName: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val installedApkPath =
-                adbClient.getExecuteResult(adbClient.choosedDevicePosition, "pm path $packageName")
+                adbClient.getExecuteResult(adbClient.serial, "pm path $packageName")
                     .split("package:").last()
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $installedApkPath ${PlatformAdapter.desktopTempFolder}/${packageName}.apk")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $installedApkPath ${PlatformAdapter.desktopTempFolder}/${packageName}.apk")
             platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
         }
     }
@@ -653,7 +666,7 @@ class MainStateHolder(
                     }
                     // 检索当前设备连接状态
                     val result =
-                        platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} ${adbClient.serial} shell echo \"connect_test\"")
+                        platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell echo \"connect_test\"")
                     if (!result.contains("connect_test")) throw Exception("Current Device is offline!")
                     // 从断开到成功连接，主动刷新一次设备信息
                     if (!isConnected) {
@@ -687,9 +700,17 @@ class MainStateHolder(
         CoroutineScope(Dispatchers.IO).launch {
             delay(1000L)
             runCatching {
-                val subdirectories = adbClient.getAdbClient(adbClient.choosedDevicePosition)?.list(path) ?: listOf()
+                val subdirectories = mutableListOf<RemoteFile>()
+                adbClient.getAdbDevices(adbClient.serial)
+                    ?.excuteCommandWithResult("ls $path")?.collect {
+                        val fileName = it.split("/").last()
+                        val isDirectory = it.endsWith("/")
+                        val path = it.dropLast(1)
+                        val remoteFile = RemoteFile(fileName, isDirectory, path)
+                        subdirectories.add(remoteFile)
+                    }
                 val deviceCode =
-                    adbClient.getExecuteResult(adbClient.choosedDevicePosition, "getprop ro.product.device")
+                    adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.device")
                 _fileState.update {
                     it.copy(deviceCode = deviceCode, currentdirectory = path, subdirectories = subdirectories)
                 }
@@ -886,7 +907,7 @@ class MainStateHolder(
                 var memFree = ""
                 var memUsed = ""
 
-                val memInfo = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "top -b -n 1 | grep \"Mem:\"")
+                val memInfo = adbClient.getExecuteResult(adbClient.serial, "top -b -n 1 | grep \"Mem:\"")
                 memInfo.split(',').forEach {
                     if (it.contains("total")) {
                         memTotal = it.replace("Mem:  ", "").replace(" total", "")
@@ -898,7 +919,7 @@ class MainStateHolder(
                 }
                 LogUtils.printLog("getTotalPerformanceResult -> memTotal:$memTotal, memUsed:$memUsed, memFree:$memFree")
 
-                val cpuInfo = adbClient.getExecuteResult(adbClient.choosedDevicePosition, "top -b -n 1 | grep \"%cpu\"")
+                val cpuInfo = adbClient.getExecuteResult(adbClient.serial, "top -b -n 1 | grep \"%cpu\"")
                 // 以host分割，扔掉最后一段无用数据
                 cpuInfo.split("%host").first().split(' ').filter { it.isNotEmpty() }.forEach {
                     /**
@@ -977,7 +998,7 @@ class MainStateHolder(
                 val tempList = mutableListOf<ProcessPerfState>()
                 val memResult =
                     adbClient.getExecuteResult(
-                        adbClient.choosedDevicePosition,
+                        adbClient.serial,
                         "ps -A | grep $_localPackageName",
                         false
                     )
@@ -992,7 +1013,7 @@ class MainStateHolder(
                     LogUtils.printLog("processPerf: $processPerf")
                     val pid = processPerf[1]
                     val cpuPerfByPid = adbClient.getExecuteResult(
-                        adbClient.choosedDevicePosition,
+                        adbClient.serial,
                         "top -b -n 1 -p $pid | grep $pid",
                         false
                     ).split(' ').filter { it.isNotEmpty() }

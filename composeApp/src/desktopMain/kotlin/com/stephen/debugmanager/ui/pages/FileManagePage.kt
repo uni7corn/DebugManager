@@ -101,10 +101,10 @@ fun FileManagePage(
                         )
                         // 文件列表
                         LazyColumn {
-                            items(directoryState.subdirectories.sortedBy { it.path }) {
-                                if (it.path != ".." && it.path != ".")
+                            items(directoryState.subdirectories.sortedBy { it.fileName }) {
+                                if (it.fileName.isNotEmpty())
                                     FileViewItem(
-                                        it.path,
+                                        it.fileName,
                                         it.isDirectory,
                                         modifier = Modifier.clickable {
                                             // 点击则设置即将操作的path
@@ -367,7 +367,7 @@ fun FileManagePage(
 }
 
 @Composable
-fun FileViewItem(path: String, isDirectory: Boolean, modifier: Modifier) {
+fun FileViewItem(name: String, isDirectory: Boolean, modifier: Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.padding(start = 20.dp)
@@ -380,7 +380,7 @@ fun FileViewItem(path: String, isDirectory: Boolean, modifier: Modifier) {
             contentDescription = "file_icon"
         )
         CenterText(
-            path,
+            name,
             modifier = Modifier.padding(6.dp),
             style = defaultText,
         )

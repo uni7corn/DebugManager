@@ -15,7 +15,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
      * 有时候执行会返回一个1，不能用String.empty来判断，改为用返回值的长度来判断
      */
     private suspend fun checkAppInfoServiceInstallation() = withContext(Dispatchers.IO) {
-        if (adbClient.getExecuteResult(adbClient.choosedDevicePosition, "pm list packages | grep appinfoservice")
+        if (adbClient.getExecuteResult(adbClient.serial, "pm list packages | grep appinfoservice")
                 .apply { LogUtils.printLog("check AppInfoService Install result:$this") }
                 .length < 10
         ) {
@@ -36,7 +36,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         // 检查apk是否安装，未安装则先安装
         checkAppInfoServiceInstallation()
         // 进程未起，先延时
-        if (adbClient.getExecuteResult(adbClient.choosedDevicePosition, "ps -A | grep com.stephen.appinfoservice")
+        if (adbClient.getExecuteResult(adbClient.serial, "ps -A | grep com.stephen.appinfoservice")
                 .apply { LogUtils.printLog("check AppInfoService Process Running result:$this") }
                 .length < 10
         ) {
@@ -45,7 +45,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         }
     }
 
-    suspend fun pullAppInfoToComputer(whenFilePulled: () -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun pullAppInfoToComputer(whenFilePulled: suspend () -> Unit) = withContext(Dispatchers.IO) {
         LogUtils.printLog("pullAppInfoToComputer")
         tryToLaunchSaveAppInfoService()
         val androidPath = "/storage/emulated/0/Android/data/com.stephen.appinfoservice/files"

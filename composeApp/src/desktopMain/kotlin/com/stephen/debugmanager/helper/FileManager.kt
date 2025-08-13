@@ -3,10 +3,10 @@ package com.stephen.debugmanager.helper
 import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.FileOperationType
+import com.stephen.debugmanager.data.RemoteFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import se.vidstige.jadb.RemoteFile
 import com.stephen.debugmanager.utils.LogUtils
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -90,7 +90,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     fun deleteFileOrFolder(path: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("deleteFileOrFolder: $path")
-            adbClient.getExecuteResult(adbClient.choosedDevicePosition, "rm -r $path")
+            adbClient.getExecuteResult(adbClient.serial, "rm -r $path")
         }
     }
 
@@ -100,7 +100,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     fun copyFileOrFolder(sourcePath: String, destinationPath: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("cp sourcePath: $sourcePath, destinationPath: $destinationPath")
-            adbClient.getExecuteResult(adbClient.choosedDevicePosition, "cp -r $sourcePath $destinationPath")
+            adbClient.getExecuteResult(adbClient.serial, "cp -r $sourcePath $destinationPath")
         }
     }
 
@@ -110,7 +110,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     fun moveFileOrFolder(sourcePath: String, destinationPath: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("mv sourcePath: $sourcePath, destinationPath: $destinationPath")
-            adbClient.getExecuteResult(adbClient.choosedDevicePosition, "mv $sourcePath $destinationPath")
+            adbClient.getExecuteResult(adbClient.serial, "mv $sourcePath $destinationPath")
         }
     }
 
@@ -119,7 +119,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     suspend fun pushFileToAndroid(windowsPath: String, androidPath: String) = withContext(Dispatchers.IO) {
         runCatching {
-            adbClient.getAdbClient(adbClient.choosedDevicePosition)?.push(File(windowsPath), RemoteFile(androidPath))
+            adbClient.getAdbDevices(adbClient.serial)?.push(windowsPath, androidPath)
         }.onFailure { e ->
             LogUtils.printLog("推送文件失败：${e.message}", LogUtils.LogLevel.ERROR)
         }
@@ -160,7 +160,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     fun createDirectory(path: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            adbClient.getExecuteResult(adbClient.choosedDevicePosition, "mkdir $path")
+            adbClient.getExecuteResult(adbClient.serial, "mkdir $path")
         }
     }
 
@@ -169,7 +169,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     fun createFile(content: String, path: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            adbClient.getExecuteResult(adbClient.choosedDevicePosition, "echo \"$content\" > $path")
+            adbClient.getExecuteResult(adbClient.serial, "echo \"$content\" > $path")
         }
     }
 }

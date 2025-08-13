@@ -31,7 +31,6 @@ import com.stephen.debugmanager.ui.component.DropdownSelector
 import com.stephen.debugmanager.ui.component.SimpleDivider
 import com.stephen.debugmanager.ui.pages.*
 import com.stephen.debugmanager.ui.theme.defaultText
-import com.stephen.debugmanager.ui.theme.pageTitleText
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
@@ -82,9 +81,9 @@ fun ContentView(windowWith: Dp) {
                 Row {
                     SideTabBar(
                         deviceMapState.deviceMap,
-                        deviceMapState.currentChoosedDevice.toString(),
+                        deviceMapState.choosedSerial,
                         onDeviceSelect = {
-                            mainStateHolder.setChooseDevice(it.toInt())
+                            mainStateHolder.setChooseDevice(it)
                             mainStateHolder.getCurrentDeviceInfo()
                         },
                         mainItemList,
@@ -104,20 +103,20 @@ fun ContentView(windowWith: Dp) {
         }
         // 右侧内容区
         Box(modifier = Modifier.weight(1f).animateContentSize()) {
-            NavHost(navController, startDestination = Constants.DEVICE_INFO.toString()) {
-                composable(Constants.DEVICE_INFO.toString()) {
+            NavHost(navController, startDestination = Constants.DEVICE_INFO) {
+                composable(Constants.DEVICE_INFO) {
                     DeviceInfoPage(
                         deviceState,
                         onRefresh = {
                             mainStateHolder.getCurrentDeviceInfo()
                         })
                 }
-                composable(Constants.INSTALL.toString()) {
+                composable(Constants.INSTALL) {
                     ApkManagePage(appListState, deviceState.isConnected) {
                         mainStateHolder.getPackageList(it)
                     }
                 }
-                composable(Constants.FILE_MANAGE.toString()) {
+                composable(Constants.FILE_MANAGE) {
                     FileManagePage(
                         DirectoryState(
                             directoryState.deviceCode,
@@ -130,19 +129,19 @@ fun ContentView(windowWith: Dp) {
                         }
                     )
                 }
-                composable(Constants.COMMAND.toString()) {
+                composable(Constants.COMMAND) {
                     CommandPage(deviceState.isConnected)
                 }
-                composable(Constants.PERFORMANCE.toString()) {
+                composable(Constants.PERFORMANCE) {
                     PerformancePage(deviceState.isConnected, appListState)
                 }
-                composable(Constants.TOOLS.toString()) {
+                composable(Constants.TOOLS) {
                     ToolsPage()
                 }
-                composable(Constants.ABOUT.toString()) {
+                composable(Constants.ABOUT) {
                     AboutPage()
                 }
-                composable(Constants.AI_MODEL.toString()) {
+                composable(Constants.AI_MODEL) {
                     AiModelPage()
                 }
             }
@@ -165,7 +164,7 @@ fun ContentView(windowWith: Dp) {
 @Composable
 fun SideTabBar(
     deviceMap: Map<String, String>,
-    deviceSelectedPosition: String,
+    serialNumber: String,
     onDeviceSelect: (String) -> Unit,
     mainItemList: List<MainTabItem>,
     onItemClick: (name: MainTabItem) -> Unit,
@@ -179,7 +178,7 @@ fun SideTabBar(
             DropdownSelector(
                 deviceMap,
                 // 当拔掉设备，map长度减少时，防止deviceSelectedPosition越界，设为map长度为其最大值
-                deviceSelectedPosition.toInt().coerceAtMost(deviceMap.size - 1).toString(),
+                serialNumber,
                 modifier = Modifier.width(sideBarWidth),
             ) {
                 // 返回选中的设备位置，0123

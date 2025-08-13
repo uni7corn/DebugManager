@@ -1,6 +1,7 @@
 package com.stephen.debugmanager.data.uistate
 
-import se.vidstige.jadb.RemoteFile
+import com.stephen.debugmanager.data.RemoteFile
+
 
 data class DirectoryState(
     val deviceCode:String? = null,
