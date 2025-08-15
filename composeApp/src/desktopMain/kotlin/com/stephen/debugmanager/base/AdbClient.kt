@@ -50,7 +50,6 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
      */
     suspend fun getAdbDevicesList(): List<String> {
         val output = platformAdapter.executeCommandWithResult("adb devices")
-        print("adb devices output:\n $output")
         return parseAdbDevicesOutput(output)
     }
 

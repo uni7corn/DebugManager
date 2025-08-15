@@ -65,7 +65,7 @@ fun FileManagePage(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     CommonButton(
-                        onClick = { destinationCall(FileManager.LAST_DIR) },
+                        onClick = { destinationCall(FileManager.LAST_FOLDER) },
                         text = "${Constants.LEFT_ARROW}返回上一级"
                     )
                     CommonButton(
@@ -73,11 +73,7 @@ fun FileManagePage(
                         modifier = Modifier.padding(start = 10.dp)
                     )
                     CommonButton(
-                        onClick = { destinationCall(FileManager.SDCARD_DIR) }, text = "去向sdcard",
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
-                    CommonButton(
-                        onClick = { destinationCall(FileManager.PRIV_APP) }, text = "去向priv-app",
+                        onClick = { destinationCall(FileManager.ROOT_DIR) }, text = "去向sdcard",
                         modifier = Modifier.padding(start = 10.dp)
                     )
                 }
@@ -103,7 +99,7 @@ fun FileManagePage(
                             modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                         )
                         // 文件列表
-                        LazyVerticalGrid(columns = GridCells.Fixed(7)) {
+                        LazyVerticalGrid(columns = GridCells.Fixed(5)) {
                             items(directoryState.subdirectories.sortedBy { it.fileName }) {
                                 if (it.fileName.isNotEmpty())
                                     FileViewItem(
@@ -153,14 +149,14 @@ fun FileManagePage(
 @Composable
 fun FileViewItem(name: String, isDirectory: Boolean, modifier: Modifier) {
     Column(
-        modifier = modifier.padding(start = 20.dp),
+        modifier = modifier.padding(5.dp).width(IntrinsicSize.Max),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = if (isDirectory) painterResource(Res.drawable.ic_folder)
             else painterResource(Res.drawable.ic_file),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier.size(36.dp),
             contentDescription = "file_icon"
         )
         CenterText(

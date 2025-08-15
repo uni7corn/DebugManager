@@ -474,23 +474,15 @@ class MainStateHolder(
     fun getFileList(path: String = FileManager.ROOT_DIR) {
         LogUtils.printLog("getFileList -> destination: $path")
         CoroutineScope(Dispatchers.IO).launch {
-            fileManager.prepareDirPath(path)
+            fileManager.setCurrentDirPath(path)
             runCatching {
                 val deviceCode =
                     adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.device")
-                val subdirectories = mutableListOf<RemoteFile>()
-                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls ${fileManager.getDirPath().joinToString("/")} -l").apply {
-                    this.split("\n").filter {
-                        it.isNotBlank() && !it.startsWith("total ")
-                    }.forEach {
-                        val remoteFile = fileManager.parseLineOutput(it)
-                        subdirectories.add(remoteFile)
-                    }
-                }
+                val subdirectories = fileManager.updateCurrentFileList()
                 _fileState.update {
                     it.copy(
                         deviceCode = deviceCode,
-                        currentdirectory = fileManager.getDirPath().joinToString("/"),
+                        currentdirectory = fileManager.getDirPath().joinToString(FileManager.FILE_SEPARATOR),
                         subdirectories = subdirectories
                     )
                 }
@@ -698,15 +690,7 @@ class MainStateHolder(
         CoroutineScope(Dispatchers.IO).launch {
             delay(1000L)
             runCatching {
-                val subdirectories = mutableListOf<RemoteFile>()
-                adbClient.getAdbDevices(adbClient.serial)
-                    ?.excuteCommandWithResult("ls $path")?.collect {
-                        val fileName = it.split("/").last()
-                        val isDirectory = it.endsWith("/")
-                        val path = it.dropLast(1)
-                        val remoteFile = RemoteFile(fileName, isDirectory, path)
-                        subdirectories.add(remoteFile)
-                    }
+                val subdirectories = fileManager.updateCurrentFileList()
                 val deviceCode =
                     adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.device")
                 _fileState.update {
@@ -720,7 +704,7 @@ class MainStateHolder(
     }
 
     fun setSelectedFilePath(path: String) {
-        fileManager.setSelectedFilePath(path)
+//        fileManager.setSelectedFilePath(path)
     }
 
     fun getSelectedPath() = fileManager.selectedFilePath
@@ -777,14 +761,6 @@ class MainStateHolder(
     @Suppress("unused")
     fun createFile(content: String, path: String) {
         fileManager.createFile(content, path)
-    }
-
-    fun pasteFileOrFolder() {
-        fileManager.pasteFileOrFolder()
-    }
-
-    fun setFileOperationState(operationType: FileOperationType) {
-        fileManager.setFileOperationState(operationType)
     }
 
     fun getDebugManagetVersion() = PlatformAdapter.appVersion

@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import com.stephen.debugmanager.ui.theme.defaultText
 
 @Composable
@@ -25,7 +26,9 @@ fun CenterText(
         Text(
             text = text,
             style = style,
-            color = color
+            color = color,
+            maxLines = 1, // <-- 限制为一行
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

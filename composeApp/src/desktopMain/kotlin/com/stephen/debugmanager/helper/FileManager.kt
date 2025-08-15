@@ -15,52 +15,64 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
 
     companion object {
         const val ROOT_DIR = "/"
-        const val SDCARD_DIR = "/sdcard"
-        const val LAST_DIR = ".."
-        const val PRIV_APP = "system/priv-app"
+        const val FILE_SEPARATOR = "/"
+        const val LAST_FOLDER = ".."
     }
 
-    private val directoryList = mutableListOf(ROOT_DIR)
+    // 当前所处的目录，每一级分布于列表中
+    private val currentDirPath = mutableListOf(ROOT_DIR)
 
-    fun prepareDirPath(path: String) {
+    fun getDirPath() = currentDirPath
+
+    private val fileOperationType = FileOperationType.NONE
+
+    /**
+     * 更新当前目录路径
+     * @param path 目录路径
+     * ROOT_DIR 表示返回根目录
+     * LAST_FOLDER 表示返回上一级目录
+     * 其他情况表示进入子目录
+     */
+    fun setCurrentDirPath(path: String) {
         when (path) {
-            ROOT_DIR, SDCARD_DIR, PRIV_APP -> {
-                directoryList.clear()
-                directoryList.add(path)
+            ROOT_DIR -> {
+                currentDirPath.clear()
+                currentDirPath.add(ROOT_DIR)
             }
 
-            LAST_DIR -> {
-                if (directoryList.size > 1)
-                    directoryList.removeLast()
+            LAST_FOLDER -> {
+                if (currentDirPath.size > 1)
+                    currentDirPath.removeLast()
             }
 
             else -> {
-                directoryList.add(path)
+                currentDirPath.add(path)
             }
         }
+        println("path: $path, currentDirPath: ${getDirPath().joinToString(FILE_SEPARATOR)}")
     }
 
-    fun getDirPath() = directoryList
-
-    /**
-     * 设置需要操作的文件或文件夹
-     */
     var selectedFilePath: String = ""
-        private set
-
-    fun setSelectedFilePath(path: String) {
-        selectedFilePath = getDirPath().joinToString("/") + "/$path"
-    }
 
     /**
-     * 设置文件操作状态
+     * 更新当前目录文件列表
      */
-    private var fileOperationType: FileOperationType = FileOperationType.NONE
-    private var originalFilePath: String = ""
-    fun setFileOperationState(operationType: FileOperationType) {
-        LogUtils.printLog("setFileOperationState: $operationType")
-        fileOperationType = operationType
-        originalFilePath = selectedFilePath
+    suspend fun updateCurrentFileList(): List<RemoteFile> {
+        val files = mutableListOf<RemoteFile>()
+        println("updateCurrentFileList -> currentDirPath: ${getDirPath().joinToString(FILE_SEPARATOR)}")
+        platformAdapter.executeCommandWithResult(
+            "${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls ${
+                getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR
+            } -l"
+        ).apply {
+            this.split("\n").filter {
+                it.isNotBlank() && !it.startsWith("total ")
+            }.forEach {
+                val remoteFile = parseLineOutput(it)
+                remoteFile?.let { element -> files.add(element) }
+            }
+        }
+        return files
     }
 
     /**
@@ -68,22 +80,25 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     fun pasteFileOrFolder() {
         val destinationPath = getDirPath().joinToString("/")
-        when (fileOperationType) {
-            FileOperationType.COPY -> {
-                copyFileOrFolder(originalFilePath, destinationPath)
-            }
-
-            FileOperationType.MOVE -> {
-                moveFileOrFolder(originalFilePath, destinationPath)
-            }
-
-            FileOperationType.NONE -> {
-                LogUtils.printLog("文件操作状态未设置")
-            }
-        }
+//        when (fileOperationType) {
+//            FileOperationType.COPY -> {
+//                copyFileOrFolder(originalFilePath, destinationPath)
+//            }
+//
+//            FileOperationType.MOVE -> {
+//                moveFileOrFolder(originalFilePath, destinationPath)
+//            }
+//
+//            FileOperationType.NONE -> {
+//                LogUtils.printLog("文件操作状态未设置")
+//            }
+//        }
     }
 
-    fun parseLineOutput(line: String): RemoteFile {
+    /**
+     * 解析ls命令输出的单行
+     */
+    fun parseLineOutput(line: String): RemoteFile? {
 
         // Split the line by one or more spaces to get individual parts.
         val parts = line.split("\\s+".toRegex())
@@ -109,10 +124,8 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
 
         // Create a FileInfo object and add to the list.
         return if (name.isNotEmpty()) {
-            RemoteFile(name, isDirectory, getDirPath().joinToString("/") + "/$name")
-        } else {
-            RemoteFile("", false, "")
-        }
+            RemoteFile(name, isDirectory, name)
+        } else null
     }
 
     /**
