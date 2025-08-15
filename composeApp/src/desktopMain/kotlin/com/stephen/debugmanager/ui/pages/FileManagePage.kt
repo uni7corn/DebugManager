@@ -118,74 +118,83 @@ fun FileManagePage(
                 }
 
                 // 目录列表
-                Column(
-                    modifier = Modifier.fillMaxWidth(1f).weight(1f).padding(end = 10.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            // 清除选中文件
-                            androidSelectedFile = ""
-                        }
-                        .background(MaterialTheme.colorScheme.surface)
+                FileDragArea(
+                    onSelectFile = {
+                        desktopSelectedFile = it
+                    },
+                    onSelectFolder = {
+                        desktopSelectedFolderPath = it
+                    }
                 ) {
-                    CenterText(
-                        "${directoryState.deviceCode}:${directoryState.currentdirectory}",
-                        style = itemKeyText,
-                        modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
-                    )
-                    // 文件列表
-                    ContextMenuArea(items = {
-                        listOf(
-                            ContextMenuItem("刷新") {
-                                directoryState.currentdirectory?.let { mainStateHolder.updateFileList(it) }
-                            },
-                            ContextMenuItem("推送文件到此") {
-
-                            },
+                    Column(
+                        modifier = Modifier.fillMaxWidth(1f).weight(1f).padding(end = 10.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                // 清除选中文件
+                                androidSelectedFile = ""
+                            }
+                            .background(MaterialTheme.colorScheme.surface)
+                    ) {
+                        CenterText(
+                            "${directoryState.deviceCode}:${directoryState.currentdirectory}",
+                            style = itemKeyText,
+                            modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                         )
-                    }) {
-                        LazyVerticalGrid(columns = GridCells.Fixed(5)) {
-                            items(directoryState.subdirectories.sortedBy { it.fileName }) {
-                                if (it.fileName.isNotEmpty())
-                                    FileViewItem(
-                                        it.fileName,
-                                        it.isDirectory,
-                                        modifier = Modifier.padding(5.dp)
-                                            .clip(RoundedCornerShape(10))
-                                            .clickable(
-                                                interactionSource = remember { MutableInteractionSource() },
-                                                indication = null
-                                            ) {
-                                                // 点击则设置即将操作的path
-                                                androidSelectedFile = it.fileName
-                                                // 双击，执行操作
-                                                if (DoubleClickUtils.isFastDoubleClick()) {
-                                                    if (it.isDirectory)
-                                                        destinationCall(it.fileName)
-                                                }
-                                            }.background(
-                                                // android端分隔符固定为/
-                                                if (androidSelectedFile.split("/")
-                                                        .last() == it.fileName
-                                                ) MaterialTheme.colorScheme.onSurface else Color.Transparent
-                                            ),
-                                        onClickDelete = { name ->
-                                            androidSelectedFile = name
-                                            deleteConfirmDialogState.value = true
-                                        },
-                                        onClickMove = { name ->
-                                            androidSelectedFile = name
-                                        },
-                                        onClickCopy = { name ->
-                                            androidSelectedFile = name
-                                        },
-                                        onClickPull = { name ->
-                                            androidSelectedFile = name
-                                            mainStateHolder.pullFileFromAndroid(androidSelectedFile)
-                                        },
-                                    )
+                        // 文件列表
+                        ContextMenuArea(items = {
+                            listOf(
+                                ContextMenuItem("刷新") {
+                                    directoryState.currentdirectory?.let { mainStateHolder.updateFileList(it) }
+                                },
+                                ContextMenuItem("推送文件到此") {
+
+                                },
+                            )
+                        }) {
+                            LazyVerticalGrid(columns = GridCells.Fixed(5)) {
+                                items(directoryState.subdirectories.sortedBy { it.fileName }) {
+                                    if (it.fileName.isNotEmpty())
+                                        FileViewItem(
+                                            it.fileName,
+                                            it.isDirectory,
+                                            modifier = Modifier.padding(5.dp)
+                                                .clip(RoundedCornerShape(10))
+                                                .clickable(
+                                                    interactionSource = remember { MutableInteractionSource() },
+                                                    indication = null
+                                                ) {
+                                                    // 点击则设置即将操作的path
+                                                    androidSelectedFile = it.fileName
+                                                    // 双击，执行操作
+                                                    if (DoubleClickUtils.isFastDoubleClick()) {
+                                                        if (it.isDirectory)
+                                                            destinationCall(it.fileName)
+                                                    }
+                                                }.background(
+                                                    // android端分隔符固定为/
+                                                    if (androidSelectedFile.split("/")
+                                                            .last() == it.fileName
+                                                    ) MaterialTheme.colorScheme.onSurface else Color.Transparent
+                                                ),
+                                            onClickDelete = { name ->
+                                                androidSelectedFile = name
+                                                deleteConfirmDialogState.value = true
+                                            },
+                                            onClickMove = { name ->
+                                                androidSelectedFile = name
+                                            },
+                                            onClickCopy = { name ->
+                                                androidSelectedFile = name
+                                            },
+                                            onClickPull = { name ->
+                                                androidSelectedFile = name
+                                                mainStateHolder.pullFileFromAndroid(androidSelectedFile)
+                                            },
+                                        )
+                                }
                             }
                         }
                     }
