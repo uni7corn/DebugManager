@@ -83,6 +83,37 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
         }
     }
 
+    fun parseLineOutput(line: String): RemoteFile {
+
+        // Split the line by one or more spaces to get individual parts.
+        val parts = line.split("\\s+".toRegex())
+
+        // The first character of the first part indicates the file type.
+        val fileType = parts[0][0]
+
+        // A file is considered a directory if its type is 'd' (directory) or 'l' (symbolic link).
+        // For a file manager's navigation purpose, links to directories act as directories.
+        val isDirectory = fileType == 'd' || fileType == 'l'
+
+        // The file name is located from the 8th part onwards.
+        // Special handling is needed for symbolic links which include a "->" and a target path.
+        val arrowIndex = parts.indexOf("->")
+
+        val name: String = if (arrowIndex != -1) {
+            // For a symbolic link, the name is just before the "->".
+            parts.subList(7, arrowIndex).joinToString(" ")
+        } else {
+            // For a regular file or directory, the name is the last part.
+            parts.subList(7, parts.size).joinToString(" ")
+        }
+
+        // Create a FileInfo object and add to the list.
+        return if (name.isNotEmpty()) {
+            RemoteFile(name, isDirectory, getDirPath().joinToString("/") + "/$name")
+        } else {
+            RemoteFile("", false, "")
+        }
+    }
 
     /**
      * 删除文件或文件夹

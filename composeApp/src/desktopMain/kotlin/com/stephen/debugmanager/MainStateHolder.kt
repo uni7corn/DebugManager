@@ -480,11 +480,10 @@ class MainStateHolder(
                     adbClient.getExecuteResult(adbClient.serial, "getprop ro.product.device")
                 val subdirectories = mutableListOf<RemoteFile>()
                 platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls ${fileManager.getDirPath().joinToString("/")} -l").apply {
-                    this.split("\n").forEach {
-                        val fileName = it.split(" ").last()
-                        val isDirectory = it.startsWith("d") || it.startsWith("l")
-                        val path = fileManager.getDirPath().joinToString("/") + "/" + fileName
-                        val remoteFile = RemoteFile(fileName, isDirectory, path)
+                    this.split("\n").filter {
+                        it.isNotBlank() && !it.startsWith("total ")
+                    }.forEach {
+                        val remoteFile = fileManager.parseLineOutput(it)
                         subdirectories.add(remoteFile)
                     }
                 }
