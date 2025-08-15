@@ -185,43 +185,11 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     }
 
     /**
-     * 推送文件夹到Android设备
-     */
-    suspend fun pushFolderToAndroid(windowsPath: String, androidPath: String) {
-        runCatching {
-            // android端先创建文件夹
-            createDirectory(androidPath)
-            // windows端遍历文件夹，逐个推送文件
-            val flder = File(windowsPath)
-            if (flder.isDirectory) {
-                flder.listFiles()?.forEach { file ->
-                    if (file.isFile) {
-                        pushFileToAndroid(file.absolutePath, "$androidPath/${file.name}")
-                    } else {
-                        pushFolderToAndroid(file.absolutePath, "$androidPath/${file.name}")
-                    }
-                }
-            }
-        }.onFailure { e ->
-            LogUtils.printLog("推送文件失败：${e.message}", LogUtils.LogLevel.ERROR)
-        }
-    }
-
-    /**
      * 拉取文件到Windows设备
      */
     fun pullFileFromAndroid(fileName: String) {
         val path = getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR + fileName
         platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $path ${PlatformAdapter.desktopTempFolder}")
-    }
-
-    /**
-     * 创建文件夹
-     */
-    fun createDirectory(path: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            adbClient.getExecuteResult(adbClient.serial, "mkdir $path")
-        }
     }
 
     /**

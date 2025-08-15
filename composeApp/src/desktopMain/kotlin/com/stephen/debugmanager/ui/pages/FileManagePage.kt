@@ -17,10 +17,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.*
 import com.stephen.debugmanager.MainStateHolder
+import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.uistate.DirectoryState
 import com.stephen.debugmanager.helper.FileManager
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.defaultText
+import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
@@ -39,6 +41,8 @@ fun FileManagePage(
     val toastState = rememberToastState()
 
     val deleteConfirmDialogState = remember { mutableStateOf(false) }
+    val pushFileConfirmDialogState = remember { mutableStateOf(false) }
+    val pushFolderConfirmDialogState = remember { mutableStateOf(false) }
 
     var desktopSelectedFolderPath by remember { mutableStateOf("") }
 
@@ -119,15 +123,20 @@ fun FileManagePage(
 
                 // 目录列表
                 FileDragArea(
+                    modifier = Modifier.padding(5.dp)
+                        .fillMaxWidth(1f)
+                        .weight(1f),
                     onSelectFile = {
                         desktopSelectedFile = it
+                        pushFileConfirmDialogState.value = true
                     },
                     onSelectFolder = {
                         desktopSelectedFolderPath = it
+                        pushFolderConfirmDialogState.value = true
                     }
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth(1f).weight(1f).padding(end = 10.dp)
+                        modifier = Modifier.fillMaxSize(1f)
                             .clip(RoundedCornerShape(10.dp))
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
@@ -147,11 +156,9 @@ fun FileManagePage(
                         ContextMenuArea(items = {
                             listOf(
                                 ContextMenuItem("刷新") {
-                                    directoryState.currentdirectory?.let { mainStateHolder.updateFileList(it) }
-                                },
-                                ContextMenuItem("推送文件到此") {
-
-                                },
+                                    androidSelectedFile = ""
+                                    directoryState.currentdirectory.let { mainStateHolder.updateFileList(it) }
+                                }
                             )
                         }) {
                             LazyVerticalGrid(columns = GridCells.Fixed(5)) {
@@ -199,6 +206,12 @@ fun FileManagePage(
                         }
                     }
                 }
+                CenterText(
+                    "可直接拖动文件到此处来实现push操作",
+                    style = infoText,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    modifier = Modifier.fillMaxWidth(1f)
+                )
             }
             // 设备未连接提示
             if (isDeviceConnected.not()) {
@@ -211,10 +224,37 @@ fun FileManagePage(
                     onConfirm = {
                         deleteConfirmDialogState.value = false
                         mainStateHolder.deleteFileOrFolder(androidSelectedFile)
-                        directoryState.currentdirectory?.let { mainStateHolder.updateFileList(it) }
+                        directoryState.currentdirectory.let { mainStateHolder.updateFileList(it) }
                     },
                     onCancel = { deleteConfirmDialogState.value = false },
                     onDismiss = { deleteConfirmDialogState.value = false }
+                )
+            // 推送文件确认弹窗
+            if (pushFileConfirmDialogState.value)
+                CommonDialog(
+                    title = "推送文件 ${
+                        desktopSelectedFile.split(PlatformAdapter.sp).last()
+                    } 到 ${directoryState.currentdirectory}？",
+                    onConfirm = {
+                        pushFileConfirmDialogState.value = false
+                        mainStateHolder.pushFileToAndroid(desktopSelectedFile, directoryState.currentdirectory)
+                        directoryState.currentdirectory.let { mainStateHolder.updateFileList(it) }
+                    },
+                    onCancel = { pushFileConfirmDialogState.value = false },
+                    onDismiss = { pushFileConfirmDialogState.value = false }
+                )
+            if (pushFolderConfirmDialogState.value)
+                CommonDialog(
+                    title = "推送文件夹 ${
+                        desktopSelectedFolderPath.split(PlatformAdapter.sp).last()
+                    } 到 ${directoryState.currentdirectory}？",
+                    onConfirm = {
+                        pushFolderConfirmDialogState.value = false
+                        mainStateHolder.pushFolderToAndroid(desktopSelectedFolderPath, directoryState.currentdirectory)
+                        directoryState.currentdirectory.let { mainStateHolder.updateFileList(it) }
+                    },
+                    onCancel = { pushFolderConfirmDialogState.value = false },
+                    onDismiss = { pushFolderConfirmDialogState.value = false }
                 )
         }
     }
@@ -260,6 +300,7 @@ fun FileViewItem(
             CenterText(
                 name,
                 modifier = Modifier.padding(6.dp),
+                isNeedToClipText = true,
                 style = defaultText,
             )
         }

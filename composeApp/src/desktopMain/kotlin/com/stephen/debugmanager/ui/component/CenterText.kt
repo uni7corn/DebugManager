@@ -17,18 +17,26 @@ fun CenterText(
     style: TextStyle = defaultText,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onPrimary,
-    alignment: Alignment = Alignment.Center
+    alignment: Alignment = Alignment.Center,
+    isNeedToClipText: Boolean = false
 ) {
     Box(
         contentAlignment = alignment,
         modifier = modifier
     ) {
-        Text(
-            text = text,
-            style = style,
-            color = color,
-            maxLines = 1, // <-- 限制为一行
-            overflow = TextOverflow.Ellipsis
-        )
+        if (isNeedToClipText)
+            Text(
+                text = text,
+                style = style,
+                color = color,
+                maxLines = 1, // <-- 限制为一行
+                overflow = TextOverflow.Ellipsis
+            )
+        else
+            Text(
+                text = text,
+                style = style,
+                color = color,
+            )
     }
 }

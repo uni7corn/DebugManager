@@ -724,7 +724,7 @@ class MainStateHolder(
     fun pushFolderToAndroid(windowsPath: String, androidPath: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("pushFolderToAndroid: $windowsPath, $androidPath")
-            fileManager.pushFolderToAndroid(windowsPath, androidPath)
+            fileManager.pushFileToAndroid(windowsPath, androidPath)
         }
     }
 
@@ -737,14 +737,6 @@ class MainStateHolder(
             fileManager.pullFileFromAndroid(fileName)
             platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
         }
-    }
-
-    /**
-     * 创建文件夹
-     */
-    @Suppress("unused")
-    fun createDirectory(path: String) {
-        fileManager.createDirectory(path)
     }
 
     /**

@@ -19,6 +19,7 @@ import java.net.URI
 inline fun FileDragArea(
     crossinline onSelectFile: (String) -> Unit,
     crossinline onSelectFolder: (String) -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
 
@@ -30,10 +31,8 @@ inline fun FileDragArea(
                     dragData.readFiles().firstOrNull()?.let { filePath ->
                         val file = File(URI.create(filePath))
                         if (file.isFile) {
-                            println("file：${file.absolutePath}")
                             onSelectFile(file.absolutePath)
                         } else if (file.isDirectory) {
-                            println("folder：${file.absolutePath}")
                             onSelectFolder(file.absolutePath)
                         }
                     }
@@ -44,7 +43,7 @@ inline fun FileDragArea(
     }
 
     Box(
-        modifier = Modifier.dragAndDropTarget(
+        modifier = modifier.dragAndDropTarget(
             shouldStartDragAndDrop = { event -> true },
             target = callback
         )
