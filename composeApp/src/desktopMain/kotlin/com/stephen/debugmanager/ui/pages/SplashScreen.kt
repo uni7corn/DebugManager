@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.ic_compose
+import com.stephen.composeapp.generated.resources.ic_android_debug
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.theme.pageTitleText
 import kotlinx.coroutines.delay
@@ -64,10 +64,10 @@ fun SplashScreenContent(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_compose),
+                painter = painterResource(Res.drawable.ic_android_debug),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "Splash Logo",
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.size(160.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             CenterText(

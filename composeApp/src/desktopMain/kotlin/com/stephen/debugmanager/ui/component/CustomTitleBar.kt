@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.ic_android_debug
 import com.stephen.composeapp.generated.resources.ic_close
-import com.stephen.composeapp.generated.resources.ic_compose
 import com.stephen.composeapp.generated.resources.ic_floating
 import com.stephen.composeapp.generated.resources.ic_maximize
 import com.stephen.composeapp.generated.resources.ic_minimize
@@ -53,7 +53,7 @@ fun CustomTitleBar(
             ) {
                 Image(
                     contentDescription = "logo",
-                    painter = painterResource(Res.drawable.ic_compose),
+                    painter = painterResource(Res.drawable.ic_android_debug),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                     modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10))
                 )
