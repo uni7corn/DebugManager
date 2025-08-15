@@ -3,6 +3,8 @@ package com.stephen.debugmanager.base
 import com.stephen.debugmanager.data.AndroidDevice
 import kotlinx.coroutines.*
 import com.stephen.debugmanager.utils.LogUtils
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class AdbClient(private val platformAdapter: PlatformAdapter) {
 
@@ -16,8 +18,6 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
         }
     }
 
-    fun getAdbDevices(serialNumber: String): AndroidDevice? = androidDeviceMap[serialNumber]
-
     var serial: String = ""
 
     fun setChoosedDevice(serialNumber: String) {
@@ -25,7 +25,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
     }
 
     suspend fun isAdbServerStarted(): Boolean {
-        return platformAdapter.executeCommandWithResult("adb devices").contains("List of devices attached")
+        return platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices").contains("List of devices attached")
     }
 
     /**
@@ -49,7 +49,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
      * 获取当前连接的设备列表
      */
     suspend fun getAdbDevicesList(): List<String> {
-        val output = platformAdapter.executeCommandWithResult("adb devices")
+        val output = platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices")
         return parseAdbDevicesOutput(output)
     }
 
@@ -94,7 +94,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
             // 创建设备实例并添加到映射
             // 获取设备名称
             val deviceName =
-                platformAdapter.executeCommandWithResult("adb -s $serialNumber shell getprop ro.product.model")
+                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s $serialNumber shell getprop ro.product.model")
                     .replace(Regex("\\r?\\n"), "")
             androidDeviceMap[serialNumber] = AndroidDevice(deviceName, serialNumber)
         }
@@ -112,12 +112,37 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
      */
     suspend fun getExecuteResult(serial: String, command: String, isRemoveReturn: Boolean = true): String {
         var result = ""
-        androidDeviceMap[serial]?.excuteCommandWithResult(command)?.collect {
-            result += if (isRemoveReturn)
-                it.replace(Regex("\\r?\\n"), "")
-            else
-                it
-        }
+        if (androidDeviceMap.isNotEmpty())
+            excuteCommandWithResult(serial, command).collect {
+                result += if (isRemoveReturn)
+                    it.replace(Regex("\\r?\\n"), "")
+                else
+                    it
+            }
         return result
+    }
+
+    private fun excuteCommandWithResult(serial: String, command: String): Flow<String> = callbackFlow {
+        // 执行命令
+        val process = Runtime.getRuntime().exec("${platformAdapter.localAdbPath} -s $serial shell $command")
+        val inputStream = process.inputStream
+        val outputStream = process.outputStream
+        val errorStream = process.errorStream
+        val buffer = ByteArray(1024)
+        var length: Int
+        var result = ""
+        while (inputStream.read(buffer).also { length = it } != -1) {
+            result += String(buffer, 0, length)
+            trySend(result)
+        }
+        outputStream.close()
+        errorStream.close()
+        process.waitFor()
+        close()
+    }
+
+    fun push(localPath: String, remotePath: String) {
+        // 推送文件
+        Runtime.getRuntime().exec("${platformAdapter.localAdbPath} -s $serial push $localPath $remotePath")
     }
 }

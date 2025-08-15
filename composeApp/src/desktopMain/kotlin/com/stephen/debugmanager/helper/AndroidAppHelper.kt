@@ -21,7 +21,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         ) {
             val appInfoServiceApkPath = platformAdapter.getAppInfoServiceApkPath()
             LogUtils.printLog("installAppInfoService:$appInfoServiceApkPath")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} install $appInfoServiceApkPath")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $appInfoServiceApkPath")
             delay(4000L)
         }
     }
@@ -40,7 +40,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
                 .apply { LogUtils.printLog("check AppInfoService Process Running result:$this") }
                 .length < 10
         ) {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} shell am start -n com.stephen.appinfoservice/.MainActivity")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell am start -n com.stephen.appinfoservice/.MainActivity")
             delay(3000L)
         }
     }
@@ -49,7 +49,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         LogUtils.printLog("pullAppInfoToComputer")
         tryToLaunchSaveAppInfoService()
         val androidPath = "/storage/emulated/0/Android/data/com.stephen.appinfoservice/files"
-        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $androidPath ${PlatformAdapter.userAndroidTempFiles}")
+        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $androidPath ${PlatformAdapter.userAndroidTempFiles}")
         delay(3000L)
         whenFilePulled()
     }
@@ -65,7 +65,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
             "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}files${PlatformAdapter.sp}packageMap.txt"
         val packageLabelMap = mutableMapOf<String, String>()
         // 读取到文件为止
-        var file = File(path)
+        val file = File(path)
         if (file.exists()) {
             file.readLines(Charsets.UTF_8).forEach { line ->
                 val (packageName, label) = line.split("=")

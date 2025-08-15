@@ -135,32 +135,32 @@ fun FileManagePage(
                         pushFolderConfirmDialogState.value = true
                     }
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(1f)
-                            .clip(RoundedCornerShape(10.dp))
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) {
-                                // 清除选中文件
+                    // 文件列表
+                    ContextMenuArea(items = {
+                        listOf(
+                            ContextMenuItem("刷新") {
                                 androidSelectedFile = ""
+                                directoryState.currentdirectory.let { mainStateHolder.updateFileList(it) }
                             }
-                            .background(MaterialTheme.colorScheme.surface)
-                    ) {
-                        CenterText(
-                            "${directoryState.deviceCode}:${directoryState.currentdirectory}",
-                            style = itemKeyText,
-                            modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                         )
-                        // 文件列表
-                        ContextMenuArea(items = {
-                            listOf(
-                                ContextMenuItem("刷新") {
+                    }) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(1f)
+                                .clip(RoundedCornerShape(10.dp))
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    // 清除选中文件
                                     androidSelectedFile = ""
-                                    directoryState.currentdirectory.let { mainStateHolder.updateFileList(it) }
                                 }
+                                .background(MaterialTheme.colorScheme.surface)
+                        ) {
+                            CenterText(
+                                "${directoryState.deviceCode}:${directoryState.currentdirectory}",
+                                style = itemKeyText,
+                                modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                             )
-                        }) {
                             LazyVerticalGrid(columns = GridCells.Fixed(5)) {
                                 items(directoryState.subdirectories.sortedBy { it.fileName }) {
                                     if (it.fileName.isNotEmpty())
