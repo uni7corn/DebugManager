@@ -50,6 +50,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
      */
     suspend fun getAdbDevicesList(): List<String> {
         val output = platformAdapter.executeCommandWithResult("adb devices")
+        print("adb devices output:\n $output")
         return parseAdbDevicesOutput(output)
     }
 
@@ -84,7 +85,11 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
         val devices = getAdbDevicesList() // 获取解析后的设备列表
 
         LogUtils.printLog("Connected Device Number:${devices.size}")
-        androidDeviceMap.clear()
+
+        // 如果无设备或者设备减少，则清空map
+        if (devices.isEmpty() || devices.size < androidDeviceMap.size) {
+            androidDeviceMap.clear()
+        }
 
         devices.forEachIndexed { index, serialNumber ->
             // 创建设备实例并添加到映射

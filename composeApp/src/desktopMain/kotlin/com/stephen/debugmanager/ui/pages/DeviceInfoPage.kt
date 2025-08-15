@@ -1,5 +1,6 @@
 package com.stephen.debugmanager.ui.pages
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
@@ -53,7 +54,8 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                 item {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Column(
-                            modifier = Modifier.width(IntrinsicSize.Max)
+                            modifier = Modifier.animateContentSize()
+                                .width(IntrinsicSize.Max)
                                 .padding(vertical = 5.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.surface)

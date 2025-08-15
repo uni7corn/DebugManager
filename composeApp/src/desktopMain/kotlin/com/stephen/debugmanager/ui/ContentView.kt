@@ -175,18 +175,19 @@ fun SideTabBar(
 
     LazyColumn(modifier = modifier.background(MaterialTheme.colorScheme.surface)) {
         item {
-            DropdownSelector(
-                deviceMap,
-                // 当拔掉设备，map长度减少时，防止deviceSelectedPosition越界，设为map长度为其最大值
-                serialNumber,
-                modifier = Modifier.width(sideBarWidth),
-            ) {
-                // 返回选中的设备位置，0123
-                onDeviceSelect(it)
+            Column {
+                DropdownSelector(
+                    deviceMap,
+                    // 当拔掉设备，map长度减少时，防止deviceSelectedPosition越界，设为map长度为其最大值
+                    serialNumber,
+                    modifier = Modifier.width(sideBarWidth),
+                ) {
+                    // 返回选中的设备位置，0123
+                    onDeviceSelect(it)
+                }
+                SimpleDivider(Modifier.width(sideBarWidth).height(1.dp))
+                Spacer(Modifier.height(40.dp))
             }
-        }
-        item {
-            Spacer(Modifier.height(40.dp))
         }
         item {
             Column(Modifier.width(sideBarWidth)) {

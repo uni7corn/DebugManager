@@ -484,7 +484,6 @@ class MainStateHolder(
                         val fileName = it.split(" ").last()
                         val isDirectory = it.startsWith("d") || it.startsWith("l")
                         val path = fileManager.getDirPath().joinToString("/") + "/" + fileName
-                        println("fileName: $fileName, isDirectory: $isDirectory, path: $path")
                         val remoteFile = RemoteFile(fileName, isDirectory, path)
                         subdirectories.add(remoteFile)
                     }
