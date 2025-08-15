@@ -1,10 +1,27 @@
-# DebugManager
+<div align="center">
+    <img src="./launcher/logo.png" width="360">
+</div>
 
-![](launcher/original.png){width="200px" height="200px"}
+<h1 align="center">DebugManager</h1>
 
-## 最新版本
+<div align="center">
 
-[Github Release v2.1.0](https://github.com/stepheneasyshot/DebugManager/releases/tag/v2.1.0)
+A Compose Multiplatform Desktop software, for Android device debugging.
+
+[![Windows][windows-image]][release-url]
+[![macOS][mac-image]][release-url]
+[![Linux][linux-image]][release-url]
+[![Downloads][download-image]][release-url]
+![License][license-image]
+
+</div>
+
+[windows-image]: https://img.shields.io/badge/-Windows-blue?style=flat-square&logo=windows
+[mac-image]: https://img.shields.io/badge/-macOS-black?style=flat-square&logo=apple
+[linux-image]: https://img.shields.io/badge/-Linux-yellow?style=flat-square&logo=linux
+[download-image]: https://img.shields.io/github/downloads/stepheneasyshot/debugmanager/total?style=flat-square
+[release-url]: https://github.com/stepheneasyshot/debugmanager/releases
+[license-image]: https://img.shields.io/github/license/stepheneasyshot/debugmanager?style=flat-square
 
 ## 介绍
 
