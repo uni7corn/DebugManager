@@ -6,9 +6,7 @@ import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
-import com.stephen.debugmanager.data.FileOperationType
 import com.stephen.debugmanager.data.PackageFilter
-import com.stephen.debugmanager.data.RemoteFile
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.data.bean.Role
 import com.stephen.debugmanager.net.KimiRepository
@@ -703,12 +701,6 @@ class MainStateHolder(
         }
     }
 
-    fun setSelectedFilePath(path: String) {
-//        fileManager.setSelectedFilePath(path)
-    }
-
-    fun getSelectedPath() = fileManager.selectedFilePath
-
     /**
      * 删除文件或文件夹
      */
@@ -739,10 +731,10 @@ class MainStateHolder(
     /**
      * 拉取文件到Windows设备
      */
-    fun pullFileFromAndroid(androidPath: String) {
+    fun pullFileFromAndroid(fileName: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            LogUtils.printLog("pullFileFromAndroid: $androidPath")
-            fileManager.pullFileFromAndroid(androidPath)
+            LogUtils.printLog("pullFileFromAndroid: $fileName")
+            fileManager.pullFileFromAndroid(fileName)
             platformAdapter.openFolder(PlatformAdapter.desktopTempFolder)
         }
     }

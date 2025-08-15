@@ -16,8 +16,13 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     companion object {
         const val ROOT_DIR = "/"
         const val FILE_SEPARATOR = "/"
+        const val SD_CARD = "SD_CARD"
+        const val PRIV_APP = "PRIV_APP"
         const val LAST_FOLDER = ".."
     }
+
+    private val sdcardPathList = listOf("/", "sdcard")
+    private val privAppPathList = listOf("/", "system", "priv-app")
 
     // 当前所处的目录，每一级分布于列表中
     private val currentDirPath = mutableListOf(ROOT_DIR)
@@ -45,21 +50,27 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
                     currentDirPath.removeLast()
             }
 
+            SD_CARD -> {
+                currentDirPath.clear()
+                currentDirPath.addAll(sdcardPathList)
+            }
+
+            PRIV_APP -> {
+                currentDirPath.clear()
+                currentDirPath.addAll(privAppPathList)
+            }
+
             else -> {
                 currentDirPath.add(path)
             }
         }
-        println("path: $path, currentDirPath: ${getDirPath().joinToString(FILE_SEPARATOR)}")
     }
-
-    var selectedFilePath: String = ""
 
     /**
      * 更新当前目录文件列表
      */
     suspend fun updateCurrentFileList(): List<RemoteFile> {
         val files = mutableListOf<RemoteFile>()
-        println("updateCurrentFileList -> currentDirPath: ${getDirPath().joinToString(FILE_SEPARATOR)}")
         platformAdapter.executeCommandWithResult(
             "${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls ${
                 getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR
@@ -124,7 +135,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
 
         // Create a FileInfo object and add to the list.
         return if (name.isNotEmpty()) {
-            RemoteFile(name, isDirectory, name)
+            RemoteFile(name, isDirectory)
         } else null
     }
 
@@ -133,8 +144,12 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     fun deleteFileOrFolder(path: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            LogUtils.printLog("deleteFileOrFolder: $path")
-            adbClient.getExecuteResult(adbClient.serial, "rm -r $path")
+            val deletePath = getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR + path
+            LogUtils.printLog("deleteFileOrFolder: $deletePath")
+            adbClient.getExecuteResult(
+                adbClient.serial,
+                "rm -r $deletePath"
+            )
         }
     }
 
@@ -195,8 +210,9 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     /**
      * 拉取文件到Windows设备
      */
-    fun pullFileFromAndroid(androidPath: String) {
-        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} ${adbClient.serial} pull $androidPath ${PlatformAdapter.desktopTempFolder}")
+    fun pullFileFromAndroid(fileName: String) {
+        val path = getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR + fileName
+        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $path ${PlatformAdapter.desktopTempFolder}")
     }
 
     /**
