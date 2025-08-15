@@ -1,5 +1,7 @@
 # DebugManager
 
+![](launcher/original.png){width="200px" height="200px"}
+
 ## 最新版本
 
 [Github Release v2.1.0](https://github.com/stepheneasyshot/DebugManager/releases/tag/v2.1.0)
