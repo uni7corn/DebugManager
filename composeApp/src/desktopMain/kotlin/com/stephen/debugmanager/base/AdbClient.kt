@@ -25,7 +25,8 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
     }
 
     suspend fun isAdbServerStarted(): Boolean {
-        return platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices").contains("List of devices attached")
+        return platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices")
+            .contains("List of devices attached")
     }
 
     /**
@@ -35,7 +36,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
         return output.lines()
             .asSequence()
             .filter { it.isNotBlank() }
-            .drop(1) // 跳过"List of devices attached"标题行
+            .drop(1) // 跳过默认的 "List of devices attached" 标题行
             .map { line ->
                 // 分割设备序列号和状态（如"device"、"offline"等）
                 val parts = line.split("\\s+".toRegex())
@@ -124,25 +125,21 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
 
     private fun executeCommandWithResult(serial: String, command: String): Flow<String> = callbackFlow {
         // 执行命令
-        val process = Runtime.getRuntime().exec("${platformAdapter.localAdbPath} -s $serial shell $command")
-        val inputStream = process.inputStream
-        val outputStream = process.outputStream
-        val errorStream = process.errorStream
-        val buffer = ByteArray(1024)
-        var length: Int
-        var result = ""
-        while (inputStream.read(buffer).also { length = it } != -1) {
-            result += String(buffer, 0, length)
-            trySend(result)
+        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s $serial shell $command")?.let {
+            val inputStream = it.inputStream
+            val outputStream = it.outputStream
+            val errorStream = it.errorStream
+            val buffer = ByteArray(1024)
+            var length: Int
+            var result = ""
+            while (inputStream.read(buffer).also { it1 -> length = it1 } != -1) {
+                result += String(buffer, 0, length)
+                trySend(result)
+            }
+            outputStream.close()
+            errorStream.close()
+            it.waitFor()
+            close()
         }
-        outputStream.close()
-        errorStream.close()
-        process.waitFor()
-        close()
-    }
-
-    fun push(localPath: String, remotePath: String) {
-        // 推送文件
-        Runtime.getRuntime().exec("${platformAdapter.localAdbPath} -s $serial push $localPath $remotePath")
     }
 }

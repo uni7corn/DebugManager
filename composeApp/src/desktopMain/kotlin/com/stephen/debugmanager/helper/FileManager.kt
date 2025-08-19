@@ -178,7 +178,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     suspend fun pushFileToAndroid(windowsPath: String, androidPath: String) = withContext(Dispatchers.IO) {
         runCatching {
-            adbClient.push(windowsPath, androidPath)
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} push $windowsPath $androidPath")
         }.onFailure { e ->
             LogUtils.printLog("推送文件失败：${e.message}", LogUtils.LogLevel.ERROR)
         }

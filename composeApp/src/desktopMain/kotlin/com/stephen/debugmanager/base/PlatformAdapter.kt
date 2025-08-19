@@ -124,12 +124,13 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
     /**
      * 执行终端命令
      */
-    fun executeTerminalCommand(command: String) {
+    fun executeTerminalCommand(command: String): Process? {
         runCatching {
-            Runtime.getRuntime().exec(command)
+            return Runtime.getRuntime().exec(command)
         }.onFailure { e ->
             LogUtils.printLog("执行出错：${e.message}", LogUtils.LogLevel.ERROR)
         }
+        return null
     }
 
     /**
