@@ -2,9 +2,7 @@ package com.stephen.debugmanager.base
 
 import com.stephen.debugmanager.data.PlatformType
 import com.stephen.debugmanager.utils.LogUtils
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -53,7 +51,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
             PlatformType.LINUX -> "adb"
 
-            PlatformType.MAC -> "${System.getProperty("user.home")}${sp}Library${sp}Android${sp}sdk${sp}platform-tools${sp}adb"
+            PlatformType.MAC -> "${sp}Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}scrcpy${sp}adb"
         }
 
     val localScrcpyPath =
