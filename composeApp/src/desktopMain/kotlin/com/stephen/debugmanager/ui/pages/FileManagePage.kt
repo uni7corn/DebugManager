@@ -1,5 +1,6 @@
 package com.stephen.debugmanager.ui.pages
 
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -162,7 +163,7 @@ fun FileManagePage(
                                 modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                             )
                             LazyVerticalGrid(columns = GridCells.Fixed(5)) {
-                                items(directoryState.subdirectories.sortedBy { it.fileName }) {
+                                items(directoryState.subdirectories.sortedBy { it.fileName }, key = { it.fileName }) {
                                     if (it.fileName.isNotEmpty())
                                         FileViewItem(
                                             it.fileName,
@@ -180,7 +181,13 @@ fun FileManagePage(
                                                         if (it.isDirectory)
                                                             destinationCall(it.fileName)
                                                     }
-                                                }.background(
+                                                }.border(
+                                                    1.dp,
+                                                    if (androidSelectedFile.split("/")
+                                                            .last() == it.fileName
+                                                    ) MaterialTheme.colorScheme.onPrimary else Color.Transparent,
+                                                    RoundedCornerShape(10)
+                                                ).background(
                                                     // android端分隔符固定为/
                                                     if (androidSelectedFile.split("/")
                                                             .last() == it.fileName
@@ -200,6 +207,12 @@ fun FileManagePage(
                                                 androidSelectedFile = name
                                                 mainStateHolder.pullFileFromAndroid(androidSelectedFile)
                                             },
+                                            onClickCopyPath = { name ->
+                                                androidSelectedFile = name
+                                                val path = directoryState.currentdirectory + "/" + androidSelectedFile
+                                                mainStateHolder.copyPathToClipboard(path)
+                                                toastState.show("复制路径到剪切板")
+                                            }
                                         )
                                 }
                             }
@@ -269,6 +282,7 @@ fun FileViewItem(
     onClickMove: (name: String) -> Unit = {},
     onClickCopy: (name: String) -> Unit = {},
     onClickPull: (name: String) -> Unit = {},
+    onClickCopyPath: (name: String) -> Unit = {},
 ) {
     ContextMenuArea(items = {
         listOf(
@@ -283,6 +297,9 @@ fun FileViewItem(
             },
             ContextMenuItem("拉取到电脑") {
                 onClickPull(name)
+            },
+            ContextMenuItem("复制文件路径") {
+                onClickCopyPath(name)
             },
         )
     }) {

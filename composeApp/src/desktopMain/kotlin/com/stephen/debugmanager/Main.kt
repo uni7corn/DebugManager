@@ -1,5 +1,8 @@
 package com.stephen.debugmanager
 
+import androidx.compose.foundation.DarkDefaultContextMenuRepresentation
+import androidx.compose.foundation.LightDefaultContextMenuRepresentation
+import androidx.compose.foundation.LocalContextMenuRepresentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -99,36 +102,44 @@ fun main() = application {
                 else -> if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme
             }
         ) {
-            SplashScreen {
-                BoxWithConstraints {
-                    val windowWidth = maxWidth
-                    Column(
-                        modifier = Modifier.clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colorScheme.background)
-                    ) {
-                        WindowDraggableArea {
-                            CustomTitleBar(
-                                title = "DebugManager",
-                                windowState = windowState,
-                                onClose = {
-                                    dialogState.value = true
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
+            val contextMenuRepresentation = when (themeState.value) {
+                ThemeState.DARK -> DarkDefaultContextMenuRepresentation
+                ThemeState.LIGHT -> LightDefaultContextMenuRepresentation
+                else -> if (isSystemInDarkTheme()) DarkDefaultContextMenuRepresentation
+                else LightDefaultContextMenuRepresentation
+            }
+            CompositionLocalProvider(LocalContextMenuRepresentation provides contextMenuRepresentation) {
+                SplashScreen {
+                    BoxWithConstraints {
+                        val windowWidth = maxWidth
+                        Column(
+                            modifier = Modifier.clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.background)
+                        ) {
+                            WindowDraggableArea {
+                                CustomTitleBar(
+                                    title = "DebugManager",
+                                    windowState = windowState,
+                                    onClose = {
+                                        dialogState.value = true
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            }
 
-                        ContentView(windowWidth)
+                            ContentView(windowWidth)
 
-                        if (dialogState.value) {
-                            CommonDialog(
-                                title = "确认退出应用程序？",
-                                onConfirm = {
-                                    mainStateHolder.uninstallToolsApp()
-                                    exitApplication()
-                                },
-                                onCancel = { dialogState.value = false },
-                                onDismiss = { dialogState.value = false }
-                            )
+                            if (dialogState.value) {
+                                CommonDialog(
+                                    title = "确认退出应用程序？",
+                                    onConfirm = {
+                                        mainStateHolder.uninstallToolsApp()
+                                        exitApplication()
+                                    },
+                                    onCancel = { dialogState.value = false },
+                                    onDismiss = { dialogState.value = false }
+                                )
+                            }
                         }
                     }
                 }

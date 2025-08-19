@@ -25,7 +25,7 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SplashScreen(appContent: @Composable () -> Unit) {
-    var splashState = remember {
+    val splashState = remember {
         MutableTransitionState(false).apply {
             targetState = true
         }

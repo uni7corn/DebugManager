@@ -113,7 +113,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
     suspend fun getExecuteResult(serial: String, command: String, isRemoveReturn: Boolean = true): String {
         var result = ""
         if (androidDeviceMap.isNotEmpty())
-            excuteCommandWithResult(serial, command).collect {
+            executeCommandWithResult(serial, command).collect {
                 result += if (isRemoveReturn)
                     it.replace(Regex("\\r?\\n"), "")
                 else
@@ -122,7 +122,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
         return result
     }
 
-    private fun excuteCommandWithResult(serial: String, command: String): Flow<String> = callbackFlow {
+    private fun executeCommandWithResult(serial: String, command: String): Flow<String> = callbackFlow {
         // 执行命令
         val process = Runtime.getRuntime().exec("${platformAdapter.localAdbPath} -s $serial shell $command")
         val inputStream = process.inputStream

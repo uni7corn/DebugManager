@@ -6,6 +6,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -164,6 +166,15 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
                 executeTerminalCommand("xdg-open $path")
             }
         }
+    }
+
+    /**
+     * 复制到剪切板
+     */
+    fun copyToClipboard(text: String) {
+        val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+        val clip = StringSelection(text)
+        clipboard.setContents(clip, null)
     }
 }
 

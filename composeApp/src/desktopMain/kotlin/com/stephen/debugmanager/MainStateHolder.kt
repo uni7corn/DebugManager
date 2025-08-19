@@ -769,6 +769,14 @@ class MainStateHolder(
     }
 
     /**
+     * 复制路径到剪切板
+     */
+    fun copyPathToClipboard(path: String) {
+        LogUtils.printLog("copyPathToClipboard: $path")
+        platformAdapter.copyToClipboard(path)
+    }
+
+    /**
      * 设置选取的ai模型
      */
     fun storeAiModel(modelSelected: Int) {
