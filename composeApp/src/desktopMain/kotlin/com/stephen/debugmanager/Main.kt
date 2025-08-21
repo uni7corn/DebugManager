@@ -73,9 +73,7 @@ fun main() = application {
                 trayState.sendNotification(notification)
             })
             Item("退出应用", onClick = {
-                if (windowState.isMinimized)
-                    windowState.isMinimized = false
-                dialogState.value = true
+                exitApplication()
             })
         }
     )
@@ -109,37 +107,37 @@ fun main() = application {
                 else LightDefaultContextMenuRepresentation
             }
             CompositionLocalProvider(LocalContextMenuRepresentation provides contextMenuRepresentation) {
-                SplashScreen {
-                    BoxWithConstraints {
-                        val windowWidth = maxWidth
-                        Column(
-                            modifier = Modifier.clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colorScheme.background)
-                        ) {
-                            WindowDraggableArea {
-                                CustomTitleBar(
-                                    title = "DebugManager",
-                                    windowState = windowState,
-                                    onClose = {
-                                        dialogState.value = true
-                                    },
-                                    modifier = Modifier.fillMaxWidth(),
-                                )
-                            }
+                BoxWithConstraints {
+                    val windowWidth = maxWidth
+                    Column(
+                        modifier = Modifier.clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.background)
+                    ) {
+                        WindowDraggableArea {
+                            CustomTitleBar(
+                                title = "DebugManager",
+                                windowState = windowState,
+                                onClose = {
+                                    dialogState.value = true
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
 
+                        SplashScreen {
                             ContentView(windowWidth)
+                        }
 
-                            if (dialogState.value) {
-                                CommonDialog(
-                                    title = "确认退出应用程序？",
-                                    onConfirm = {
-                                        mainStateHolder.uninstallToolsApp()
-                                        exitApplication()
-                                    },
-                                    onCancel = { dialogState.value = false },
-                                    onDismiss = { dialogState.value = false }
-                                )
-                            }
+                        if (dialogState.value) {
+                            CommonDialog(
+                                title = "确认退出应用程序？",
+                                onConfirm = {
+                                    mainStateHolder.uninstallToolsApp()
+                                    exitApplication()
+                                },
+                                onCancel = { dialogState.value = false },
+                                onDismiss = { dialogState.value = false }
+                            )
                         }
                     }
                 }

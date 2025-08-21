@@ -2,6 +2,7 @@ package com.stephen.debugmanager.ui.pages
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -35,21 +36,15 @@ fun SplashScreen(appContent: @Composable () -> Unit) {
         splashState.targetState = false
     }
     Box {
-        if (!splashState.targetState)
-            appContent()
+        appContent()
         AnimatedVisibility(
             visibleState = splashState,
             enter = EnterTransition.None,
-            exit = ExitTransition.None
+            exit = fadeOut(tween(400))
         ) {
             SplashScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
-                    .animateEnterExit(
-                        enter = fadeIn(),
-                        exit = fadeOut()
-                    )
-                    .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.background)
             )
         }
