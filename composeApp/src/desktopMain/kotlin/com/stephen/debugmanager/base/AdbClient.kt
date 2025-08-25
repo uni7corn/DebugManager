@@ -3,8 +3,6 @@ package com.stephen.debugmanager.base
 import com.stephen.debugmanager.data.AndroidDevice
 import kotlinx.coroutines.*
 import com.stephen.debugmanager.utils.LogUtils
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 
 class AdbClient(private val platformAdapter: PlatformAdapter) {
 
@@ -50,7 +48,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
      * 获取当前连接的设备列表
      */
     suspend fun getAdbDevicesList(): List<String> {
-        val output = platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices")
+        val output = platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices", false)
         return parseAdbDevicesOutput(output)
     }
 
@@ -92,11 +90,10 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
         }
 
         devices.forEachIndexed { index, serialNumber ->
-            // 创建设备实例并添加到映射
-            // 获取设备名称
+            // 创建设备实例并添加到映射，获取设备名称，初次添加列表长度为0，不可用内部方法
             val deviceName =
-                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s $serialNumber shell getprop ro.product.model")
-                    .replace(Regex("\\r?\\n"), "")
+                platformAdapter.executeCommandWithResult(
+                    "${platformAdapter.localAdbPath} -s $serialNumber shell getprop ro.product.model")
             androidDeviceMap[serialNumber] = AndroidDevice(deviceName, serialNumber)
         }
 
@@ -111,35 +108,12 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
     /**
      * 获取$localAdbPath Shell执行结果
      */
-    suspend fun getExecuteResult(serial: String, command: String, isRemoveReturn: Boolean = true): String {
-        var result = ""
+    suspend fun getAndroidShellExecuteResult(serial: String, command: String, isRemoveReturn: Boolean = true) =
         if (androidDeviceMap.isNotEmpty())
-            executeCommandWithResult(serial, command).collect {
-                result += if (isRemoveReturn)
-                    it.replace(Regex("\\r?\\n"), "")
-                else
-                    it
-            }
-        return result
-    }
+            platformAdapter.executeCommandWithResult(
+                "${platformAdapter.localAdbPath} -s $serial shell $command",
+                isRemoveReturn
+            )
+        else ""
 
-    private fun executeCommandWithResult(serial: String, command: String): Flow<String> = callbackFlow {
-        // 执行命令
-        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s $serial shell $command")?.let {
-            val inputStream = it.inputStream
-            val outputStream = it.outputStream
-            val errorStream = it.errorStream
-            val buffer = ByteArray(1024)
-            var length: Int
-            var result = ""
-            while (inputStream.read(buffer).also { it1 -> length = it1 } != -1) {
-                result += String(buffer, 0, length)
-                trySend(result)
-            }
-            outputStream.close()
-            errorStream.close()
-            it.waitFor()
-            close()
-        }
-    }
 }

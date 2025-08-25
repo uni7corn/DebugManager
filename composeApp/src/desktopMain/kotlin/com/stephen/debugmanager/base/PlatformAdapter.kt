@@ -3,6 +3,8 @@ package com.stephen.debugmanager.base
 import com.stephen.debugmanager.data.PlatformType
 import com.stephen.debugmanager.utils.LogUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.withContext
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -28,14 +30,13 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         // Windows可以显示exe的目录，另外2个平台显示的都是user目录
         private val workDirectory: String = System.getProperty("user.dir")
 
-        // 桌面路径
-        private val desktopPath = System.getProperty("user.home") + "${sp}Desktop"
-        val desktopTempFolder = "$desktopPath${sp}AndroidTempFiles"
-
         // use目录下的配置文件目录
         private val userConfigFile = "${System.getProperty("user.home")}${sp}.debugmanagerTemp"
         val userLogConfigFile = "${userConfigFile}${sp}LogFiles"
         val userAndroidTempFiles = "${userConfigFile}${sp}AndroidDeviceTempFiles"
+
+        // 拉取Android文件缓存文件夹路径
+        val pulledTempFolder = "$userConfigFile${sp}PulledTempFiles"
 
         val appVersion: String = System.getProperty("jpackage.app-version") ?: "DefaultVersion 1.0.0"
 
@@ -94,7 +95,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
             val androidTemp = Paths.get("${userAndroidTempFiles}${sp}thisisaemptyfile")
             Files.createDirectories(androidTemp.parent)
             // 创建桌面的缓存文件
-            val desktopTemp = Paths.get("${desktopTempFolder}${sp}thisisaemptyfile")
+            val desktopTemp = Paths.get("${pulledTempFolder}${sp}thisisaemptyfile")
             Files.createDirectories(desktopTemp.parent)
             // 进程锁文件
             val lockFile = Paths.get(lockFilePath)
@@ -132,25 +133,53 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
     }
 
     /**
-     * 执行命令，获取输出
+     * 执行命令，直接获取输出
+     * @param isRemoveReturn 是否移除换行符
+     * @return 命令执行结果
      */
-    suspend fun executeCommandWithResult(command: String) = withContext(Dispatchers.IO) {
+    suspend fun executeCommandWithResult(command: String, isRemoveReturn: Boolean = true): String =
+        withContext(Dispatchers.IO) {
+            var result = ""
+            procecssStreamResultBuilder(command).collect {
+                result = if (isRemoveReturn)
+                    it.replace(Regex("\\r?\\n"), "")
+                else
+                    it
+            }
+            result
+        }
+
+    private fun procecssStreamResultBuilder(command: String): Flow<String> = callbackFlow {
+        // 执行命令
         val processBuilder = ProcessBuilder(*command.split(" ").toTypedArray())
         val process = processBuilder.start()
 
+        val overallResult = StringBuilder()
+
         val reader = BufferedReader(InputStreamReader(process.inputStream))
-        val output = StringBuilder()
         var line: String?
         while (reader.readLine().also { line = it } != null) {
-            output.append(line).append("\n")
+            overallResult.append(line).append("\n")
+            trySend(overallResult.toString())
         }
-        // 等待进程结束
-        process.waitFor()
+
+        val errorReader = BufferedReader(InputStreamReader(process.errorStream))
+        var errorLine: String?
+        while (errorReader.readLine().also { errorLine = it } != null) {
+            overallResult.append(errorLine).append("\n")
+            trySend(overallResult.toString())
+        }
         // 关闭输入流
         reader.close()
-        output.toString()
+        errorReader.close()
+        // 等待进程结束
+        process.waitFor()
+        close()
     }
 
+    /**
+     * 打开Desktop上某个文件夹
+     */
     fun openFolder(path: String) {
         when (getPlatformType()) {
             PlatformType.WINDOWS, PlatformType.UNKNOWN -> {
