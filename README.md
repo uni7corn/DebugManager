@@ -74,9 +74,12 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 
 这个页面是一些输入指令的调试功能。
 
-1. 最上方是adb操作，注意这里没有加入上下文机制，适合执行单次生效的命令，像reboot，发送广播，更新系统数据库，拉起activity，拉起service等。
-2. 在车机上我们还联动语音可见模拟，进行快速调试
-3. 内部版本同时也支持了carservice信号可视化模拟
+![](/screenshots/blogs_cmp_command_page.png)
+
+1. 左侧是terminal命令，可以执行一些低权限简单命令
+2. 右边是adb操作，注意这里没有加入上下文机制，适合执行单次生效的命令，像reboot，发送广播，更新系统数据库，拉起activity，拉起service等。
+3. 在车机上我们还联动语音可见模拟，进行快速调试
+4. 内部版本同时也支持了carservice信号可视化模拟
 
 ### 性能监测
 
@@ -123,6 +126,6 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 </div>
 
 <div style="display: flex; justify-content: center;">
-  <img src="/screenshots/blogs_cmp_debugmanager_ai_narrow_screen.png" alt="Image 1" style="width: 45%; margin-right: 5%;">
+  <img src="/screenshots/blogs_cmp_command_page_narrow.png" alt="Image 1" style="width: 45%; margin-right: 5%;">
   <img src="/screenshots/blogs_cmp_debugmanager_about_narrow_screen.png" alt="Image 2" style="width: 45%;">
 </div>
