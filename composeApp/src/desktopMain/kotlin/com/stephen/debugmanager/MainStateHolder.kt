@@ -1,5 +1,7 @@
 package com.stephen.debugmanager
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.stephen.debugmanager.base.AdbClient
@@ -8,6 +10,8 @@ import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
+import com.stephen.debugmanager.data.bean.CommandData
+import com.stephen.debugmanager.data.bean.CommandType
 import com.stephen.debugmanager.data.bean.Role
 import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.helper.DataStoreHelper
@@ -74,6 +78,11 @@ class MainStateHolder(
     private val _processPerfListState = MutableStateFlow(mutableListOf<ProcessPerfState>())
     val processPerfListStateStateFlow = _processPerfListState.asStateFlow()
 
+    // androidShell命令执行列表
+    val androidShellExecuteListState = mutableStateOf(mutableStateListOf<CommandData>())
+
+    // 终端命令执行列表
+    val terminalExecuteListState = mutableStateOf(mutableStateListOf<CommandData>())
 
     init {
         LogUtils.printLog("MainStateHolder init")
@@ -567,9 +576,46 @@ class MainStateHolder(
             }
     }
 
-    fun executeAdbCommand(command: String) {
+    /**
+     * 执行终端命令
+     */
+    fun executeTerminalCommand(command: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand(command)
+            terminalExecuteListState.value.add(
+                CommandData(
+                    contents = "@${PlatformAdapter.computerUserName}: $command",
+                    type = CommandType.USER,
+                )
+            )
+            val result = platformAdapter.executeCommandWithResult(command, false)
+            terminalExecuteListState.value.add(
+                CommandData(
+                    contents = result,
+                    type = CommandType.SYSTEM,
+                )
+            )
+        }
+    }
+
+    /**
+     * 执行android shell命令
+     */
+    fun executeAndroidShellCommand(command: String) {
+        println("executeAndroidShellCommand: $command")
+        CoroutineScope(Dispatchers.IO).launch {
+            androidShellExecuteListState.value.add(
+                CommandData(
+                    contents = "@Android: $command",
+                    type = CommandType.USER,
+                )
+            )
+            val result = adbClient.getAndroidShellExecuteResult(adbClient.serial, command, false)
+            androidShellExecuteListState.value.add(
+                CommandData(
+                    contents = result,
+                    type = CommandType.SYSTEM,
+                )
+            )
         }
     }
 
@@ -639,7 +685,8 @@ class MainStateHolder(
                 runCatching {
                     // 通过系统命令，检索连接设备的数量是否变化
                     val deviceCount =
-                        platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices", false).split("\n")
+                        platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices", false)
+                            .split("\n")
                             .filter {
                                 // 筛掉无用行
                                 it.contains("device") && !it.contains("devices")
