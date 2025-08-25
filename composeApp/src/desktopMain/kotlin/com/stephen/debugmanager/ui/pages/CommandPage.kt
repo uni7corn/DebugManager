@@ -11,11 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.groupTitleText
-import kotlinx.coroutines.delay
 import org.koin.core.context.GlobalContext
 
 @Composable
@@ -24,6 +26,9 @@ fun CommandPage(isDeviceConnected: Boolean) {
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
     val toastState = rememberToastState()
+
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     var androidShellCommand by remember { mutableStateOf("") }
     var terminalCommand by remember { mutableStateOf("") }
@@ -80,7 +85,9 @@ fun CommandPage(isDeviceConnected: Boolean) {
                             value = terminalCommand,
                             tipText = "输入Terminal命令",
                             onValueChange = { terminalCommand = it },
-                            modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
+                            modifier = Modifier
+                                .padding(start = 10.dp, end = 10.dp).weight(1f)
+                                .focusRequester(focusRequester),
                             onEnterPressed = {
                                 if (terminalCommand.isEmpty()) {
                                     toastState.show("请输入命令")
@@ -122,7 +129,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
                             .clip(RoundedCornerShape(10.dp))
                             .background(MaterialTheme.colorScheme.background)
                     ) {
-                        LazyColumn(modifier = Modifier.fillMaxSize(1f)) {
+                        LazyColumn(state = androidListScrollState) {
                             items(androidExecuteList) {
                                 CenterText(
                                     it.contents,
@@ -138,7 +145,9 @@ fun CommandPage(isDeviceConnected: Boolean) {
                             value = androidShellCommand,
                             tipText = "输入adb命令",
                             onValueChange = { androidShellCommand = it },
-                            modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
+                            modifier = Modifier
+                                .padding(start = 10.dp, end = 10.dp).weight(1f)
+                                .focusRequester(focusRequester),
                             onEnterPressed = {
                                 if (androidShellCommand.isEmpty()) {
                                     toastState.show("请输入命令")
@@ -164,6 +173,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
                 }
             }
             if (isDeviceConnected.not()) {
+                focusManager.clearFocus()
                 DeviceNoneConnectShade()
             }
         }

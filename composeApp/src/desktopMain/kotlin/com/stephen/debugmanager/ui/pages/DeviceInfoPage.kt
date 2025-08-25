@@ -18,7 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_refresh
@@ -41,6 +44,9 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     val toastState = rememberToastState()
+
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     val mockInputSting = remember { mutableStateOf("") }
 
@@ -215,7 +221,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     tipText = "输入DisplayId(默认为0)",
                                     onValueChange = { displayidString.value = it },
                                     modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-                                        .weight(1f),
+                                        .weight(1f).focusRequester(focusRequester),
                                     onEnterPressed = {
                                         if (displayidString.value.isEmpty()) {
                                             toastState.show("参数为空，默认设置displayid为0")
@@ -265,7 +271,9 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                         onValueChange = {
                                             recordTime.value = it
                                         },
-                                        modifier = Modifier.padding(horizontal = 5.dp).weight(1f)
+                                        modifier = Modifier
+                                            .padding(horizontal = 5.dp).weight(1f)
+                                            .focusRequester(focusRequester)
                                     )
                                     CommonButton(
                                         "开始录屏", onClick = {
@@ -422,7 +430,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     tipText = "模拟输入法(English Only)",
                                     onValueChange = { mockInputSting.value = it },
                                     modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-                                        .weight(1f),
+                                        .weight(1f).focusRequester(focusRequester),
                                     onEnterPressed = {
                                         mainStateHolder.inputText(mockInputSting.value)
                                         mockInputSting.value = ""
@@ -444,6 +452,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
             }
             // 设备未连接，显示提示文案
             if (deviceState.isConnected.not()) {
+                focusManager.clearFocus()
                 DeviceNoneConnectShade()
             }
         }
