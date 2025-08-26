@@ -19,8 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.stephen.debugmanager.MainStateHolder
-import com.stephen.debugmanager.data.bean.CommandData
-import com.stephen.debugmanager.data.bean.CommandType
+import com.stephen.debugmanager.data.bean.TerminalCommandData
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.infoText
@@ -175,7 +174,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
 fun CommandExecuteWindow(
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState(),
-    executeList: List<CommandData>
+    executeList: List<TerminalCommandData>
 ) {
     Column(
         modifier = modifier.clip(RoundedCornerShape(10.dp))
@@ -185,18 +184,19 @@ fun CommandExecuteWindow(
             LazyColumn(state = scrollState) {
                 items(executeList) {
                     when (it.type) {
-                        CommandType.USER -> {
+                        TerminalCommandData.CommandType.USER -> {
                             CenterText(
-                                it.contents,
+                                text = it.contents,
                                 modifier = Modifier.fillParentMaxWidth(1f),
                                 color = Color.Green,
+                                style = infoText,
                                 alignment = Alignment.TopStart
                             )
                         }
 
-                        CommandType.SYSTEM -> {
+                        TerminalCommandData.CommandType.SYSTEM -> {
                             CenterText(
-                                it.contents,
+                                text = it.contents,
                                 modifier = Modifier.fillParentMaxWidth(1f),
                                 style = infoText,
                                 color = Color.White,

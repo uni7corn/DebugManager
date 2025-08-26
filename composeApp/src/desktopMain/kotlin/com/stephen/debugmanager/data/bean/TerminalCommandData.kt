@@ -1,11 +1,11 @@
 package com.stephen.debugmanager.data.bean
 
-data class CommandData(
+data class TerminalCommandData(
     val contents: String,
     val type: CommandType,
-)
-
-enum class CommandType {
-    USER,
-    SYSTEM
+){
+    enum class CommandType {
+        USER,
+        SYSTEM
+    }
 }

@@ -10,8 +10,7 @@ import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
-import com.stephen.debugmanager.data.bean.CommandData
-import com.stephen.debugmanager.data.bean.CommandType
+import com.stephen.debugmanager.data.bean.TerminalCommandData
 import com.stephen.debugmanager.data.bean.Role
 import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.helper.DataStoreHelper
@@ -79,10 +78,10 @@ class MainStateHolder(
     val processPerfListStateStateFlow = _processPerfListState.asStateFlow()
 
     // androidShell命令执行列表
-    val androidShellExecuteListState = mutableStateOf(mutableStateListOf<CommandData>())
+    val androidShellExecuteListState = mutableStateOf(mutableStateListOf<TerminalCommandData>())
 
     // 终端命令执行列表
-    val terminalExecuteListState = mutableStateOf(mutableStateListOf<CommandData>())
+    val terminalExecuteListState = mutableStateOf(mutableStateListOf<TerminalCommandData>())
 
     init {
         LogUtils.printLog("MainStateHolder init")
@@ -585,16 +584,16 @@ class MainStateHolder(
                 terminalExecuteListState.value.clear()
             } else {
                 terminalExecuteListState.value.add(
-                    CommandData(
+                    TerminalCommandData(
                         contents = "@${PlatformAdapter.computerUserName}: $command",
-                        type = CommandType.USER,
+                        type = TerminalCommandData.CommandType.USER,
                     )
                 )
                 val result = platformAdapter.executeCommandWithResult(command, false)
                 terminalExecuteListState.value.add(
-                    CommandData(
+                    TerminalCommandData(
                         contents = result,
-                        type = CommandType.SYSTEM,
+                        type = TerminalCommandData.CommandType.SYSTEM,
                     )
                 )
             }
@@ -610,16 +609,16 @@ class MainStateHolder(
                 androidShellExecuteListState.value.clear()
             } else {
                 androidShellExecuteListState.value.add(
-                    CommandData(
+                    TerminalCommandData(
                         contents = "@Android: $command",
-                        type = CommandType.USER,
+                        type = TerminalCommandData.CommandType.USER,
                     )
                 )
                 val result = adbClient.getAndroidShellExecuteResult(adbClient.serial, command, false)
                 androidShellExecuteListState.value.add(
-                    CommandData(
+                    TerminalCommandData(
                         contents = result,
-                        type = CommandType.SYSTEM,
+                        type = TerminalCommandData.CommandType.SYSTEM,
                     )
                 )
             }
