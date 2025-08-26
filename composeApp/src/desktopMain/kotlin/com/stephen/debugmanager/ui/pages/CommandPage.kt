@@ -1,6 +1,9 @@
 package com.stephen.debugmanager.ui.pages
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -18,11 +21,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.ic_terminal_window
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.bean.TerminalCommandData
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.infoText
+import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
 @Composable
@@ -64,49 +70,63 @@ fun CommandPage(isDeviceConnected: Boolean) {
                         .clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.surface)
                         .padding(10.dp)
                 ) {
-                    CenterText(
-                        "Terminal",
-                        modifier = Modifier.padding(bottom = 10.dp),
-                        style = groupTitleText
-                    )
+                    Box {
+                        Column {
+                            CenterText(
+                                "Terminal",
+                                modifier = Modifier.padding(bottom = 10.dp),
+                                style = groupTitleText
+                            )
 
-                    // 命令执行窗口 Composable
-                    CommandExecuteWindow(
-                        modifier = Modifier.padding(bottom = 10.dp)
-                            .fillMaxWidth(1f).weight(1f),
-                        scrollState = terminalListScrollState,
-                        executeList = terminalExecuteList
-                    )
+                            // 命令执行窗口 Composable
+                            CommandExecuteWindow(
+                                modifier = Modifier.padding(bottom = 10.dp)
+                                    .fillMaxWidth(1f).weight(1f),
+                                scrollState = terminalListScrollState,
+                                executeList = terminalExecuteList
+                            )
 
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        WrappedEditText(
-                            value = terminalCommand,
-                            tipText = "输入Terminal命令",
-                            onValueChange = { terminalCommand = it },
-                            modifier = Modifier
-                                .padding(start = 10.dp, end = 10.dp).weight(1f)
-                                .focusRequester(focusRequester),
-                            onEnterPressed = {
-                                if (terminalCommand.isEmpty()) {
-                                    toastState.show("请输入命令")
-                                } else {
-                                    mainStateHolder.executeTerminalCommand(terminalCommand)
-                                    terminalCommand = ""
-                                }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                WrappedEditText(
+                                    value = terminalCommand,
+                                    tipText = "输入Terminal命令",
+                                    onValueChange = { terminalCommand = it },
+                                    modifier = Modifier
+                                        .padding(start = 10.dp, end = 10.dp).weight(1f)
+                                        .focusRequester(focusRequester),
+                                    onEnterPressed = {
+                                        if (terminalCommand.isEmpty()) {
+                                            toastState.show("请输入命令")
+                                        } else {
+                                            mainStateHolder.executeTerminalCommand(terminalCommand)
+                                            terminalCommand = ""
+                                        }
+                                    }
+                                )
+                                CommonButton(
+                                    "执行", onClick = {
+                                        if (terminalCommand.isEmpty()) {
+                                            toastState.show("请输入命令")
+                                        } else {
+                                            mainStateHolder.executeTerminalCommand(terminalCommand)
+                                            terminalCommand = ""
+                                        }
+                                    },
+                                    modifier = Modifier.padding(10.dp),
+                                    btnColor = MaterialTheme.colorScheme.tertiary
+                                )
                             }
-                        )
-                        CommonButton(
-                            "执行", onClick = {
-                                if (terminalCommand.isEmpty()) {
-                                    toastState.show("请输入命令")
-                                } else {
-                                    mainStateHolder.executeTerminalCommand(terminalCommand)
-                                    terminalCommand = ""
-                                }
-                            },
-                            modifier = Modifier.padding(10.dp),
-                            btnColor = MaterialTheme.colorScheme.tertiary
+                        }
+
+                        Image(
+                            painter = painterResource(Res.drawable.ic_terminal_window),
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp).align(Alignment.TopEnd).clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ){
+                                mainStateHolder.openSingleTerminalWindow()
+                            }
                         )
                     }
                 }

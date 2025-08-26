@@ -1012,6 +1012,16 @@ class MainStateHolder(
     }
 
     /**
+     * 打开一个terminal窗口
+     */
+    fun openSingleTerminalWindow() {
+        LogUtils.printLog("openSingleTerminalWindow")
+        CoroutineScope(Dispatchers.IO).launch {
+            platformAdapter.openSingleTerminalWindow()
+        }
+    }
+
+    /**
      * 开始轮询进程的性能数据
      */
     suspend fun startLoopGetProcessPerf() = withContext(Dispatchers.IO) {

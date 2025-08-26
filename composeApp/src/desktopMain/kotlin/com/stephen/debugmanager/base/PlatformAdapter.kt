@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.withContext
+import kotlinx.io.IOException
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.BufferedReader
@@ -174,6 +175,39 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         // 等待进程结束
         process.waitFor()
         close()
+    }
+
+    /**
+     * 单开一个terminal窗口
+     */
+    suspend fun openSingleTerminalWindow() = withContext(Dispatchers.IO) {
+        // 创建一个ProcessBuilder实例
+        // 第一个参数是可执行文件，后面的参数是传递给它的命令行参数
+        // /C：执行命令后关闭窗口
+        // /K：执行命令后保持窗口打开 (我们想要的)
+        // dir：你想要执行的命令
+        val builder = ProcessBuilder("cmd.exe", "/C", "start", "cmd.exe", "/K", "$localAdbPath --version")
+
+        // 设置工作目录（可选）
+        // builder.directory(new File("C:\\"))
+
+        // 设置进程环境变量（可选）
+        // Map<String, String> env = builder.environment()
+        // env.put("MY_VAR", "myValue")
+
+        try {
+            // 启动进程
+            val process = builder.start()
+
+            LogUtils.printLog("===========>CMD started<============")
+
+            // 可以选择等待进程执行结束
+            val exitCode = process.waitFor()
+            LogUtils.printLog("process exit code: $exitCode")
+        } catch (e: IOException) {
+            LogUtils.printLog("open cmd window failed: ${e.message}")
+            e.printStackTrace()
+        }
     }
 
     /**
