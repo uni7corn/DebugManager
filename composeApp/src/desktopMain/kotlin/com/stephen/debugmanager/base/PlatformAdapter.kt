@@ -26,7 +26,17 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         // 路径分隔符
         val sp: String = File.separator
 
-        val computerUserName = System.getProperty("user.name");
+        val computerUserName: String? = System.getProperty("user.name")
+
+        val osName = System.getProperty("os.name").lowercase(Locale.getDefault())
+
+        val platformType = if (osName.contains("win")) PlatformType.WINDOWS
+        else if (osName.contains("mac")) PlatformType.MAC
+        else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) PlatformType.LINUX
+        else PlatformType.UNKNOWN
+
+        // 终端清屏命令
+        val clearCommandList = listOf<String>("cls", "clear")
 
         // jvm工作目录
         // Windows可以显示exe的目录，另外2个平台显示的都是user目录
@@ -48,7 +58,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
     }
 
     val localAdbPath =
-        when (getPlatformType()) {
+        when (platformType) {
             PlatformType.WINDOWS, PlatformType.UNKNOWN ->
                 "$workDirectory${sp}app${sp}resources${sp}scrcpy${sp}adb.exe"
 
@@ -58,7 +68,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         }
 
     val localScrcpyPath =
-        when (getPlatformType()) {
+        when (platformType) {
             PlatformType.WINDOWS, PlatformType.UNKNOWN ->
                 "$workDirectory${sp}app${sp}resources${sp}scrcpy${sp}scrcpy.exe"
 
@@ -68,7 +78,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
     fun getUserTempFilePath() = userConfigFile
 
     suspend fun getAppInfoServiceApkPath() =
-        when (getPlatformType()) {
+        when (platformType) {
             PlatformType.WINDOWS, PlatformType.UNKNOWN ->
                 "\"$workDirectory${sp}app${sp}resources${sp}AppInfoService.apk\""
 
@@ -106,19 +116,6 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
             LogUtils.printLog("\n\n\n=====>Application start<======")
         }.onFailure { e ->
             LogUtils.printLog("创建配置文件失败：${e.message}")
-        }
-    }
-
-    /**
-     * 获取当前平台类型
-     */
-    private fun getPlatformType(): PlatformType {
-        val osName = System.getProperty("os.name").lowercase(Locale.getDefault())
-        return when {
-            osName.contains("win") -> PlatformType.WINDOWS
-            osName.contains("mac") -> PlatformType.MAC
-            osName.contains("nix") || osName.contains("nux") || osName.contains("aix") -> PlatformType.LINUX
-            else -> PlatformType.UNKNOWN
         }
     }
 
@@ -183,7 +180,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
      * 打开Desktop上某个文件夹
      */
     fun openFolder(path: String) {
-        when (getPlatformType()) {
+        when (platformType) {
             PlatformType.WINDOWS, PlatformType.UNKNOWN -> {
                 executeTerminalCommand("explorer.exe $path")
             }

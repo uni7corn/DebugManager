@@ -581,19 +581,23 @@ class MainStateHolder(
      */
     fun executeTerminalCommand(command: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            terminalExecuteListState.value.add(
-                CommandData(
-                    contents = "@${PlatformAdapter.computerUserName}: $command",
-                    type = CommandType.USER,
+            if (command in PlatformAdapter.clearCommandList) {
+                terminalExecuteListState.value.clear()
+            } else {
+                terminalExecuteListState.value.add(
+                    CommandData(
+                        contents = "@${PlatformAdapter.computerUserName}: $command",
+                        type = CommandType.USER,
+                    )
                 )
-            )
-            val result = platformAdapter.executeCommandWithResult(command, false)
-            terminalExecuteListState.value.add(
-                CommandData(
-                    contents = result,
-                    type = CommandType.SYSTEM,
+                val result = platformAdapter.executeCommandWithResult(command, false)
+                terminalExecuteListState.value.add(
+                    CommandData(
+                        contents = result,
+                        type = CommandType.SYSTEM,
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -601,21 +605,24 @@ class MainStateHolder(
      * 执行android shell命令
      */
     fun executeAndroidShellCommand(command: String) {
-        println("executeAndroidShellCommand: $command")
         CoroutineScope(Dispatchers.IO).launch {
-            androidShellExecuteListState.value.add(
-                CommandData(
-                    contents = "@Android: $command",
-                    type = CommandType.USER,
+            if (command in PlatformAdapter.clearCommandList) {
+                androidShellExecuteListState.value.clear()
+            } else {
+                androidShellExecuteListState.value.add(
+                    CommandData(
+                        contents = "@Android: $command",
+                        type = CommandType.USER,
+                    )
                 )
-            )
-            val result = adbClient.getAndroidShellExecuteResult(adbClient.serial, command, false)
-            androidShellExecuteListState.value.add(
-                CommandData(
-                    contents = result,
-                    type = CommandType.SYSTEM,
+                val result = adbClient.getAndroidShellExecuteResult(adbClient.serial, command, false)
+                androidShellExecuteListState.value.add(
+                    CommandData(
+                        contents = result,
+                        type = CommandType.SYSTEM,
+                    )
                 )
-            )
+            }
         }
     }
 
