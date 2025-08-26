@@ -1,6 +1,5 @@
 package com.stephen.debugmanager.ui.pages
 
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -22,7 +21,6 @@ import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.uistate.DirectoryState
 import com.stephen.debugmanager.helper.FileManager
 import com.stephen.debugmanager.ui.component.*
-import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.utils.DoubleClickUtils
