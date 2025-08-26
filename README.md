@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./launcher/logo.png" width="256">
+    <img src="./launcher/original.png" width="256" alt="DebugManager">
 </div>
 
 <h1 align="center">DebugManager</h1>
