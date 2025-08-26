@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -18,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.stephen.debugmanager.ui.theme.infoText
 
@@ -46,6 +48,7 @@ fun WrappedEditText(
             unfocusedContainerColor = MaterialTheme.colorScheme.background,
             focusedContainerColor = MaterialTheme.colorScheme.background,
         ),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
         label = { Text(tipText, color = MaterialTheme.colorScheme.onSecondary) },
         onValueChange = {
             // 如果此时使用了ctrl或者alt键，那么就不做处理

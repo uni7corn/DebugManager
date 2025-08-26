@@ -310,7 +310,6 @@ fun FileViewItem(
             Image(
                 painter = if (isDirectory) painterResource(Res.drawable.ic_folder)
                 else painterResource(Res.drawable.ic_file),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 modifier = Modifier.size(36.dp),
                 contentDescription = "file_icon"
             )
@@ -318,7 +317,7 @@ fun FileViewItem(
                 name,
                 modifier = Modifier.padding(6.dp),
                 isNeedToClipText = true,
-                style = defaultText,
+                style = infoText,
             )
         }
     }
