@@ -3,6 +3,7 @@ package com.stephen.debugmanager.base
 import com.stephen.debugmanager.data.AndroidDevice
 import kotlinx.coroutines.*
 import com.stephen.debugmanager.utils.LogUtils
+import kotlin.collections.filter
 
 class AdbClient(private val platformAdapter: PlatformAdapter) {
 
@@ -35,22 +36,28 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
             .asSequence()
             .filter { it.isNotBlank() }
             .drop(1) // 跳过默认的 "List of devices attached" 标题行
+            .filter { line ->
+                // 定义所有有效的设备状态关键字集合
+                val validStates = setOf("device", "emulator", "bootloader", "recovery", "fastboot")
+                validStates.any { line.contains(it) }
+            }
             .map { line ->
                 // 分割设备序列号和状态（如"device"、"offline"等）
                 val parts = line.split("\\s+".toRegex())
                 if (parts.isNotEmpty()) parts[0] else ""
             }
-            .filter { it.isNotBlank() }
             .toList()
     }
 
     /**
      * 获取当前连接的设备列表
      */
-    suspend fun getAdbDevicesList(): List<String> {
-        val output = platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices", false)
-        return parseAdbDevicesOutput(output)
-    }
+    suspend fun getAdbDevicesList() = parseAdbDevicesOutput(
+        platformAdapter.executeCommandWithResult(
+            "${platformAdapter.localAdbPath} devices",
+            false
+        )
+    )
 
     /**
      * 获取ROOT权限
@@ -93,7 +100,8 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
             // 创建设备实例并添加到映射，获取设备名称，初次添加列表长度为0，不可用内部方法
             val deviceName =
                 platformAdapter.executeCommandWithResult(
-                    "${platformAdapter.localAdbPath} -s $serialNumber shell getprop ro.product.model")
+                    "${platformAdapter.localAdbPath} -s $serialNumber shell getprop ro.product.model"
+                )
             androidDeviceMap[serialNumber] = AndroidDevice(deviceName, serialNumber)
         }
 

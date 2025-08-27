@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import java.text.SimpleDateFormat
 import kotlin.collections.listOf
+import kotlin.sequences.drop
+import kotlin.sequences.filter
 
 
 class MainStateHolder(
@@ -690,13 +692,7 @@ class MainStateHolder(
                 delay(2000L)
                 runCatching {
                     // 通过系统命令，检索连接设备的数量是否变化
-                    val deviceCount =
-                        platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} devices", false)
-                            .split("\n")
-                            .filter {
-                                // 筛掉无用行
-                                it.contains("device") && !it.contains("devices")
-                            }.size
+                    val deviceCount = adbClient.getAdbDevicesList().size
                     if (deviceCount != _deviceMapState.value.deviceMap.size) {
                         LogUtils.printLog("DEVICE_COUNT_CHANGED! current device count: $deviceCount")
                         // 刷新列表之后，刷新一次当前设备信息
