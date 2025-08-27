@@ -3,7 +3,6 @@ package com.stephen.debugmanager.base
 import com.stephen.debugmanager.data.AndroidDevice
 import kotlinx.coroutines.*
 import com.stephen.debugmanager.utils.LogUtils
-import kotlin.collections.filter
 
 class AdbClient(private val platformAdapter: PlatformAdapter) {
 

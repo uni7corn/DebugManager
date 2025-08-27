@@ -18,9 +18,9 @@ import java.util.*
 
 class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
-    fun init() {
+    fun init(onSingleAppRunning: (Boolean) -> Unit) {
         createInitTempFile()
-        singleInstanceApp.initCheckFileLock(lockFilePath)
+        singleInstanceApp.initCheckFileLock(lockFilePath, onSingleAppRunning)
     }
 
     companion object {

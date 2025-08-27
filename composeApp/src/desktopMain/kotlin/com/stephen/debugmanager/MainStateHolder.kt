@@ -40,6 +40,8 @@ class MainStateHolder(
     private val deepSeekRepository: DeepSeekRepository
 ) {
 
+    val isOtherInstanceRunning = mutableStateOf(true)
+
     // 连接的设备列表
     private val _deviceMapState = MutableStateFlow(DeviceMapState())
     val deviceMapStateStateFlow = _deviceMapState.asStateFlow()
@@ -84,11 +86,18 @@ class MainStateHolder(
 
     init {
         LogUtils.printLog("MainStateHolder init")
-        recycleCheckConnection()
-        dataStoreHelper.init(dataStoreFileName)
-        initThemeState()
-        platformAdapter.init()
-        adbClient.init()
+        platformAdapter.init { isRunning ->
+            // UI 界面以此判断显示关闭弹窗还是直接退出
+            isOtherInstanceRunning.value = isRunning
+
+            // 没有实例运行再初始化，如果有实例，只显示一个窗口
+            if (!isRunning) {
+                adbClient.init()
+                dataStoreHelper.init(dataStoreFileName)
+                recycleCheckConnection()
+                initThemeState()
+            }
+        }
     }
 
     /**

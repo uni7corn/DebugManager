@@ -28,6 +28,7 @@ object LogUtils {
 
     // 新增方法，用于将字符串写入文件
     private fun writeToFile(msg: String) {
+//        println(msg)
         synchronized(this) {
             printScope.launch {
                 val file = File(PlatformAdapter.userLogConfigFile, logFileName)

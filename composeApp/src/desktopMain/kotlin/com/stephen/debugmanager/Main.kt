@@ -26,6 +26,7 @@ import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
+import com.stephen.debugmanager.ui.SingleProcessTipWindow
 import com.stephen.debugmanager.ui.component.AnimatedTheme
 import com.stephen.debugmanager.ui.component.CommonDialog
 import com.stephen.debugmanager.ui.component.CustomTitleBar
@@ -51,89 +52,97 @@ fun main() = application {
 
     val themeState = mainStateHolder.themeStateStateFlow.collectAsState()
 
+    val isOtherInstanceRunning = mainStateHolder.isOtherInstanceRunning
+
     val trayState = rememberTrayState()
+
     val notification = rememberNotification("Notification", "Message from MyApp!")
 
-    Tray(
-        state = trayState,
-        icon = painterResource(Res.drawable.app_logo),
-        tooltip = "DebugManager",
-        onAction = {
-            windowState.isMinimized = false
-        },
-        menu = {
-            Item("打开主界面", onClick = {
+    if (isOtherInstanceRunning.value) {
+        SingleProcessTipWindow()
+    }
+    else {
+        Tray(
+            state = trayState,
+            icon = painterResource(Res.drawable.app_logo),
+            tooltip = "DebugManager",
+            onAction = {
                 windowState.isMinimized = false
-            })
-            Item("发通知测试", onClick = {
-                trayState.sendNotification(notification)
-            })
-            Item("退出应用", onClick = {
-                exitApplication()
-            })
-        }
-    )
-
-    Window(
-        onCloseRequest = {
-            if (windowState.isMinimized)
-                windowState.isMinimized = false
-            dialogState.value = true
-        },
-        transparent = true,
-        title = "DebugManager",
-        undecorated = true,
-        state = windowState,
-        icon = painterResource(Res.drawable.app_logo),
-    ) {
-        // set the minimum size
-        window.minimumSize = Dimension(600, 650)
-
-        AnimatedTheme(
-            targetColorScheme = when (themeState.value) {
-                ThemeState.DARK -> DarkColorScheme
-                ThemeState.LIGHT -> LightColorScheme
-                else -> if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme
+            },
+            menu = {
+                Item("打开主界面", onClick = {
+                    windowState.isMinimized = false
+                })
+                Item("发通知测试", onClick = {
+                    trayState.sendNotification(notification)
+                })
+                Item("退出应用", onClick = {
+                    exitApplication()
+                })
             }
+        )
+
+        Window(
+            onCloseRequest = {
+                if (windowState.isMinimized)
+                    windowState.isMinimized = false
+                dialogState.value = true
+            },
+            transparent = true,
+            title = "DebugManager",
+            undecorated = true,
+            state = windowState,
+            icon = painterResource(Res.drawable.app_logo),
         ) {
-            val contextMenuRepresentation = when (themeState.value) {
-                ThemeState.DARK -> DarkDefaultContextMenuRepresentation
-                ThemeState.LIGHT -> LightDefaultContextMenuRepresentation
-                else -> if (isSystemInDarkTheme()) DarkDefaultContextMenuRepresentation
-                else LightDefaultContextMenuRepresentation
-            }
-            CompositionLocalProvider(LocalContextMenuRepresentation provides contextMenuRepresentation) {
-                BoxWithConstraints {
-                    val windowWidth = maxWidth
-                    Column(
-                        modifier = Modifier.clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colorScheme.background)
-                    ) {
-                        WindowDraggableArea {
-                            CustomTitleBar(
-                                title = "DebugManager",
-                                windowState = windowState,
-                                onClose = {
-                                    dialogState.value = true
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
+            // set the minimum size
+            window.minimumSize = Dimension(600, 650)
 
-                        SplashScreen {
-                            ContentView(windowWidth)
-                        }
+            AnimatedTheme(
+                targetColorScheme = when (themeState.value) {
+                    ThemeState.DARK -> DarkColorScheme
+                    ThemeState.LIGHT -> LightColorScheme
+                    else -> if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme
+                }
+            ) {
+                val contextMenuRepresentation = when (themeState.value) {
+                    ThemeState.DARK -> DarkDefaultContextMenuRepresentation
+                    ThemeState.LIGHT -> LightDefaultContextMenuRepresentation
+                    else -> if (isSystemInDarkTheme()) DarkDefaultContextMenuRepresentation
+                    else LightDefaultContextMenuRepresentation
+                }
+                CompositionLocalProvider(LocalContextMenuRepresentation provides contextMenuRepresentation) {
+                    BoxWithConstraints {
+                        val windowWidth = maxWidth
+                        Column(
+                            modifier = Modifier.clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.background)
+                        ) {
+                            WindowDraggableArea {
+                                CustomTitleBar(
+                                    title = "DebugManager",
+                                    windowState = windowState,
+                                    onClose = {
+                                        dialogState.value = true
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            }
 
-                        if (dialogState.value) {
-                            CommonDialog(
-                                title = "确认退出应用程序？",
-                                onConfirm = {
-                                    mainStateHolder.uninstallToolsApp()
-                                    exitApplication()
-                                },
-                                onCancel = { dialogState.value = false },
-                                onDismiss = { dialogState.value = false }
-                            )
+                            SplashScreen {
+                                ContentView(windowWidth)
+                            }
+
+                            if (dialogState.value) {
+                                CommonDialog(
+                                    title = "确认退出应用程序？",
+                                    onConfirm = {
+                                        mainStateHolder.uninstallToolsApp()
+                                        exitApplication()
+                                    },
+                                    onCancel = { dialogState.value = false },
+                                    onDismiss = { dialogState.value = false }
+                                )
+                            }
                         }
                     }
                 }
