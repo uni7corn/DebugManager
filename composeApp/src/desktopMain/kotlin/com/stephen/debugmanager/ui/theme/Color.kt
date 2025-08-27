@@ -50,6 +50,10 @@ val markDownLight = object : MarkdownColors {
         get() = LightColorScheme.onPrimary
 }
 
+// 给开屏页做动画过渡
+val DarkBackGround = Color(0xFF1a1a1a)
+val LightBackGround = Color(0xffe2e9f8)
+
 val DarkColorScheme = darkColorScheme(
     // 使用最多的按钮色
     primary = Color(0xff404040),

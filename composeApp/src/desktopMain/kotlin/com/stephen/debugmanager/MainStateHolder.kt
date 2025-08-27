@@ -10,15 +10,15 @@ import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
-import com.stephen.debugmanager.data.bean.TerminalCommandData
 import com.stephen.debugmanager.data.bean.Role
-import com.stephen.debugmanager.net.KimiRepository
-import com.stephen.debugmanager.helper.DataStoreHelper
-import com.stephen.debugmanager.helper.LogFileFinder
-import com.stephen.debugmanager.helper.AndroidAppHelper
-import com.stephen.debugmanager.helper.FileManager
+import com.stephen.debugmanager.data.bean.TerminalCommandData
 import com.stephen.debugmanager.data.uistate.*
+import com.stephen.debugmanager.helper.AndroidAppHelper
+import com.stephen.debugmanager.helper.DataStoreHelper
+import com.stephen.debugmanager.helper.FileManager
+import com.stephen.debugmanager.helper.LogFileFinder
 import com.stephen.debugmanager.net.DeepSeekRepository
+import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.utils.LogUtils
 import com.stephen.debugmanager.utils.getDateString
 import kotlinx.coroutines.*
@@ -27,9 +27,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import java.text.SimpleDateFormat
-import kotlin.collections.listOf
-import kotlin.sequences.drop
-import kotlin.sequences.filter
 
 
 class MainStateHolder(
@@ -89,6 +86,7 @@ class MainStateHolder(
         LogUtils.printLog("MainStateHolder init")
         recycleCheckConnection()
         dataStoreHelper.init(dataStoreFileName)
+        initThemeState()
         platformAdapter.init()
         adbClient.init()
     }
@@ -110,7 +108,7 @@ class MainStateHolder(
     /**
      * 获取本地存储的主题
      */
-    fun getThemeState() {
+    fun initThemeState() {
         CoroutineScope(Dispatchers.IO).launch {
             dataStoreHelper.dataStore.data.collect {
                 val themeState = it[themePreferencesKey]?.toInt() ?: ThemeState.DARK

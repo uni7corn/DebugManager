@@ -26,6 +26,7 @@ import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
+import com.stephen.debugmanager.ui.component.AnimatedTheme
 import com.stephen.debugmanager.ui.component.CommonDialog
 import com.stephen.debugmanager.ui.component.CustomTitleBar
 import com.stephen.debugmanager.ui.pages.SplashScreen
@@ -49,11 +50,6 @@ fun main() = application {
     val dialogState = remember { mutableStateOf(false) }
 
     val themeState = mainStateHolder.themeStateStateFlow.collectAsState()
-
-    LaunchedEffect(Unit) {
-        // 获取存储的主题设置
-        mainStateHolder.getThemeState()
-    }
 
     val trayState = rememberTrayState()
     val notification = rememberNotification("Notification", "Message from MyApp!")
@@ -93,8 +89,8 @@ fun main() = application {
         // set the minimum size
         window.minimumSize = Dimension(600, 650)
 
-        MaterialTheme(
-            colorScheme = when (themeState.value) {
+        AnimatedTheme(
+            targetColorScheme = when (themeState.value) {
                 ThemeState.DARK -> DarkColorScheme
                 ThemeState.LIGHT -> LightColorScheme
                 else -> if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme
