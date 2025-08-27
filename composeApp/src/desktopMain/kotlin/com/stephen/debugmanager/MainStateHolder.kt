@@ -194,7 +194,6 @@ class MainStateHolder(
      */
     fun getCurrentDeviceInfo() {
         LogUtils.printLog("getCurrentDeviceInfo", LogUtils.LogLevel.INFO)
-        println("=============>getCurrentDeviceInfo<===============")
         runCatching {
             adbClient.runRootScript()
             adbClient.runRemountScript()
@@ -703,7 +702,6 @@ class MainStateHolder(
                     if (deviceCount != _deviceMapState.value.deviceMap.size) {
                         LogUtils.printLog("DEVICE_COUNT_CHANGED! current device count: $deviceCount")
                         // 刷新列表之后，刷新一次当前设备信息
-                        println("=====device count changed=====")
                         getDeviceMap()
                         MainScope().launch {
                             delay(800L)
@@ -717,7 +715,6 @@ class MainStateHolder(
                     // 从断开到成功连接，主动刷新一次设备信息
                     if (!isConnected) {
                         LogUtils.printLog("=====non connected to connected====")
-                        println("=====non connected to connected====")
                         getCurrentDeviceInfo()
                     }
                     isConnected = true

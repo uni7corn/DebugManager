@@ -11,6 +11,7 @@ navigationCompose = "2.7.0-alpha07"
 datastore = "1.1.1"
 composeMarkdown = "0.30.0"
 coil = "3.1.0"
+log4j = "2.23.1"
 
 [libraries]
 kotlin_coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin_coroutines" }
@@ -30,6 +31,8 @@ datastore = { module = "androidx.datastore:datastore", version.ref = "datastore"
 datastore-preferences = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 compose-markdown = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "composeMarkdown" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+log4j-slf4j2 = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }

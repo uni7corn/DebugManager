@@ -1,43 +1,24 @@
 package com.stephen.debugmanager.utils
 
-import com.stephen.debugmanager.base.PlatformAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileWriter
-import java.text.SimpleDateFormat
+import org.slf4j.LoggerFactory
 
 object LogUtils {
 
-    private val logFileName = "Log_" + SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".txt"
+    private val printScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private val printScope = CoroutineScope(Dispatchers.Default)
+    private val logger = LoggerFactory.getLogger(LogUtils::class.java)
 
     fun printLog(msg: String, level: LogLevel = LogLevel.DEBUG) {
         printScope.launch {
-            writeToFile("${getTimeStamp()} $level $msg\n")
-        }
-    }
-
-    private fun getTimeStamp(): String {
-        val currentTime = System.currentTimeMillis()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        return dateFormat.format(currentTime)
-    }
-
-    // 新增方法，用于将字符串写入文件
-    private fun writeToFile(msg: String) {
-//        println(msg)
-        synchronized(this) {
-            printScope.launch {
-                val file = File(PlatformAdapter.userLogConfigFile, logFileName)
-                if (!file.exists()) {
-                    file.createNewFile()
-                }
-                FileWriter(file, true).use { writer ->
-                    writer.write(msg)
-                }
+            when (level) {
+                LogLevel.DEBUG -> logger.debug(msg)
+                LogLevel.INFO -> logger.info(msg)
+                LogLevel.WARN -> logger.warn(msg)
+                LogLevel.ERROR -> logger.error(msg)
             }
         }
     }

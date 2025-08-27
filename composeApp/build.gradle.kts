@@ -7,7 +7,7 @@ plugins {
     alias (libs.plugins.kotlinx.serialization)
 }
 
-val debugManagerAppVersion = "2.4.0"
+val debugManagerAppVersion = "2.4.1"
 
 group = "com.stephen"
 version = debugManagerAppVersion
@@ -49,6 +49,8 @@ kotlin{
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.compose.markdown )
             implementation(libs.coil.compose)
+            implementation(libs.log4j.slf4j2)
+            implementation(libs.log4j.core)
         }
         desktopMain.dependencies {
             implementation(libs.ktor.client.okhttp)

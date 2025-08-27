@@ -41,11 +41,4 @@ class KimiRepository(private val ktorClient: KtorClient) {
             )
         }.body<KimiResult>()
     }
-
-    fun test() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = chatWithMoonShotKimi("你好")
-            println(result)
-        }
-    }
 }

@@ -43,11 +43,4 @@ class DeepSeekRepository(private val ktorClient: KtorClient) {
             )
         }.body<DeepSeekResult>()
     }
-
-    fun test() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = chatWithDeepSeek("你好")
-            PrintStream(System.out, true, "UTF-8").println(result)
-        }
-    }
 }
