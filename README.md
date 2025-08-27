@@ -17,10 +17,15 @@ A Compose Multiplatform Desktop software, for Android device debugging.
 </div>
 
 [windows-image]: https://img.shields.io/badge/-Windows-blue?style=flat-square&logo=windows
+
 [mac-image]: https://img.shields.io/badge/-macOS-black?style=flat-square&logo=apple
+
 [linux-image]: https://img.shields.io/badge/-Linux-yellow?style=flat-square&logo=linux
+
 [download-image]: https://img.shields.io/github/downloads/stepheneasyshot/debugmanager/total?style=flat-square
+
 [release-url]: https://github.com/stepheneasyshot/debugmanager/releases
+
 [license-image]: https://img.shields.io/github/license/stepheneasyshot/debugmanager?style=flat-square
 
 ## 介绍
@@ -37,7 +42,8 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 
 ![](/screenshots/blogs_dark_deviceinfo.png)
 
-1. root和remount，这两个是点击后自动执行adbd获取root权限，remount重载。一般情况下这两个操作会在刚启动软件就自动执行，特殊的场景下可能需要手动点击。如果刚刷完机，最好打开软件后立即重启一次设备，使文件系统重载生效，否则很多文件相关的功能可能会执行失败
+1.
+root和remount，这两个是点击后自动执行adbd获取root权限，remount重载。一般情况下这两个操作会在刚启动软件就自动执行，特殊的场景下可能需要手动点击。如果刚刷完机，最好打开软件后立即重启一次设备，使文件系统重载生效，否则很多文件相关的功能可能会执行失败
 2. 抓取trace，在进行性能分析时使用，自动执行为期10s的trace记录，抓取完毕会自动提取到电脑桌面
 3. 打开google设置，可以打开内置的原生Settings，一般需要开启某些调试开关时使用
 4. fastboot和recovery，这两个操作会直接重启到对应模式
@@ -50,12 +56,14 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 
 ![](/screenshots/blogs_cmp_appmanage.png)
 
-1. 上方的软件安装，可以选取电脑中的apk文件。再配置正确的安装参数，降级安装，覆盖安装等，可将apk安装到系统。一般在安装第三方的apk做验证时使用，需要注意车机系统内置的priv-app，不可以通过install来更新，只能通过下面的push功能来置换。
+1.
+上方的软件安装，可以选取电脑中的apk文件。再配置正确的安装参数，降级安装，覆盖安装等，可将apk安装到系统。一般在安装第三方的apk做验证时使用，需要注意车机系统内置的priv-app，不可以通过install来更新，只能通过下面的push功能来置换。
 2. 下面的app列表展示了此系统里的一些软件的名称，版本，包名，更新时间，列表可以选择筛选后的精简部分还是显示全部app。每个条目最右侧有三个点，点开则为更详细的操作弹窗。
 3. 打开应用界面，可以直接打开对应app的主界面，需要注意这个对于Activity驱动的普通app可以生效，而对于空调，座椅，allapp这种悬浮窗架构的app是不生效的。
 4. 卸载，一般用于直接run进去的app，或者第三方app，对于系统预制的app，直接利用uninstall卸载是没有用的，只能移除apk来实现。
 5. 提取apk，将对应系统内软件的apk文件提取到桌面。
-6. 置换apk，选择电脑端的apk文件，替换掉车机里面原来的apk，达到精准更新软件的目的，适合在不刷机的情况下进行小范围验证操作。选择文件后点击开始PUSH，就会自动替换了。在所有的待替换的apk更新完毕之后，重启设备，下次开机即为新的apk了。注意PUSH的耗时时间和apk体积有关，100Mb以上的apk文件，push后请等待10s以上，再进行重启。
+6.
+置换apk，选择电脑端的apk文件，替换掉车机里面原来的apk，达到精准更新软件的目的，适合在不刷机的情况下进行小范围验证操作。选择文件后点击开始PUSH，就会自动替换了。在所有的待替换的apk更新完毕之后，重启设备，下次开机即为新的apk了。注意PUSH的耗时时间和apk体积有关，100Mb以上的apk文件，push后请等待10s以上，再进行重启。
 
 ### 文件管理
 
@@ -109,6 +117,7 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 ![](/screenshots/blogs_light_about.png)
 
 ### 自适应布局
+
 支持自适应布局，采用了最小窗口尺寸设定、流式布局和自动折叠侧边栏等策略。
 
 保证在不同窗口尺寸下，也能有较好的交互和页面表现。
@@ -129,3 +138,10 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
   <img src="/screenshots/blogs_cmp_command_page_narrow.png" alt="Image 1" style="width: 45%; margin-right: 5%;">
   <img src="/screenshots/blogs_cmp_debugmanager_about_narrow_screen.png" alt="Image 2" style="width: 45%;">
 </div>
+
+### 单例与多窗口
+此前单例运行采用文件锁检测机制，如果缓存目录里有锁文件生成，就直接退出当前进程。
+
+v2.4.0版本开始加入多窗口机制，有实例运行时，显示一个提示窗口，阻断后续的数据处理逻辑，提示用户当前有实例在运行，不能重复运行。
+
+![](/screenshots/blogs_multi_window_singleinstance.png)
