@@ -237,6 +237,17 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         val clip = StringSelection(text)
         clipboard.setContents(clip, null)
     }
+
+    /**
+     * 调用系统警示音
+     */
+    fun callSystemAlert() {
+        runCatching {
+            Toolkit.getDefaultToolkit().beep()
+        }.onFailure {
+            LogUtils.printLog("callSystemAlert failed: ${it.message}", LogUtils.LogLevel.ERROR)
+        }
+    }
 }
 
 @Suppress("unused")

@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.w3c.dom.css.Counter
 import java.text.SimpleDateFormat
 
 
@@ -1018,6 +1019,15 @@ class MainStateHolder(
         LogUtils.printLog("openSingleTerminalWindow")
         CoroutineScope(Dispatchers.IO).launch {
             platformAdapter.openSingleTerminalWindow()
+        }
+    }
+
+    /**
+     * 调用系统警示音
+     */
+    fun callSystemAlert() {
+        CoroutineScope(Dispatchers.IO).launch {
+            platformAdapter.callSystemAlert()
         }
     }
 

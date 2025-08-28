@@ -9,6 +9,7 @@ import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.compose.ui.window.rememberWindowState
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_close
 import com.stephen.composeapp.generated.resources.ic_error_tip
+import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.ui.component.AnimatedTheme
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.CommonButton
@@ -30,9 +32,12 @@ import com.stephen.debugmanager.ui.theme.DarkColorScheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.koin.core.context.GlobalContext
 
 @Composable
 fun ApplicationScope.SingleProcessTipWindow() {
+
+    val mainStateHolder = GlobalContext.get().get<MainStateHolder>()
 
     val windowState = rememberWindowState(
         width = 300.dp,
@@ -41,6 +46,10 @@ fun ApplicationScope.SingleProcessTipWindow() {
     )
 
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        mainStateHolder.callSystemAlert()
+    }
 
     Window(
         onCloseRequest = {
