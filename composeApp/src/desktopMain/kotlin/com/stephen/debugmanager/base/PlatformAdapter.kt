@@ -78,10 +78,10 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     fun getUserTempFilePath() = userConfigFile
 
-    suspend fun getAppInfoServiceApkPath() =
+    suspend fun getAppInfoServerDexPath() =
         when (platformType) {
             PlatformType.WINDOWS, PlatformType.UNKNOWN ->
-                "\"$workDirectory${sp}app${sp}resources${sp}AppInfoService.apk\""
+                "\"$workDirectory${sp}app${sp}resources${sp}aya.dex\""
 
             PlatformType.LINUX ->
                 // original result:
@@ -90,10 +90,10 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
                 executeCommandWithResult("whereis DebugManager").split(" ").drop(1).joinToString()
                     .split("/")
                     .dropLast(2)
-                    .joinToString("/") + "${sp}lib${sp}app${sp}resources${sp}AppInfoService.apk"
+                    .joinToString("/") + "${sp}lib${sp}app${sp}resources${sp}aya.dex"
 
             PlatformType.MAC ->
-                "/Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}AppInfoService.apk"
+                "/Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}aya.dex"
         }
 
     /**

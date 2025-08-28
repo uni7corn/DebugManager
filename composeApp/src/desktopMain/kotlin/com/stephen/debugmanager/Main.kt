@@ -136,7 +136,6 @@ fun main() = application {
                                 CommonDialog(
                                     title = "确认退出应用程序？",
                                     onConfirm = {
-                                        mainStateHolder.uninstallToolsApp()
                                         exitApplication()
                                     },
                                     onCancel = { dialogState.value = false },

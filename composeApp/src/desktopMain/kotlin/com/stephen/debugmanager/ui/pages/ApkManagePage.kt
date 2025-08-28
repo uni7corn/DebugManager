@@ -1,16 +1,16 @@
 package com.stephen.debugmanager.ui.pages
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -20,21 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.LocalPlatformContext
-import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import com.stephen.composeapp.generated.resources.Res
-import com.stephen.composeapp.generated.resources.ic_close
-import com.stephen.composeapp.generated.resources.ic_loading
-import com.stephen.composeapp.generated.resources.ic_more
+import com.stephen.composeapp.generated.resources.ic_default_app_icon
 import com.stephen.debugmanager.MainStateHolder
-import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.InstallParams
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.uistate.AppListState
@@ -43,10 +37,9 @@ import com.stephen.debugmanager.ui.component.skeleton.WeSkeleton
 import com.stephen.debugmanager.ui.theme.defaultText
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.itemKeyText
+import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
-import java.awt.FileDialog
-import java.awt.Frame
 import java.io.File
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -153,19 +146,37 @@ fun ApkManagePage(
                         }
                     }
                     WeSkeleton.Rectangle(appListState.appMap.isEmpty()) {
-                        LazyColumn {
+//                        LazyColumn {
+//                            items(appListState.appMap.keys.toList(), key = { it }) {
+//                                Box(
+//                                    modifier = Modifier.fillMaxWidth(1f).animateItem()
+//                                ) {
+//                                    appListState.appMap[it]?.let { item ->
+//                                        AppHozItem(
+//                                            item.packageName,
+//                                            item.appLabel,
+//                                            item.version,
+//                                            item.iconFilePath,
+//                                            item.lastUpdateTime,
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                        }
+
+
+                        LazyVerticalGrid(columns = GridCells.Fixed(5)) {
                             items(appListState.appMap.keys.toList(), key = { it }) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth(1f).animateItem()
                                 ) {
                                     appListState.appMap[it]?.let { item ->
-                                        AppItem(
+                                        GridAppItem(
                                             item.packageName,
                                             item.appLabel,
                                             item.version,
                                             item.iconFilePath,
                                             item.lastUpdateTime,
-                                            toastState = toastState
                                         )
                                     }
                                 }
@@ -182,16 +193,13 @@ fun ApkManagePage(
 }
 
 @Composable
-fun AppItem(
+fun AppHozItem(
     packageName: String,
     label: String,
     version: String,
     iconFilePath: String,
     lastUpdateTime: String,
-    toastState: ToastState
 ) {
-
-    val optionsDialogState = remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -224,7 +232,7 @@ fun AppItem(
             )
             if (isNeedShowLoading) {
                 Image(
-                    painter = painterResource(Res.drawable.ic_loading),
+                    painter = painterResource(Res.drawable.ic_default_app_icon),
                     contentDescription = "loading icon",
                     modifier = Modifier.size(50.dp).padding(start = 5.dp).rotate(rotation)
                 )
@@ -243,133 +251,57 @@ fun AppItem(
             style = defaultText,
             modifier = Modifier.weight(0.6f)
         )
-
-        Image(
-            contentDescription = "app options",
-            painter = painterResource(Res.drawable.ic_more),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-            modifier = Modifier.padding(end = 10.dp)
-                .clip(RoundedCornerShape(10.dp)).clickable {
-                    optionsDialogState.value = true
-                }.size(36.dp).padding(5.dp)
-        )
-
-        if (optionsDialogState.value) {
-            OptionsDialog(label, packageName, toastState = toastState) {
-                optionsDialogState.value = false
-            }
-        }
     }
 }
 
 @Composable
-fun OptionsDialog(label: String, packageName: String, toastState: ToastState, dismiss: () -> Unit) {
+fun GridAppItem(
+    packageName: String,
+    label: String,
+    version: String,
+    iconFilePath: String,
+    lastUpdateTime: String,
+) {
 
-    val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
-
-    var selectedPushApk by remember { mutableStateOf<File?>(null) }
-
-    Dialog(
-        // 点外面不让消除，防止双击apk文件时易误消除
-        onDismissRequest = {},
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(5.dp)
+            .border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
+            .padding(5.dp)
     ) {
-        Column(
-            modifier = Modifier.width(380.dp).clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colorScheme.surface),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row {
-                Spacer(modifier = Modifier.weight(1f))
+        val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
+        Box {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalPlatformContext.current)
+                    .data(File(iconFilePath))
+                    .build(),
+                modifier = Modifier.padding(start = 5.dp).size(50.dp),
+                contentDescription = "app icon",
+                onState = {
+                    imageState.value = it
+                }
+            )
+            // 错误和加载中，都显示默认值
+            val isNeedShowLoading =
+                imageState.value is AsyncImagePainter.State.Error || imageState.value is AsyncImagePainter.State.Loading
+            val infiniteTransition = rememberInfiniteTransition()
+            val rotation by infiniteTransition.animateFloat(
+                initialValue = 0f,
+                targetValue = 360f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(1000, easing = LinearEasing)
+                )
+            )
+            if (isNeedShowLoading) {
                 Image(
-                    painter = painterResource(Res.drawable.ic_close),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                    contentDescription = "close",
-                    modifier = Modifier.size(32.dp).padding(end = 10.dp, top = 10.dp)
-                        .clip(RoundedCornerShape(50))
-                        .clickable { dismiss() }
+                    painter = painterResource(Res.drawable.ic_default_app_icon),
+                    contentDescription = "loading icon",
+                    modifier = Modifier.size(50.dp).padding(start = 5.dp).rotate(rotation)
                 )
             }
-            CenterText(
-                "请选择要对${label}进行的操作",
-                groupTitleText,
-                modifier = Modifier.padding(10.dp).fillMaxWidth(1f)
-            )
-            CommonButton(
-                "打开应用",
-                onClick = {
-                    toastState.show("部分服务类应用无主界面，打开操作可能无效")
-                    mainStateHolder.startMainActivity(packageName)
-                    dismiss()
-                },
-                modifier = Modifier.height(45.dp).padding(5.dp).fillMaxWidth(1f)
-            )
-            CommonButton(
-                "卸载", onClick = {
-                    toastState.show("注意系统预制应用可能卸载无效")
-                    mainStateHolder.uninstallApp(packageName)
-                    dismiss()
-                },
-                modifier = Modifier.height(45.dp).padding(5.dp).fillMaxWidth(1f),
-                btnColor = MaterialTheme.colorScheme.error
-            )
-            CommonButton(
-                "提取APK",
-                onClick = {
-                    toastState.show(PULL_FILE_TOAST)
-                    mainStateHolder.pullInstalledApk(packageName)
-                    dismiss()
-                },
-                modifier = Modifier.height(45.dp).padding(5.dp).fillMaxWidth(1f)
-            )
-            SimpleDivider(Modifier.height(2.dp).fillMaxWidth(1f))
-            CenterText(
-                "置换apk",
-                defaultText,
-                modifier = Modifier.fillMaxWidth(1f).padding(top = 10.dp)
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(1f).padding(10.dp)
-            ) {
-                CenterText(
-                    text = "选择 apk 路径: ${selectedPushApk?.absolutePath}",
-                    style = defaultText,
-                    modifier = Modifier.weight(1f)
-                        .border(
-                            2.dp,
-                            MaterialTheme.colorScheme.onPrimary,
-                            RoundedCornerShape(10.dp)
-                        )
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.secondary).clickable {
-                            val fileChooser = FileDialog(
-                                Frame(),
-                                "Select a file",
-                                FileDialog.LOAD
-                            ).apply {
-                                file = "*.apk"
-                            }
-                            fileChooser.isVisible = true
-                            selectedPushApk =
-                                fileChooser.directory?.let { File(it, fileChooser.file) }
-                        }.padding(vertical = 10.dp, horizontal = 5.dp)
-                )
-                CommonButton(
-                    "PUSH",
-                    onClick = {
-                        selectedPushApk?.absolutePath?.let {
-                            toastState.show("自动替换推送中，稍后重启即可")
-                            mainStateHolder.pushApk(packageName, it)
-                        } ?: run {
-                            toastState.show("请选择一个要替换的 apk 文件")
-                        }
-                        dismiss()
-                    },
-                    modifier = Modifier.height(36.dp).padding(start = 10.dp),
-                )
-            }
+        }
+        Column(modifier = Modifier.padding(start = 10.dp).weight(0.4f)) {
+            CenterText(text = label, style = itemKeyText)
         }
     }
 }

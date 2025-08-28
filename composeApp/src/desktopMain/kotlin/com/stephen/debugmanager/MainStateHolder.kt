@@ -174,7 +174,7 @@ class MainStateHolder(
                 platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} start-server")
                 adbClient.runRootScript()
                 adbClient.runRemountScript()
-                appinfoHelper.tryToLaunchSaveAppInfoService()
+                appinfoHelper.initAppInfoServer()
                 // 获取安装的app列表
                 getPackageList()
                 isInProcessing = false
@@ -366,13 +366,6 @@ class MainStateHolder(
     }
 
     /**
-     * 卸载装进去的app，需要在主线程。执行完毕再退出DebnugManager
-     */
-    fun uninstallToolsApp() {
-        appinfoHelper.uninstallAppInfoService()
-    }
-
-    /**
      * 录屏并导出
      */
     var isRecording = false
@@ -540,48 +533,36 @@ class MainStateHolder(
     private suspend fun updateAppInfo(filterParams: String = PackageFilter.SIMPLE.param) {
         // 把label和packageName的数据读取到map中，挂起方法，读取完毕再进行下一步
         val packageLabelMap = appinfoHelper.analyzeAppLabel()
-        val installedApps = adbClient.getAndroidShellExecuteResult(
-            adbClient.serial,
-            if (filterParams == PackageFilter.SIMPLE.param) "pm list package -3"
-            else "pm list package"
-        )
+        val installedApps =
+            appinfoHelper.getInstalledApps(filterParams == PackageFilter.SIMPLE.param)
         val appInfoMap = mutableMapOf<String, AppItemData>()
-        installedApps.split("package:")
-            .filter { it.isNotEmpty() }
-            .sortedBy { (packageLabelMap[it] ?: "default") }.forEach {
-                runCatching {
-                    // suspend方法，只有读取完成后才会往下走，否则会阻塞
-                    val iconFilePath = appinfoHelper.getIconFilePath(it)
-                    // 读取label
-                    val label = packageLabelMap[it]
-                    // 读取版本
-                    val version =
-                        adbClient.getAndroidShellExecuteResult(
-                            adbClient.serial,
-                            "dumpsys package $it | grep versionName"
-                        ).split("=").last()
-                    // 上次1更新时间
-                    val lastUpdateTime =
-                        adbClient.getAndroidShellExecuteResult(
-                            adbClient.serial,
-                            "dumpsys package $it | grep lastUpdateTime"
-                        ).split("=").last()
-                    appInfoMap[it] =
-                        AppItemData(
-                            packageName = it,
-                            appLabel = label ?: "Loading...",
-                            version = version,
-                            iconFilePath = iconFilePath,
-                            lastUpdateTime = lastUpdateTime
-                        )
-                    _appMapListState.update {
-                        it.copy(appMap = appInfoMap, appInfoMap.size)
-                    }
-                    _appMapListState.value = _appMapListState.value.toUiState()
-                }.onFailure { e ->
-                    LogUtils.printLog("获取app信息失败:${e.message}", LogUtils.LogLevel.ERROR)
+        installedApps.sortedBy { (packageLabelMap[it]?.label ?: "default") }.forEach {
+            runCatching {
+                // suspend方法，只有读取完成后才会往下走，否则会阻塞
+                val iconFilePath = appinfoHelper.getIconFilePath(it)
+                // 读取label
+                val appInfoItem = packageLabelMap[it]
+                val label = appInfoItem?.label ?: "Loading..."
+                // 读取版本
+                val version = appInfoItem?.versionName ?: "1.0"
+                // 上次1更新时间
+                val lastUpdateTime = appInfoItem?.lastUpdateTime.toString()
+                appInfoMap[it] =
+                    AppItemData(
+                        packageName = it,
+                        appLabel = label,
+                        version = version,
+                        iconFilePath = iconFilePath,
+                        lastUpdateTime = lastUpdateTime
+                    )
+                _appMapListState.update { value ->
+                    value.copy(appMap = appInfoMap, appInfoMap.size)
                 }
+                _appMapListState.value = _appMapListState.value.toUiState()
+            }.onFailure { e ->
+                LogUtils.printLog("获取app信息失败:${e.message}", LogUtils.LogLevel.ERROR)
             }
+        }
     }
 
     /**
