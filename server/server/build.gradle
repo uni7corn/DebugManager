@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'io.liriliri.aya'
+
+    compileSdk = 33
+
+    defaultConfig {
+        minSdk 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "aya-server-v${versionName}.apk"
+
+        def dexPath = rootProject.rootDir.path
+        variant.assembleProvider.get().doLast {
+            copy {
+                def file = zipTree(file(outputFile)).matching { include 'classes*.dex' }.singleFile
+
+                from file
+                into dexPath
+                rename { String fileName ->
+                    fileName.replace(file.getName(), "aya.dex")
+                }
+            }
+        }
+    }
+}
