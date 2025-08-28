@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
@@ -121,10 +122,9 @@ fun CommandPage(isDeviceConnected: Boolean) {
                         Image(
                             painter = painterResource(Res.drawable.ic_terminal_window),
                             contentDescription = null,
-                            modifier = Modifier.size(28.dp).align(Alignment.TopEnd).clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                            ){
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                            modifier = Modifier.size(28.dp).align(Alignment.TopEnd)
+                                .bounceClick().clickable {
                                 mainStateHolder.openSingleTerminalWindow()
                             }
                         )
