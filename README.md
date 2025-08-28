@@ -129,3 +129,11 @@ Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支
 v2.4.0版本开始加入多窗口机制，有实例运行时，显示一个提示窗口，阻断后续的数据处理逻辑，提示用户当前有实例在运行，不能重复运行。
 
 ![](/screenshots/blogs_multi_window_singleinstance.png)
+
+### 开源库使用
+
+1. [AYA的服务端](https://github.com/liriliri/aya) 此前是一个apk的形式，安装进入设备，拉起Activity来读取所有的appinfo，存储Icon到本地，再拉取到Desktop，拿来显示
+2. [Ktor](https://ktor.io/) 用于搭建http服务
+3. [Koin](https://insert-koin.io/) 用于依赖注入
+4. [Coil](https://coil-kt.github.io/coil/) 用于图片加载
+5. [DataStore](https://klibs.io/project/androidx/androidx) 主题数据持久化存储
