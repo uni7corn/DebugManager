@@ -9,7 +9,7 @@ data class DeepSeekResult(
     val id: String,
     val model: String,
     val `object`: String,
-    val prompt_logprobs: String?,
+    val system_fingerprint: String,
     val usage: Usage
 )
 
@@ -18,21 +18,26 @@ data class Choice(
     val finish_reason: String,
     val index: Int,
     val logprobs: String?,
-    val message: Message,
-    val stop_reason: String?
+    val message: Message
 )
 
 @Serializable
 data class Usage(
     val completion_tokens: Int,
+    val prompt_cache_hit_tokens: Int,
+    val prompt_cache_miss_tokens: Int,
     val prompt_tokens: Int,
+    val prompt_tokens_details: PromptTokensDetails,
     val total_tokens: Int
 )
 
 @Serializable
 data class Message(
     val content: String,
-    val reasoning_content: String?,
-    val role: String,
-    val tool_calls: List<String?>
+    val role: String? = ""
+)
+
+@Serializable
+data class PromptTokensDetails(
+    val cached_tokens: Int
 )
