@@ -7,7 +7,7 @@ plugins {
     alias (libs.plugins.kotlinx.serialization)
 }
 
-val debugManagerAppVersion = "2.4.5"
+val debugManagerAppVersion = "2.5.0"
 
 group = "com.stephen"
 version = debugManagerAppVersion
