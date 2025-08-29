@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -38,6 +39,7 @@ import com.stephen.debugmanager.data.bean.PackageInfo
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.rememberToastState
+import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.ui.theme.itemKeyText
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
@@ -91,6 +93,7 @@ fun ApkManagePage(
                         it.versionName,
                         mainStateHolder.getIconFilePath(it.packageName),
                         it.lastUpdateTime.toString(),
+                        modifier = Modifier.padding(5.dp).padding(5.dp)
                     )
                 }
             }
@@ -105,13 +108,11 @@ fun GridAppItem(
     version: String,
     iconFilePath: String,
     lastUpdateTime: String,
+    modifier: Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(5.dp)
-            .height(100.dp)
-            .border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
-            .padding(5.dp)
+        modifier = modifier.clip(RoundedCornerShape(10))
     ) {
         val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
         Box {
@@ -145,8 +146,11 @@ fun GridAppItem(
             }
         }
 
-        Column(modifier = Modifier.padding(start = 10.dp).weight(0.4f)) {
-            CenterText(text = label)
-        }
+        CenterText(
+            label,
+            modifier = Modifier.padding(6.dp),
+            isNeedToClipText = true,
+            style = infoText,
+        )
     }
 }
