@@ -90,7 +90,7 @@ fun ApkManagePage(
                     DropdownSelector(
                         installOptions,
                         installParams,
-                        modifier = Modifier.width(120.dp)
+                        modifier = Modifier.width(100.dp)
                     ) {
                         installParams = it
                     }

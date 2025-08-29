@@ -45,7 +45,7 @@ fun AiModelPage() {
             AIModels.KIMI to "Kimi"
         )
 
-        var selectedModel = mainStateHolder.aiStoreStateFlow.collectAsState()
+        val selectedModel = mainStateHolder.aiStoreStateFlow.collectAsState()
 
         val userInputSting = remember { mutableStateOf("") }
 
@@ -77,7 +77,7 @@ fun AiModelPage() {
             DropdownSelector(
                 aiModelOptions,
                 selectedModel.value,
-                modifier = Modifier.width(130.dp)
+                modifier = Modifier.width(110.dp)
             ) {
                 mainStateHolder.storeAiModel(it)
             }

@@ -69,6 +69,7 @@ fun FileChooseWidget(
     CenterText(
         text = path.ifEmpty { tintText },
         style = defaultText,
+        isNeedToClipText = true,
         modifier = modifier.border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.secondary).clickable {

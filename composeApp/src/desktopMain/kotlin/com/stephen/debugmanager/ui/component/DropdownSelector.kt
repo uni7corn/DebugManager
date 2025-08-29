@@ -42,7 +42,7 @@ fun <T> DropdownSelector(
                 .clickable {
                     if (!DoubleClickUtils.isFastDoubleClick())
                         expanded = expanded.not()
-                }.padding(2.dp),
+                }.padding(vertical = 2.dp, horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CenterText(
@@ -71,7 +71,7 @@ fun <T> DropdownSelector(
                 CenterText(it.value, modifier = modifier.fillMaxWidth(1f).clickable {
                     onSelected(it.key)
                     expanded = false
-                }.padding(vertical = 10.dp))
+                }.padding(vertical = 5.dp))
             }
         }
     }
