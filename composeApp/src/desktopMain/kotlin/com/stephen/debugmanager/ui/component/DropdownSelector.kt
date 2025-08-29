@@ -42,7 +42,7 @@ fun <T> DropdownSelector(
                 .clickable {
                     if (!DoubleClickUtils.isFastDoubleClick())
                         expanded = expanded.not()
-                }.padding(5.dp),
+                }.padding(2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CenterText(
@@ -51,7 +51,7 @@ fun <T> DropdownSelector(
             )
 
             Image(
-                modifier = Modifier.size(16.dp).rotate(rotateAnimation),
+                modifier = Modifier.size(14.dp).rotate(rotateAnimation),
                 painter = painterResource(Res.drawable.ic_expand),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "Dropdown"

@@ -102,12 +102,12 @@ fun ContentView(isMenuExpanded: Boolean) {
                         deviceState,
                         onRefresh = {
                             mainStateHolder.getCurrentDeviceInfo()
-                            mainStateHolder.getAndroidAppListInfo()
+                            mainStateHolder.getpackageListInfo()
                         })
                 }
                 composable(Constants.INSTALL) {
-                    ApkManagePage(appListState, deviceState.isConnected) {
-
+                    ApkManagePage(appListState, deviceState.isConnected){
+                        mainStateHolder.getpackageListInfo(it)
                     }
                 }
                 composable(Constants.FILE_MANAGE) {

@@ -8,7 +8,6 @@ import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
-import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.data.bean.PackageInfo
 import com.stephen.debugmanager.data.bean.Role
@@ -26,7 +25,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import java.text.SimpleDateFormat
 
 
@@ -54,11 +52,12 @@ class MainStateHolder(
     // 设备文件列表信息
     private val _fileState = MutableStateFlow(DirectoryState())
     val directoryStateStateFlow = _fileState.asStateFlow()
-    private val _selectedApkFileState = MutableStateFlow("")
-    val selectedApkFileStateFlow = _selectedApkFileState.asStateFlow()
+    private val _selectedApkFileFileState = MutableStateFlow("")
+    val selectedApkFilePathStateFlow = _selectedApkFileFileState.asStateFlow()
 
     // 设备app列表
     val appListStateStateFlow = mutableStateOf(mutableStateListOf<PackageInfo>())
+    val selectSystemAppState = mutableStateOf(false)
 
     // 主题
     private val _themeState = MutableStateFlow(ThemeState.DEFAULT)
@@ -101,10 +100,19 @@ class MainStateHolder(
                     adbClient.runRootScript()
                     adbClient.runRemountScript()
                     appinfoHelper.initAppInfoServer()
-                    getAndroidAppListInfo()
+                    getpackageListInfo()
                 }
             }
         }
+    }
+
+    fun setSelectSystemApp(select: Boolean) {
+        LogUtils.printLog("setSelectSystemApp-> select:$select")
+        selectSystemAppState.value = select
+    }
+
+    fun setSelectedApkFile(filePath: String) {
+        _selectedApkFileFileState.value = filePath
     }
 
     /**
@@ -540,13 +548,15 @@ class MainStateHolder(
     /**
      * 获取当前设备安装的应用列表
      */
-    fun getAndroidAppListInfo(filterParams: String = PackageFilter.SIMPLE.param) {
+    fun getpackageListInfo(showSystemApps: Boolean = false) {
+        LogUtils.printLog("========>getAndroidAppListInfo -> $showSystemApps<===========")
+        appListStateStateFlow.value.clear()
         CoroutineScope(Dispatchers.IO).launch {
-            val packages = appinfoHelper.getInstalledApps(filterParams == PackageFilter.SIMPLE.param)
+            // 清空旧数据，重新添加入列表
+            val packages = appinfoHelper.getInstalledApps(showSystemApps)
             packages.forEach {
                 appinfoHelper.requestPackageInfo(it).apply {
                     if (packageInfos.isNotEmpty()) {
-                        LogUtils.printLog("getAndroidAppListInfo: $it")
                         appListStateStateFlow.value.add(packageInfos.first())
                     }
                 }
@@ -571,7 +581,6 @@ class MainStateHolder(
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("startMainActivity: $packageName")
             platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell monkey -p $packageName -c android.intent.category.LAUNCHER 1")
-
             // adapt specific method of start main activity
             val mainActivity =
                 adbClient.getAndroidShellExecuteResult(
@@ -589,20 +598,6 @@ class MainStateHolder(
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("uninstallApp: $packageName")
             platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} uninstall $packageName")
-        }
-    }
-
-    /**
-     * push置换应用apk
-     */
-    fun pushApk(packageName: String, apkPath: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val installedApkPath =
-                adbClient.getAndroidShellExecuteResult(adbClient.serial, "pm path $packageName")
-                    .split("package:").last()
-            val installedApkFolderPath = installedApkPath.split("/").dropLast(1).joinToString("/")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell rm $installedApkPath")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} push $apkPath $installedApkFolderPath")
         }
     }
 

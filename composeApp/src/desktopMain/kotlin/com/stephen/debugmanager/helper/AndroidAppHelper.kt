@@ -33,15 +33,20 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
     /**
      * 获取安装的app列表，可以选择包含和忽略系统应用
      */
-    suspend fun getInstalledApps(isIgnoreSystemApps: Boolean) = adbClient
+    suspend fun getInstalledApps(showSystemApps: Boolean) = adbClient
         .getAndroidShellExecuteResult(
             adbClient.serial,
-            if (isIgnoreSystemApps) "pm list package -3"
-            else "pm list package", false
-        )
-        .split("\n")
-        .filter { it.isNotEmpty() }
-        .map { it.replace("package:", "") }
+            if (showSystemApps) "pm list package"
+            else "pm list package -3",
+            false
+        ).split('\n')
+        .map { it.trim() } // 移除每行首尾的空白
+        .filter { it.startsWith("package:") } // 过滤出以 "package:" 开头的行
+        .map { it.substringAfter("package:") } // 提取 "package:" 后面的部分
+        .filter { it.isNotEmpty() } // 过滤掉空字符串
+        .also {
+            LogUtils.printLog("getInstalledApps lenth: ${it.size}")
+        }
 
     /**
      * 推送aya.dex文件到Android设备的/data/local/tmp/aya/目录下
@@ -112,7 +117,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         }
         val jsonString = Json.encodeToString(value = ayaRequest)
         writer.println(jsonString)
-        LogUtils.printLog("Sent request: $jsonString")
+//        LogUtils.printLog("Sent request: $jsonString")
     }
 
     fun readResponse(): AyaResponse {
@@ -120,7 +125,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
             throw IllegalStateException("Client is not connected.")
         }
         val response: String = reader.readLine() ?: ""
-        val json = Json{
+        val json = Json {
             ignoreUnknownKeys = true
         }
         return json.decodeFromString<AyaResponse>(response)
@@ -138,7 +143,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         )
         sendRequest(ayaRequest)
         val response = readResponse()
-        LogUtils.printLog("response:$response")
+//        LogUtils.printLog("response:$response")
         response
     }
 

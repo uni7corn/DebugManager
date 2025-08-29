@@ -122,24 +122,22 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: List<PackageInfo>)
                         style = groupTitleText
                     )
                     LazyColumn {
-                        items (appListState, key = { it }) {
+                        items(appListState, key = { it }) {
                             Box(
                                 modifier = Modifier.fillMaxWidth(1f).animateItem()
                             ) {
-                                appListState.forEach {
-                                    PerformanceAppItem(
-                                        it.packageName,
-                                        it.label,
-                                        it.versionName,
-                                        "TODO",
-                                        isNeedToExpand = (selectedApp == it.packageName),
-                                        perfState = prcessPerfListState.value,
-                                        onClick = {
-                                            selectedApp = it
-                                            mainStateHolder.setProcessPackage(it)
-                                        }
-                                    )
-                                }
+                                PerformanceAppItem(
+                                    it.packageName,
+                                    it.label,
+                                    it.versionName,
+                                    mainStateHolder.getIconFilePath(it.packageName),
+                                    isNeedToExpand = (selectedApp == it.packageName),
+                                    perfState = prcessPerfListState.value,
+                                    onClick = { item ->
+                                        selectedApp = item
+                                        mainStateHolder.setProcessPackage(item)
+                                    }
+                                )
                             }
                         }
                     }

@@ -150,31 +150,44 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         }
 
     private fun procecssStreamResultBuilder(command: String): Flow<String> = callbackFlow {
-        // 执行命令
-        val processBuilder = ProcessBuilder(*command.split(" ").toTypedArray())
-        val process = processBuilder.start()
+        try {
+            val processBuilder = ProcessBuilder(*command.split(" ").toTypedArray())
+            val process = processBuilder.start()
 
-        val overallResult = StringBuilder()
+            val outputReader = BufferedReader(InputStreamReader(process.inputStream))
+            val errorReader = BufferedReader(InputStreamReader(process.errorStream))
 
-        val reader = BufferedReader(InputStreamReader(process.inputStream))
-        var line: String?
-        while (reader.readLine().also { line = it } != null) {
-            overallResult.append(line).append("\n")
+            val outputBuilder = StringBuilder()
+            var line: String?
+            while (outputReader.readLine().also { line = it } != null) {
+                outputBuilder.append(line).append("\n")
+            }
+
+            val errorBuilder = StringBuilder()
+            var errorLine: String?
+            while (errorReader.readLine().also { errorLine = it } != null) {
+                errorBuilder.append(errorLine).append("\n")
+                trySend(errorBuilder.toString())
+            }
+
+            // 等待进程结束
+            val exitCode = process.waitFor()
+
+            // 拼接最终结果
+            val overallResult = StringBuilder()
+            if (outputBuilder.isNotEmpty()) {
+                overallResult.append(outputBuilder)
+            }
+            if (errorBuilder.isNotEmpty()) {
+                overallResult.append(errorBuilder)
+            }
+            // 发送最终的完整结果
             trySend(overallResult.toString())
+            close()
+        } catch (e: Exception) {
+            // 处理异常
+            close(e)
         }
-
-        val errorReader = BufferedReader(InputStreamReader(process.errorStream))
-        var errorLine: String?
-        while (errorReader.readLine().also { errorLine = it } != null) {
-            overallResult.append(errorLine).append("\n")
-            trySend(overallResult.toString())
-        }
-        // 关闭输入流
-        reader.close()
-        errorReader.close()
-        // 等待进程结束
-        process.waitFor()
-        close()
     }
 
     /**
