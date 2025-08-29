@@ -12,11 +12,6 @@ import com.stephen.debugmanager.ui.theme.pageTitleText
 @Composable
 fun BasePage(title: String, content: @Composable () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(1f).padding(10.dp)) {
-        CenterText(
-            title,
-            modifier = Modifier.padding(bottom = 10.dp).align(Alignment.CenterHorizontally),
-            style = pageTitleText,
-        )
         content()
     }
 }

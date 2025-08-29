@@ -1,5 +1,9 @@
 package com.stephen.debugmanager.helper
 
+import com.stephen.debugmanager.base.AdbClient
+import com.stephen.debugmanager.base.PlatformAdapter
+import com.stephen.debugmanager.utils.LogUtils
+import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -7,36 +11,24 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.Socket
-import com.stephen.debugmanager.base.AdbClient
-import com.stephen.debugmanager.base.PlatformAdapter
-import com.stephen.debugmanager.data.PackageFilter
-import com.stephen.debugmanager.data.bean.AppInfoItemData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
-import com.stephen.debugmanager.utils.LogUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import java.io.File
 
+/**
+ * 应用管理页面流程重构：
+ * 1. 获取所有app的信息，包括packageName、appLabel、version等，存储到一个
+ * 2.
+ */
 class AndroidAppHelper(private val adbClient: AdbClient, private val platformAdapter: PlatformAdapter) {
 
     suspend fun initAppInfoServer() = withContext(Dispatchers.IO) {
         pushDexFile()
         launchServer()
-    }
-
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(5000L)
-            saveAllAppInfo()
-        }
+        saveAllAppInfo()
     }
 
     private suspend fun saveAllAppInfo() = withContext(Dispatchers.IO) {
         // 检查AppInfoService是否在运行
         val packageList = getInstalledApps(false)
-        requestSaveAllAppInfo(packageList)
+        requestPackageInfo(packageList)
     }
 
     suspend fun getInstalledApps(isIgnoreSystemApps: Boolean) = adbClient
@@ -80,12 +72,11 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         }
     }
 
-    suspend fun pullAppInfoToComputer(whenFilePulled: suspend () -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun pullAppIconsToComputer(whenIconFilePulled: suspend () -> Unit) = withContext(Dispatchers.IO) {
         LogUtils.printLog("pullAppInfoToComputer")
-        initAppInfoServer()
         val androidPath = "/data/local/tmp/aya/icons"
         platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $androidPath ${PlatformAdapter.userAndroidTempFiles}")
-        whenFilePulled()
+        whenIconFilePulled()
     }
 
     /**
@@ -93,27 +84,6 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
      */
     fun getIconFilePath(packageName: String) =
         "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}icons${PlatformAdapter.sp}$packageName.png"
-
-    fun analyzeAppLabel(): Map<String, AppInfoItemData> {
-        val path =
-            "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}appInfo${PlatformAdapter.sp}apps_info_test.json"
-        val packageLabelMap = mutableMapOf<String, AppInfoItemData>()
-        // 读取到文件为止
-        val file = File(path)
-        if (file.exists()) {
-            // 解析JSON字符串为AppInfoItemData对象
-            val jsonString = file.readText()
-            val json = Json {
-                ignoreUnknownKeys = true  // 关键配置：忽略未知key
-                coerceInputValues = true   // 可选：自动转换不匹配的类型（如数字转字符串）
-            }
-            val appInfoList = json.decodeFromString<List<AppInfoItemData>>(jsonString)
-            appInfoList.forEach { appInfo ->
-                packageLabelMap[appInfo.packageName] = appInfo
-            }
-        }
-        return packageLabelMap
-    }
 
 
     @Serializable
@@ -137,8 +107,7 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
      * 5. pull 出文件到Desktop
      * 6. 拿取png显示
      */
-
-    fun requestSaveAllAppInfo(appList: List<String>) {
+    fun requestPackageInfo(packageNames: List<String>) {
         val host = "localhost"
         val port = 1234
 
@@ -152,11 +121,11 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
                 val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
 
                 // 1. 构建参数对象
-                val params = GetPackageInfosParams(appList)
+                val params = GetPackageInfosParams(packageNames)
                 // 2. 构建请求对象，params字段直接使用上面创建的对象
                 val request = Request(
                     id = "214",
-                    method = "saveAllInfoToFile",
+                    method = "getPackageInfos",
                     params = params
                 )
                 // 3. 将整个请求对象序列化为 JSON 字符串

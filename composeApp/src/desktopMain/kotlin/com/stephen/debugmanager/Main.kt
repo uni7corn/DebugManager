@@ -52,6 +52,8 @@ fun main() = application {
 
     val themeState = mainStateHolder.themeStateStateFlow.collectAsState()
 
+    val isMenuExpanded = remember { mutableStateOf(true) }
+
     val isOtherInstanceRunning = mainStateHolder.isOtherInstanceRunning
 
     val trayState = rememberTrayState()
@@ -60,8 +62,7 @@ fun main() = application {
 
     if (isOtherInstanceRunning.value) {
         SingleProcessTipWindow()
-    }
-    else {
+    } else {
         Tray(
             state = trayState,
             icon = painterResource(Res.drawable.app_logo),
@@ -113,6 +114,13 @@ fun main() = application {
                 CompositionLocalProvider(LocalContextMenuRepresentation provides contextMenuRepresentation) {
                     BoxWithConstraints {
                         val windowWidth = maxWidth
+
+                        LaunchedEffect(windowWidth) {
+                            if (windowWidth < 601.dp) {
+                                isMenuExpanded.value = false
+                            }
+                        }
+
                         Column(
                             modifier = Modifier.clip(RoundedCornerShape(12.dp))
                                 .background(MaterialTheme.colorScheme.background)
@@ -125,11 +133,14 @@ fun main() = application {
                                         dialogState.value = true
                                     },
                                     modifier = Modifier.fillMaxWidth(),
-                                )
+                                    isMenuExpanded = isMenuExpanded.value,
+                                ) {
+                                    isMenuExpanded.value = it
+                                }
                             }
 
                             SplashScreen {
-                                ContentView(windowWidth)
+                                ContentView(isMenuExpanded.value)
                             }
 
                             if (dialogState.value) {

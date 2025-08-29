@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.w3c.dom.css.Counter
 import java.text.SimpleDateFormat
 
 
@@ -97,6 +96,12 @@ class MainStateHolder(
                 dataStoreHelper.init(dataStoreFileName)
                 recycleCheckConnection()
                 initThemeState()
+                CoroutineScope(Dispatchers.IO).launch {
+                    platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} start-server")
+                    adbClient.runRootScript()
+                    adbClient.runRemountScript()
+                    appinfoHelper.initAppInfoServer()
+                }
             }
         }
     }
@@ -162,26 +167,6 @@ class MainStateHolder(
         _deviceMapState.value = _deviceMapState.value.toUiState()
     }
 
-    /**
-     * 需要加入processing标志位，防止重复执行，getDeviceInfo时会再次调用
-     */
-    private var isInProcessing = false
-    private fun prepareEnv() {
-        if (!isInProcessing) {
-            isInProcessing = true
-            CoroutineScope(Dispatchers.IO).launch {
-                LogUtils.printLog("prepareEnv", LogUtils.LogLevel.INFO)
-                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} start-server")
-                adbClient.runRootScript()
-                adbClient.runRemountScript()
-                appinfoHelper.initAppInfoServer()
-                // 获取安装的app列表
-                getPackageList()
-                isInProcessing = false
-            }
-        }
-    }
-
     fun root() {
         adbClient.runRootScript()
     }
@@ -200,7 +185,6 @@ class MainStateHolder(
             adbClient.runRemountScript()
             // 根据选中设备的位置拿取设备信息
             CoroutineScope(Dispatchers.IO).launch {
-                prepareEnv()
                 val deviceName = adbClient.getAndroidShellExecuteResult(adbClient.serial, "getprop ro.product.model")
                 val sdkVersion =
                     adbClient.getAndroidShellExecuteResult(adbClient.serial, "getprop ro.build.version.release")
@@ -498,69 +482,6 @@ class MainStateHolder(
                 _fileState.value = _fileState.value.toUiState()
             }.onFailure { e ->
                 LogUtils.printLog("获取文件列表失败:${e.message}", LogUtils.LogLevel.ERROR)
-            }
-        }
-    }
-
-    /**
-     * hold住选取的apk文件路径
-     */
-    fun setSelectedApkFile(apkFilePath: String) {
-        _selectedApkFileState.update {
-            apkFilePath
-        }
-    }
-
-    /**
-     * 获取安装的app列表
-     */
-    @OptIn(ExperimentalResourceApi::class)
-    fun getPackageList(filterParams: String = PackageFilter.SIMPLE.param) {
-        LogUtils.printLog("getPackageList $filterParams")
-        // 获取当前设备的app信息
-        CoroutineScope(Dispatchers.IO).launch {
-            appinfoHelper.pullAppInfoToComputer {
-                // 文件已拉取完毕，再次刷新应用列表
-                updateAppInfo(filterParams)
-            }
-        }
-        // 使用缓存的app信息，最快速加载，当无数据时，使用默认loading值
-        CoroutineScope(Dispatchers.IO).launch {
-            updateAppInfo(filterParams)
-        }
-    }
-
-    private suspend fun updateAppInfo(filterParams: String = PackageFilter.SIMPLE.param) {
-        // 把label和packageName的数据读取到map中，挂起方法，读取完毕再进行下一步
-        val packageLabelMap = appinfoHelper.analyzeAppLabel()
-        val installedApps =
-            appinfoHelper.getInstalledApps(filterParams == PackageFilter.SIMPLE.param)
-        val appInfoMap = mutableMapOf<String, AppItemData>()
-        installedApps.sortedBy { (packageLabelMap[it]?.label ?: "default") }.forEach {
-            runCatching {
-                // suspend方法，只有读取完成后才会往下走，否则会阻塞
-                val iconFilePath = appinfoHelper.getIconFilePath(it)
-                // 读取label
-                val appInfoItem = packageLabelMap[it]
-                val label = appInfoItem?.label ?: "Loading..."
-                // 读取版本
-                val version = appInfoItem?.versionName ?: "1.0"
-                // 上次1更新时间
-                val lastUpdateTime = appInfoItem?.lastUpdateTime.toString()
-                appInfoMap[it] =
-                    AppItemData(
-                        packageName = it,
-                        appLabel = label,
-                        version = version,
-                        iconFilePath = iconFilePath,
-                        lastUpdateTime = lastUpdateTime
-                    )
-                _appMapListState.update { value ->
-                    value.copy(appMap = appInfoMap, appInfoMap.size)
-                }
-                _appMapListState.value = _appMapListState.value.toUiState()
-            }.onFailure { e ->
-                LogUtils.printLog("获取app信息失败:${e.message}", LogUtils.LogLevel.ERROR)
             }
         }
     }

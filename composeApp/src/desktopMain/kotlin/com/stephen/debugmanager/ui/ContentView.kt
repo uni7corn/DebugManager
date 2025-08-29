@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,7 +35,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
 @Composable
-fun ContentView(windowWith: Dp) {
+fun ContentView(isMenuExpanded: Boolean) {
 
     val mainItemList = listOf(
         Constants.DEVICE_INFO to Res.drawable.ic_devices,
@@ -49,13 +48,7 @@ fun ContentView(windowWith: Dp) {
         Constants.ABOUT to Res.drawable.ic_about,
     ).map { (name, icon) -> MainTabItem(name, icon) }
 
-    val isMenuExpanded = remember { mutableStateOf(true) }
 
-    LaunchedEffect(windowWith) {
-        if (windowWith.value < 650) {
-            isMenuExpanded.value = false
-        }
-    }
 
     val choosedTab = remember { mutableStateOf(mainItemList[0]) }
 
@@ -76,7 +69,7 @@ fun ContentView(windowWith: Dp) {
 
     Row(modifier = Modifier.fillMaxSize(1f)) {
         val navController = rememberNavController()
-        AnimatedContent(targetState = isMenuExpanded.value) { expanded ->
+        AnimatedContent(targetState = isMenuExpanded) { expanded ->
             if (expanded) {
                 Row {
                     SideTabBar(
@@ -113,7 +106,7 @@ fun ContentView(windowWith: Dp) {
                 }
                 composable(Constants.INSTALL) {
                     ApkManagePage(appListState, deviceState.isConnected) {
-                        mainStateHolder.getPackageList(it)
+
                     }
                 }
                 composable(Constants.FILE_MANAGE) {
@@ -145,18 +138,6 @@ fun ContentView(windowWith: Dp) {
                     AiModelPage()
                 }
             }
-
-            Image(
-                painter = painterResource(
-                    if (isMenuExpanded.value) Res.drawable.ic_menu_collapse
-                    else Res.drawable.ic_menu_expand
-                ),
-                contentDescription = "menu_adjust",
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                modifier = Modifier.padding(10.dp).size(30.dp).clickable {
-                    isMenuExpanded.value = !isMenuExpanded.value
-                }.align(Alignment.TopStart)
-            )
         }
     }
 }

@@ -160,7 +160,7 @@ fun FileManagePage(
                                 style = itemKeyText,
                                 modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                             )
-                            LazyVerticalGrid(columns = GridCells.Fixed(5)) {
+                            LazyVerticalGrid(columns = GridCells.Fixed(6)) {
                                 items(directoryState.subdirectories.sortedBy { it.fileName }, key = { it.fileName }) {
                                     if (it.fileName.isNotEmpty())
                                         FileViewItem(

@@ -19,6 +19,8 @@ import com.stephen.composeapp.generated.resources.ic_android_debug
 import com.stephen.composeapp.generated.resources.ic_close
 import com.stephen.composeapp.generated.resources.ic_floating
 import com.stephen.composeapp.generated.resources.ic_maximize
+import com.stephen.composeapp.generated.resources.ic_menu_collapse
+import com.stephen.composeapp.generated.resources.ic_menu_expand
 import com.stephen.composeapp.generated.resources.ic_minimize
 import org.jetbrains.compose.resources.painterResource
 
@@ -34,7 +36,9 @@ fun CustomTitleBar(
         windowState.placement = if (windowState.placement == WindowPlacement.Maximized)
             WindowPlacement.Floating else WindowPlacement.Maximized
     },
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isMenuExpanded: Boolean,
+    onClickMenuExpandIcon: (Boolean) -> Unit
 ) {
     val isMaximized = windowState.placement == WindowPlacement.Maximized
     Box(
@@ -47,6 +51,18 @@ fun CustomTitleBar(
         Box(
             modifier = Modifier.fillMaxWidth(),
         ) {
+            Image(
+                painter = painterResource(
+                    if (isMenuExpanded) Res.drawable.ic_menu_collapse
+                    else Res.drawable.ic_menu_expand
+                ),
+                contentDescription = "menu_adjust",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                modifier = Modifier.padding(5.dp).size(30.dp).clickable {
+                    onClickMenuExpandIcon(!isMenuExpanded)
+                }.align(Alignment.CenterStart)
+            )
+
             Row(
                 modifier = Modifier.align(Alignment.Center),
                 verticalAlignment = Alignment.CenterVertically,
