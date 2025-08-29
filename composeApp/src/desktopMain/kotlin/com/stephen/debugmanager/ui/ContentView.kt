@@ -60,7 +60,7 @@ fun ContentView(isMenuExpanded: Boolean) {
 
     val directoryState by mainStateHolder.directoryStateStateFlow.collectAsState()
 
-    val appListState by mainStateHolder.appListStateStateFlow.collectAsState()
+    val appListState by mainStateHolder.appListStateStateFlow
 
     LaunchedEffect(Unit) {
         mainStateHolder.getDeviceMap()
@@ -102,6 +102,7 @@ fun ContentView(isMenuExpanded: Boolean) {
                         deviceState,
                         onRefresh = {
                             mainStateHolder.getCurrentDeviceInfo()
+                            mainStateHolder.getAndroidAppListInfo()
                         })
                 }
                 composable(Constants.INSTALL) {

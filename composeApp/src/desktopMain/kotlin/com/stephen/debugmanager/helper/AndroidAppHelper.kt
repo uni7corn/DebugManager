@@ -2,35 +2,37 @@ package com.stephen.debugmanager.helper
 
 import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
+import com.stephen.debugmanager.data.bean.AyaRequest
+import com.stephen.debugmanager.data.bean.AyaResponse
+import com.stephen.debugmanager.data.bean.PackageListParams
 import com.stephen.debugmanager.utils.LogUtils
 import kotlinx.coroutines.*
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.Socket
+import java.nio.charset.StandardCharsets
 
-/**
- * 应用管理页面流程重构：
- * 1. 获取所有app的信息，包括packageName、appLabel、version等，存储到一个
- * 2.
- */
+
 class AndroidAppHelper(private val adbClient: AdbClient, private val platformAdapter: PlatformAdapter) {
 
+    /**
+     * 初始化AppInfoServer，单次执行
+     */
     suspend fun initAppInfoServer() = withContext(Dispatchers.IO) {
         pushDexFile()
         launchServer()
-        saveAllAppInfo()
+        delay(3000L)
+        // 延时转发端口，链接Socket
+        platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} forward tcp:1234 localabstract:aya")
+        connect()
     }
 
-    private suspend fun saveAllAppInfo() = withContext(Dispatchers.IO) {
-        // 检查AppInfoService是否在运行
-        val packageList = getInstalledApps(false)
-        requestPackageInfo(packageList)
-    }
-
+    /**
+     * 获取安装的app列表，可以选择包含和忽略系统应用
+     */
     suspend fun getInstalledApps(isIgnoreSystemApps: Boolean) = adbClient
         .getAndroidShellExecuteResult(
             adbClient.serial,
@@ -41,9 +43,12 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         .filter { it.isNotEmpty() }
         .map { it.replace("package:", "") }
 
-    private suspend fun pushDexFile() = withContext(Dispatchers.IO) {
-        if (adbClient.getAndroidShellExecuteResult(adbClient.serial, "ls /data/local/tmp/aya/")
-                .apply { LogUtils.printLog("check AppInfoService Process Running result:$this") }
+    /**
+     * 推送aya.dex文件到Android设备的/data/local/tmp/aya/目录下
+     */
+    private suspend inline fun pushDexFile() = withContext(Dispatchers.IO) {
+        if (platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls /data/local/tmp/aya/")
+                .apply { LogUtils.printLog("check dex file existence result:$this") }
                 .contains("aya.dex")
         ) {
             LogUtils.printLog("DEX file exists")
@@ -55,95 +60,95 @@ class AndroidAppHelper(private val adbClient: AdbClient, private val platformAda
         }
     }
 
-    private suspend fun launchServer() = withContext(Dispatchers.IO) {
-        // 判断Server是否在运行
-        if (adbClient.getAndroidShellExecuteResult(adbClient.serial, "cat /proc/net/unix | grep \"@aya\"")
-                .apply { LogUtils.printLog("check AppInfoService Process Running result:$this") }
-                .isNotEmpty()
-        ) {
-            LogUtils.printLog("Server is running")
-        } else {
-            LogUtils.printLog("Server is not running")
-            // 启动Server
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell CLASSPATH=/data/local/tmp/aya/aya.dex app_process /system/bin io.liriliri.aya.Server")
-            delay(500L)
-            // 转发端口
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} forward tcp:1234 localabstract:aya")
+    /**
+     * 通过CLASSPATH启动Server
+     * 转发到Desktop本地端口
+     * 需要单开一个线程，保证会话不中断
+     */
+    private fun launchServer() {
+        CoroutineScope(Dispatchers.IO).launch {
+            // 判断Server是否在运行
+            if (adbClient.getAndroidShellExecuteResult(adbClient.serial, "cat /proc/net/unix | grep \"@aya\"")
+                    .apply { LogUtils.printLog("check AppInfoService Process Running result:$this") }
+                    .isNotEmpty()
+            ) {
+                LogUtils.printLog("Server is running")
+            } else {
+                LogUtils.printLog("Server is not running")
+                // 启动Server
+                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell CLASSPATH=/data/local/tmp/aya/aya.dex app_process /system/bin io.liriliri.aya.Server")
+            }
         }
     }
 
+    private lateinit var socket: Socket
+    private lateinit var writer: PrintWriter
+    private lateinit var reader: BufferedReader
+    val host = "localhost"
+    val port = 1234
+
+    fun connect() {
+        if (this::socket.isInitialized && !socket.isClosed) {
+            return // 已经连接，无需重复连接
+        }
+        LogUtils.printLog("Connecting to $host:$port...")
+        socket = Socket(host, port)
+        writer = PrintWriter(socket.getOutputStream(), true)
+        reader = BufferedReader(InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))
+        LogUtils.printLog("Connected.")
+    }
+
+    @Suppress("Unused")
+    fun disconnect() {
+        if (this::socket.isInitialized) {
+            socket.close()
+            LogUtils.printLog("Disconnected.")
+        }
+    }
+
+    fun sendRequest(ayaRequest: AyaRequest) {
+        if (!this::socket.isInitialized || socket.isClosed) {
+            throw IllegalStateException("Client is not connected. Call connect() first.")
+        }
+        val jsonString = Json.encodeToString(value = ayaRequest)
+        writer.println(jsonString)
+        LogUtils.printLog("Sent request: $jsonString")
+    }
+
+    fun readResponse(): AyaResponse {
+        if (!this::socket.isInitialized || socket.isClosed) {
+            throw IllegalStateException("Client is not connected.")
+        }
+        val response: String = reader.readLine() ?: ""
+        val json = Json{
+            ignoreUnknownKeys = true
+        }
+        return json.decodeFromString<AyaResponse>(response)
+    }
+
+    /**
+     * 请求获取应用信息，根据包名获取
+     */
+    suspend fun requestPackageInfo(packageName: String) = withContext(Dispatchers.IO) {
+        val params = PackageListParams(listOf(packageName))
+        val ayaRequest = AyaRequest(
+            id = "214",
+            method = "getPackageInfos",
+            params = params
+        )
+        sendRequest(ayaRequest)
+        val response = readResponse()
+        LogUtils.printLog("response:$response")
+        response
+    }
+
+    /**
+     * 全量执行后，拉取一次所有app的图标png文件
+     */
     suspend fun pullAppIconsToComputer(whenIconFilePulled: suspend () -> Unit) = withContext(Dispatchers.IO) {
         LogUtils.printLog("pullAppInfoToComputer")
         val androidPath = "/data/local/tmp/aya/icons"
         platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $androidPath ${PlatformAdapter.userAndroidTempFiles}")
         whenIconFilePulled()
-    }
-
-    /**
-     * 循环读取图标文件，直到存在为止
-     */
-    fun getIconFilePath(packageName: String) =
-        "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}icons${PlatformAdapter.sp}$packageName.png"
-
-
-    @Serializable
-    data class GetPackageInfosParams(
-        val packageNames: List<String>
-    )
-
-    @Serializable
-    data class Request<T>(
-        val id: String,
-        val method: String,
-        val params: T
-    )
-
-    /**
-     * 修改server适配DebugManager的原有流程，前置操作：
-     * 1. adb push aya.dex /data/local/tmp/aya/aya.dex
-     * 2. CLASSPATH=/data/local/tmp/aya/aya.dex app_process /system/bin io.liriliri.aya.Server
-     * 3. adb forward tcp:1234 localabstract:aya
-     * 4. 运行请求
-     * 5. pull 出文件到Desktop
-     * 6. 拿取png显示
-     */
-    fun requestPackageInfo(packageNames: List<String>) {
-        val host = "localhost"
-        val port = 1234
-
-        try {
-            // 创建一个 Socket 并连接到主机和端口
-            Socket(host, port).use { socket ->
-                println("Successfully connected to $host:$port")
-
-                // 获取输入和输出流
-                val writer = PrintWriter(socket.getOutputStream(), true)
-                val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
-
-                // 1. 构建参数对象
-                val params = GetPackageInfosParams(packageNames)
-                // 2. 构建请求对象，params字段直接使用上面创建的对象
-                val request = Request(
-                    id = "214",
-                    method = "getPackageInfos",
-                    params = params
-                )
-                // 3. 将整个请求对象序列化为 JSON 字符串
-                val jsonString = Json.encodeToString(value = request)
-                // 发送请求，加上换行符作为分隔符
-                writer.println(jsonString)
-                println("Sent request: $request")
-                // 读取服务器响应
-                val responseString = reader.readLine()
-                if (responseString != null) {
-                    println("Received response: $responseString")
-                } else {
-                    println("Received empty response")
-                }
-            }
-        } catch (e: Exception) {
-            System.err.println("An error occurred: ${e.message}")
-            e.printStackTrace()
-        }
     }
 }

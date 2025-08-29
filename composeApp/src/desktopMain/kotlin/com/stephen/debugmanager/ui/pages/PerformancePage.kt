@@ -20,7 +20,7 @@ import coil3.compose.LocalPlatformContext
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import com.stephen.debugmanager.MainStateHolder
-import com.stephen.debugmanager.data.uistate.AppListState
+import com.stephen.debugmanager.data.bean.PackageInfo
 import com.stephen.debugmanager.data.uistate.ProcessPerfState
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
@@ -36,13 +36,13 @@ import java.io.File
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
+fun PerformancePage(isDeviceConnected: Boolean, appListState: List<PackageInfo>) {
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
     val performanceState = mainStateHolder.performanceStateStateFlow.collectAsState()
 
-    var prcessPerfListState = mainStateHolder.processPerfListStateStateFlow.collectAsState()
+    val prcessPerfListState = mainStateHolder.processPerfListStateStateFlow.collectAsState()
 
     var selectedApp by remember { mutableStateOf("") }
 
@@ -122,16 +122,16 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: AppListState) {
                         style = groupTitleText
                     )
                     LazyColumn {
-                        items (appListState.appMap.keys.toList(), key = { it }) {
+                        items (appListState, key = { it }) {
                             Box(
                                 modifier = Modifier.fillMaxWidth(1f).animateItem()
                             ) {
-                                appListState.appMap[it]?.let {
+                                appListState.forEach {
                                     PerformanceAppItem(
                                         it.packageName,
-                                        it.appLabel,
-                                        it.version,
-                                        it.iconFilePath,
+                                        it.label,
+                                        it.versionName,
+                                        "TODO",
                                         isNeedToExpand = (selectedApp == it.packageName),
                                         perfState = prcessPerfListState.value,
                                         onClick = {

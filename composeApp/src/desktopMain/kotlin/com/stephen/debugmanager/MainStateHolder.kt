@@ -10,6 +10,7 @@ import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
 import com.stephen.debugmanager.data.PackageFilter
 import com.stephen.debugmanager.data.ThemeState
+import com.stephen.debugmanager.data.bean.PackageInfo
 import com.stephen.debugmanager.data.bean.Role
 import com.stephen.debugmanager.data.bean.TerminalCommandData
 import com.stephen.debugmanager.data.uistate.*
@@ -57,8 +58,7 @@ class MainStateHolder(
     val selectedApkFileStateFlow = _selectedApkFileState.asStateFlow()
 
     // 设备app列表
-    private val _appMapListState = MutableStateFlow(AppListState())
-    val appListStateStateFlow = _appMapListState.asStateFlow()
+    val appListStateStateFlow = mutableStateOf(mutableStateListOf<PackageInfo>())
 
     // 主题
     private val _themeState = MutableStateFlow(ThemeState.DEFAULT)
@@ -101,6 +101,7 @@ class MainStateHolder(
                     adbClient.runRootScript()
                     adbClient.runRemountScript()
                     appinfoHelper.initAppInfoServer()
+                    getAndroidAppListInfo()
                 }
             }
         }
@@ -535,6 +536,33 @@ class MainStateHolder(
             }
         }
     }
+
+    /**
+     * 获取当前设备安装的应用列表
+     */
+    fun getAndroidAppListInfo(filterParams: String = PackageFilter.SIMPLE.param) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val packages = appinfoHelper.getInstalledApps(filterParams == PackageFilter.SIMPLE.param)
+            packages.forEach {
+                appinfoHelper.requestPackageInfo(it).apply {
+                    if (packageInfos.isNotEmpty()) {
+                        LogUtils.printLog("getAndroidAppListInfo: $it")
+                        appListStateStateFlow.value.add(packageInfos.first())
+                    }
+                }
+            }
+            appinfoHelper.pullAppIconsToComputer {
+                LogUtils.printLog("All app icons pulled!")
+            }
+        }
+    }
+
+    /**
+     * 获取应用图标路径
+     */
+    fun getIconFilePath(packageName: String) =
+        "${PlatformAdapter.userAndroidTempFiles}${PlatformAdapter.sp}icons${PlatformAdapter.sp}$packageName.png"
+
 
     /**
      * 打开应用主界面
