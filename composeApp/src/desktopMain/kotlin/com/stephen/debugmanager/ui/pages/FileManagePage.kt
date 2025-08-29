@@ -1,5 +1,6 @@
 package com.stephen.debugmanager.ui.pages
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +29,7 @@ import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun FileManagePage(
     directoryState: DirectoryState,
@@ -160,13 +162,22 @@ fun FileManagePage(
                                 style = itemKeyText,
                                 modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                             )
-                            LazyVerticalGrid(columns = GridCells.Fixed(6)) {
-                                items(directoryState.subdirectories.sortedBy { it.fileName }, key = { it.fileName }) {
-                                    if (it.fileName.isNotEmpty())
+                            LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 120.dp)) {
+                                items(directoryState.subdirectories.filter { it.fileName.isNotEmpty() }
+                                    .sortedBy { it.fileName }, key = { it.fileName }) {
+                                    Box(
+                                        Modifier.animateItem(
+                                            fadeInSpec = null,
+                                            fadeOutSpec = null,
+                                            placementSpec = tween(300)
+                                        ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
                                         FileViewItem(
                                             it.fileName,
                                             it.isDirectory,
                                             modifier = Modifier.padding(5.dp)
+                                                .animateItemPlacement()
                                                 .clip(RoundedCornerShape(10))
                                                 .clickable(
                                                     interactionSource = remember { MutableInteractionSource() },
@@ -212,6 +223,7 @@ fun FileManagePage(
                                                 toastState.show("复制路径到剪切板")
                                             }
                                         )
+                                    }
                                 }
                             }
                         }
