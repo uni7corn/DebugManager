@@ -70,7 +70,10 @@ fun FileChooseWidget(
         text = path.ifEmpty { tintText },
         style = defaultText,
         isNeedToClipText = true,
-        modifier = modifier.border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
+        modifier = modifier.dragAndDropTarget(
+            shouldStartDragAndDrop = { event -> true },
+            target = callback
+        ).border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.secondary).clickable {
                 // 选择文件
@@ -99,9 +102,6 @@ fun FileChooseWidget(
                         onPathSelect(fileChooser.selectedFile.absolutePath)
                     }
                 }
-            }.dragAndDropTarget(
-                shouldStartDragAndDrop = { event -> true },
-                target = callback
-            ).padding(10.dp)
+            }.padding(10.dp)
     )
 }
