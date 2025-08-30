@@ -202,7 +202,7 @@ fun SideTabItem(icon: DrawableResource, title: String, modifier: Modifier, isSel
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(icon),
-                modifier = Modifier.padding(end = 10.dp).size(22.dp),
+                modifier = Modifier.padding(end = 10.dp).size(20.dp),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                 contentDescription = "tab_icon"
             )

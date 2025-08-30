@@ -7,9 +7,9 @@ import androidx.compose.ui.unit.sp
 import com.mikepenz.markdown.model.MarkdownTypography
 
 val defaultText = TextStyle(
-    fontSize = 16.sp,
+    fontSize = 14.sp,
     fontWeight = FontWeight.Normal,
-    textAlign = TextAlign.Center,
+    textAlign = TextAlign.Left,
 )
 
 val infoText = TextStyle(
@@ -19,25 +19,25 @@ val infoText = TextStyle(
 )
 
 val pageTitleText = TextStyle(
-    fontSize = 20.sp,
-    fontWeight = FontWeight.Bold,
-    textAlign = TextAlign.Center,
-)
-
-val groupTitleText = TextStyle(
     fontSize = 18.sp,
     fontWeight = FontWeight.Bold,
     textAlign = TextAlign.Center,
 )
 
-val itemKeyText = TextStyle(
+val groupTitleText = TextStyle(
     fontSize = 16.sp,
     fontWeight = FontWeight.Bold,
+    textAlign = TextAlign.Center,
+)
+
+val itemKeyText = TextStyle(
+    fontSize = 14.sp,
+    fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Left,
 )
 
 val itemValueText = TextStyle(
-    fontSize = 14.sp,
+    fontSize = 13.sp,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Left,
 )

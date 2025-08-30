@@ -61,7 +61,7 @@ fun SplashScreenContent(modifier: Modifier = Modifier) {
                 painter = painterResource(Res.drawable.ic_android_debug),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "Splash Logo",
-                modifier = Modifier.size(160.dp)
+                modifier = Modifier.size(120.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             CenterText(

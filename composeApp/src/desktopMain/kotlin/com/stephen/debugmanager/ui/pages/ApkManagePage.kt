@@ -1,8 +1,11 @@
 package com.stephen.debugmanager.ui.pages
 
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,6 +29,7 @@ import com.stephen.debugmanager.data.InstallParams
 import com.stephen.debugmanager.data.bean.PackageInfo
 import com.stephen.debugmanager.data.installOptions
 import com.stephen.debugmanager.ui.component.*
+import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
@@ -43,6 +47,8 @@ fun ApkManagePage(
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
     val selectSystemAppState = mainStateHolder.selectSystemAppState
+
+    val dialogInfoItem = remember { mutableStateOf<PackageInfo?>(null) }
 
     val selectedApkFilePathState = mainStateHolder.selectedApkFilePathStateFlow.collectAsState()
 
@@ -65,16 +71,16 @@ fun ApkManagePage(
                 ) {
                     Checkbox(
                         checked = selectSystemAppState.value, onCheckedChange = {
-                            if (!DoubleClickUtils.isFastDoubleClick(2000L)) {
+                            if (!DoubleClickUtils.isFastDoubleClick(3000L)) {
                                 mainStateHolder.setSelectSystemApp(it)
                                 onChangeSystemAppShowState(it)
                             } else {
                                 toastState.show("切换太快了~")
                             }
                         },
-                        modifier = Modifier.padding(end = 5.dp).size(20.dp)
+                        modifier = Modifier.padding(end = 5.dp).size(18.dp)
                     )
-                    CenterText("显示系统APP", modifier = Modifier.padding(end = 16.dp))
+                    CenterText("显示系统APP", style = infoText, modifier = Modifier.padding(end = 16.dp))
                     FileChooseWidget(
                         tintText = "拖动 APK 文件到此处 或 点击选取",
                         path = selectedApkFilePathState.value,
@@ -98,7 +104,9 @@ fun ApkManagePage(
                         text = "安装",
                         onClick = {
                             if (selectedApkFilePathState.value.isNotEmpty()) {
-                                mainStateHolder.installApp(selectedApkFilePathState.value, installParams)
+                                mainStateHolder.installApp(selectedApkFilePathState.value, installParams) {
+                                    toastState.show(it)
+                                }
                             } else {
                                 toastState.show("请选择一个要安装 apk 文件")
                             }
@@ -108,7 +116,7 @@ fun ApkManagePage(
                     )
                 }
 
-                LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 120.dp)) {
+                LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 105.dp)) {
                     items(appListState.sortedBy { it.label }, key = { it.packageName }) {
                         Box(
                             Modifier.animateItem(
@@ -119,16 +127,34 @@ fun ApkManagePage(
                             contentAlignment = Alignment.Center
                         ) {
                             GridAppItem(
-                                it.packageName,
-                                it.label,
-                                it.versionName,
-                                mainStateHolder.getIconFilePath(it.packageName),
-                                it.lastUpdateTime.toString(),
-                                modifier = Modifier.padding(5.dp).padding(5.dp)
+                                label = it.label,
+                                iconFilePath = mainStateHolder.getIconFilePath(it.packageName),
+                                modifier = Modifier.padding(5.dp)
+                                    .size(100.dp).padding(5.dp)
+                                    .bounceClick().clickable {
+                                        dialogInfoItem.value = it
+                                    }
                             )
                         }
                     }
                 }
+            }
+            AnimatedVisibility(
+                visible = dialogInfoItem.value != null,
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut(),
+                modifier = Modifier.fillMaxSize(1f)
+                    .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6f))
+                    .clickable(indication = null, interactionSource = remember {
+                        MutableInteractionSource()
+                    }) {
+                        dialogInfoItem.value = null
+                    }
+            ) {
+                AppInfoDialog(
+                    dialogInfoItem.value,
+                    mainStateHolder.getIconFilePath(dialogInfoItem.value?.packageName ?: "")
+                )
             }
             // 设备未连接，显示提示文案
             if (isDeviceConnected.not()) {
@@ -140,11 +166,8 @@ fun ApkManagePage(
 
 @Composable
 fun GridAppItem(
-    packageName: String,
     label: String,
-    version: String,
     iconFilePath: String,
-    lastUpdateTime: String,
     modifier: Modifier
 ) {
     Column(
@@ -181,5 +204,59 @@ fun GridAppItem(
             isNeedToClipText = true,
             style = infoText,
         )
+    }
+}
+
+@Composable
+fun AppInfoDialog(infoItem: PackageInfo?, iconFilePath: String, onClickStringCopy: (String) -> Unit = {}) {
+    Box(contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.width(400.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }) {}
+                .padding(vertical = 5.dp, horizontal = 10.dp)
+        ) {
+            val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 5.dp)
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data(File(iconFilePath))
+                        .build(),
+                    modifier = Modifier.padding(start = 5.dp, top = 5.dp, bottom = 5.dp, end = 10.dp).size(60.dp),
+                    contentDescription = "app icon",
+                    onState = {
+                        imageState.value = it
+                    }
+                )
+                Column {
+                    CenterText(
+                        "${infoItem?.label}",
+                        style = groupTitleText,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                    CenterText(
+                        "${infoItem?.versionName}",
+                        isNeedToClipText = true,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                    CenterText(
+                        "${infoItem?.packageName}",
+                        isNeedToClipText = true,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                }
+            }
+            SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
+            NameValueText("安装路径", "${infoItem?.apkPath}", nameWeight = 0.3f)
+            SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
+            NameValueText("最后更新时间", "${infoItem?.lastUpdateTime}", nameWeight = 0.3f)
+        }
     }
 }

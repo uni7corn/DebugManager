@@ -463,10 +463,16 @@ class MainStateHolder(
     /**
      * 安装apk
      */
-    fun installApp(filePath: String, installParams: String = "") {
+    fun installApp(filePath: String, installParams: String = "", onInstallResult: (String) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams $filePath")
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams $filePath")
+            val result =
+                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams $filePath")
+            if (result.contains("Success")) {
+                onInstallResult("安装成功")
+            } else {
+                onInstallResult("安装失败: $result")
+            }
         }
     }
 

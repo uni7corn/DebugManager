@@ -75,6 +75,8 @@ val DarkColorScheme = darkColorScheme(
     onBackground = Color(0xff323232),
     // 功能组选中的颜色
     onSurface = Color(0xff404040),
+    // toastBackground
+    surfaceContainer = Color(0xffffffff)
 )
 
 val LightColorScheme = lightColorScheme(
@@ -88,4 +90,6 @@ val LightColorScheme = lightColorScheme(
     error = Color(0xffe8563d),
     onBackground = Color(0xffe2e5f0),
     onSurface = Color(0xffd6deec),
+    surfaceContainer = Color(0xff000000)
+
 )

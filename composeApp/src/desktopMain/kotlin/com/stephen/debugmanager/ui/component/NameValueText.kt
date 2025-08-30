@@ -14,7 +14,7 @@ import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.ui.theme.itemValueText
 
 @Composable
-fun NameValueText(name: String, value: String, modifier: Modifier = Modifier) {
+fun NameValueText(name: String, value: String, modifier: Modifier = Modifier, nameWeight: Float = 0.5f) {
     Row(
         modifier = modifier.padding(vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -22,14 +22,14 @@ fun NameValueText(name: String, value: String, modifier: Modifier = Modifier) {
         Text(
             text = name,
             style = itemKeyText,
-            modifier = Modifier.weight(0.5f),
+            modifier = Modifier.weight(nameWeight),
             color = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(modifier = Modifier.width(20.dp))
         Text(
             text = value,
             style = itemValueText,
-            modifier = Modifier.weight(0.5f),
+            modifier = Modifier.weight(1f - nameWeight),
             color = MaterialTheme.colorScheme.onPrimary
         )
     }

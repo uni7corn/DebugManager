@@ -161,7 +161,7 @@ fun FileManagePage(
                                 style = itemKeyText,
                                 modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp),
                             )
-                            LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 120.dp)) {
+                            LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 105.dp)) {
                                 items(directoryState.subdirectories.filter { it.fileName.isNotEmpty() }
                                     .sortedBy { it.fileName }, key = { it.fileName }) {
                                     Box(
@@ -175,8 +175,13 @@ fun FileManagePage(
                                         FileViewItem(
                                             it.fileName,
                                             it.isDirectory,
-                                            modifier = Modifier.padding(5.dp)
-                                                .animateItemPlacement()
+                                            modifier = Modifier
+                                                .animateItem(
+                                                    fadeInSpec = null,
+                                                    fadeOutSpec = null,
+                                                    placementSpec = tween(300)
+                                                )
+                                                .size(100.dp)
                                                 .clip(RoundedCornerShape(10))
                                                 .clickable(
                                                     interactionSource = remember { MutableInteractionSource() },
@@ -312,22 +317,26 @@ fun FileViewItem(
             },
         )
     }) {
-        Column(
-            modifier = modifier.padding(5.dp).width(IntrinsicSize.Max),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = modifier.padding(5.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = if (isDirectory) painterResource(Res.drawable.ic_folder)
-                else painterResource(Res.drawable.ic_file),
-                modifier = Modifier.size(36.dp),
-                contentDescription = "file_icon"
-            )
-            CenterText(
-                name,
-                modifier = Modifier.padding(6.dp),
-                isNeedToClipText = true,
-                style = infoText,
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Image(
+                    painter = if (isDirectory) painterResource(Res.drawable.ic_folder)
+                    else painterResource(Res.drawable.ic_file),
+                    modifier = Modifier.size(36.dp),
+                    contentDescription = "file_icon"
+                )
+                CenterText(
+                    name,
+                    modifier = Modifier.padding(6.dp),
+                    isNeedToClipText = true,
+                    style = infoText,
+                )
+            }
         }
     }
 }

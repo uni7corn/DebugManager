@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
+import com.stephen.debugmanager.ui.theme.infoText
 import kotlinx.coroutines.delay
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -62,34 +65,29 @@ fun WeToast(
                 layoutDirection: LayoutDirection,
                 popupContentSize: IntSize
             ): IntOffset {
-                return IntOffset(windowSize.width / 2 - popupContentSize.width / 2, 50)
+                // 居中显示
+                return IntOffset(
+                    windowSize.width / 2 - popupContentSize.width / 2,
+                    windowSize.height / 2 - popupContentSize.height / 2
+                )
             }
         }
     }
     if (visible || localVisible) {
         Popup(popupPositionProvider = positionProvider) {
-            Box(
-                modifier = Modifier.width(400.dp).heightIn(44.dp).clip(RoundedCornerShape(50)),
-                contentAlignment = Alignment.TopCenter
+            AnimatedVisibility(
+                visible = visible && localVisible,
+                enter = fadeIn() + scaleIn(tween(100), initialScale = 0.8f),
+                exit = fadeOut() + scaleOut(tween(100), targetScale = 0.8f)
             ) {
-                AnimatedVisibility(
-                    visible = visible && localVisible,
-                    enter = fadeIn() + scaleIn(tween(100), initialScale = 0.8f),
-                    exit = fadeOut() + scaleOut(tween(100), targetScale = 0.8f)
+                Box(
+                    modifier = Modifier.widthIn(max = 500.dp)
+                        .clip(RoundedCornerShape(10))
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        modifier = Modifier.width(400.dp).heightIn(44.dp).clip(RoundedCornerShape(50))
-                            .background(Color(0xCC4C4C4C)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = title,
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    CenterText(text = title, style = infoText, color = MaterialTheme.colorScheme.background)
                 }
             }
         }
