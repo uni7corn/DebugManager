@@ -598,6 +598,16 @@ class MainStateHolder(
     }
 
     /**
+     * 停止一个app
+     */
+    fun forceStopApp(packageName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            LogUtils.printLog("forceStopApp: $packageName")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} shell am force-stop $packageName")
+        }
+    }
+
+    /**
      * 卸载app
      */
     fun uninstallApp(packageName: String) {
@@ -610,12 +620,12 @@ class MainStateHolder(
     /**
      * 提取安装包
      */
-    fun pullInstalledApk(packageName: String) {
+    fun pullInstalledApk(packageName: String, versionName: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val installedApkPath =
                 adbClient.getAndroidShellExecuteResult(adbClient.serial, "pm path $packageName")
                     .split("package:").last()
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $installedApkPath ${PlatformAdapter.pulledTempFolder}/${packageName}.apk")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $installedApkPath ${PlatformAdapter.pulledTempFolder}/${packageName}_$versionName.apk")
             platformAdapter.openFolder(PlatformAdapter.pulledTempFolder)
         }
     }

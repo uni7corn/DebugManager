@@ -2,6 +2,8 @@ package com.stephen.debugmanager.ui.pages
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ContextMenuArea
+import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,6 +34,8 @@ import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.utils.DoubleClickUtils
+import com.stephen.debugmanager.utils.size
+import com.stephen.debugmanager.utils.toDateString
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import java.io.File
@@ -127,13 +131,26 @@ fun ApkManagePage(
                             contentAlignment = Alignment.Center
                         ) {
                             GridAppItem(
+                                packageName = it.packageName,
                                 label = it.label,
                                 iconFilePath = mainStateHolder.getIconFilePath(it.packageName),
                                 modifier = Modifier.padding(5.dp)
                                     .size(100.dp).padding(5.dp)
                                     .bounceClick().clickable {
                                         dialogInfoItem.value = it
-                                    }
+                                    },
+                                onClickShowInfo = {
+                                    dialogInfoItem.value = it
+                                },
+                                onClickOpen = {
+                                    mainStateHolder.startMainActivity(it.packageName)
+                                },
+                                onForceStop = {
+                                    mainStateHolder.forceStopApp(it.packageName)
+                                },
+                                onExtractApk = {
+                                    mainStateHolder.pullInstalledApk(it.packageName, it.versionName)
+                                },
                             )
                         }
                     }
@@ -166,44 +183,66 @@ fun ApkManagePage(
 
 @Composable
 fun GridAppItem(
+    packageName: String,
     label: String,
     iconFilePath: String,
-    modifier: Modifier
+    modifier: Modifier,
+    onClickShowInfo: () -> Unit,
+    onClickOpen: () -> Unit,
+    onForceStop: () -> Unit,
+    onExtractApk: () -> Unit,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.clip(RoundedCornerShape(10))
-    ) {
-        val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
-        Box {
-            // 错误和加载中，都显示默认值
-            val isNeedShowLoading =
-                imageState.value is AsyncImagePainter.State.Error || imageState.value is AsyncImagePainter.State.Loading
-            if (isNeedShowLoading) {
-                Image(
-                    painter = painterResource(Res.drawable.ic_default_app_icon),
-                    contentDescription = "loading icon",
-                    modifier = Modifier.size(50.dp).padding(start = 5.dp)
+    ContextMenuArea(items = {
+        listOf(
+            ContextMenuItem("打开") {
+                onClickOpen()
+            },
+            ContextMenuItem("强制停止") {
+                onForceStop()
+            },
+            ContextMenuItem("展示信息") {
+                onClickShowInfo()
+            },
+            ContextMenuItem("提取安装包") {
+                onExtractApk()
+            },
+        )
+    }) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.clip(RoundedCornerShape(10))
+        ) {
+            val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
+            Box {
+                // 错误和加载中，都显示默认值
+                val isNeedShowLoading =
+                    imageState.value is AsyncImagePainter.State.Error || imageState.value is AsyncImagePainter.State.Loading
+                if (isNeedShowLoading) {
+                    Image(
+                        painter = painterResource(Res.drawable.ic_default_app_icon),
+                        contentDescription = "loading icon",
+                        modifier = Modifier.size(50.dp).padding(start = 5.dp)
+                    )
+                }
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data(File(iconFilePath))
+                        .build(),
+                    modifier = Modifier.padding(start = 5.dp).size(50.dp),
+                    contentDescription = "app icon",
+                    onState = {
+                        imageState.value = it
+                    }
                 )
             }
-            AsyncImage(
-                model = ImageRequest.Builder(LocalPlatformContext.current)
-                    .data(File(iconFilePath))
-                    .build(),
-                modifier = Modifier.padding(start = 5.dp).size(50.dp),
-                contentDescription = "app icon",
-                onState = {
-                    imageState.value = it
-                }
+
+            CenterText(
+                label,
+                modifier = Modifier.padding(6.dp),
+                isNeedToClipText = true,
+                style = infoText,
             )
         }
-
-        CenterText(
-            label,
-            modifier = Modifier.padding(6.dp),
-            isNeedToClipText = true,
-            style = infoText,
-        )
     }
 }
 
@@ -254,9 +293,17 @@ fun AppInfoDialog(infoItem: PackageInfo?, iconFilePath: String, onClickStringCop
                 }
             }
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
+            NameValueText("是否系统APP", if (infoItem?.system == true) "是" else "否", nameWeight = 0.3f)
+            SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
+            NameValueText("最小SDK版本", "${infoItem?.minSdkVersion}", nameWeight = 0.3f)
+            SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
+            NameValueText("目标SDK版本", "${infoItem?.targetSdkVersion}", nameWeight = 0.3f)
+            SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
+            NameValueText("安装包大小", "${infoItem?.apkSize?.size()}", nameWeight = 0.3f)
+            SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
             NameValueText("安装路径", "${infoItem?.apkPath}", nameWeight = 0.3f)
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
-            NameValueText("最后更新时间", "${infoItem?.lastUpdateTime}", nameWeight = 0.3f)
+            NameValueText("最后更新时间", "${infoItem?.lastUpdateTime?.toDateString()}", nameWeight = 0.3f)
         }
     }
 }

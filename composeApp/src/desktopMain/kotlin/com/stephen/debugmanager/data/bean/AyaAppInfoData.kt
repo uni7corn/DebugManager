@@ -23,7 +23,7 @@ data class AyaResponse(
 @Serializable
 data class PackageInfo(
     val apkPath: String,
-    val apkSize: Int,
+    val apkSize: Long,
     val enabled: Boolean,
     val firstInstallTime: Long,
     val label: String,

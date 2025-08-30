@@ -25,3 +25,8 @@ fun Long.size(): String {
         (this / 1024).toString() + "KB"
     } else this.toString() + "B"
 }
+
+
+fun Long.toDateString(): String {
+    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this)
+}
