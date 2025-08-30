@@ -29,6 +29,8 @@ fun WrappedEditText(
     onValueChange: (String) -> Unit,
     tipText: String,
     modifier: Modifier = Modifier,
+    maxInputLenth: Int = Int.MAX_VALUE,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
     onEnterPressed: () -> Unit = {}
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -48,15 +50,17 @@ fun WrappedEditText(
             unfocusedContainerColor = MaterialTheme.colorScheme.background,
             focusedContainerColor = MaterialTheme.colorScheme.background,
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
+        keyboardOptions = keyboardOptions,
         label = { Text(tipText, color = MaterialTheme.colorScheme.onSecondary) },
         onValueChange = {
             // 如果此时使用了ctrl或者alt键，那么就不做处理
             // 否则就处理，丢弃掉最后一个换行符
-            onValueChange(if (!ctrlPressed && !altPressed) it.processText() else it)
+            if (it.length <= maxInputLenth) {
+                onValueChange(if (!ctrlPressed && !altPressed) it.processText() else it)
+            }
         },
         modifier = modifier
-            .widthIn(max = 200.dp, min = 100.dp)
+            .widthIn(max = 200.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.background)
             .border(2.dp, MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(10.dp))

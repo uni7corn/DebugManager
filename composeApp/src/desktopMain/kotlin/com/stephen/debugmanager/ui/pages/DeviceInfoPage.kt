@@ -12,6 +12,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_refresh
@@ -213,14 +215,17 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 )
                             }
                             Row(
-                                modifier = Modifier.fillMaxWidth(1f),
+                                modifier = Modifier.padding(start = 10.dp).fillMaxWidth(1f),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 WrappedEditText(
                                     value = displayidString.value,
-                                    tipText = "输入DisplayId(默认为0)",
+                                    tipText = "DisplayId(默认为0)",
                                     onValueChange = { displayidString.value = it },
-                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                                    maxInputLenth = 1,
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    modifier = Modifier.padding(end = 10.dp)
+                                        .height(50.dp)
                                         .weight(1f).focusRequester(focusRequester),
                                     onEnterPressed = {
                                         if (displayidString.value.isEmpty()) {
@@ -271,8 +276,10 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                         onValueChange = {
                                             recordTime.value = it
                                         },
-                                        modifier = Modifier
-                                            .padding(horizontal = 5.dp).weight(1f)
+                                        maxInputLenth = 1,
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                        modifier = Modifier.padding(end = 10.dp)
+                                            .height(50.dp).weight(1f)
                                             .focusRequester(focusRequester)
                                     )
                                     CommonButton(
@@ -427,9 +434,9 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                             ) {
                                 WrappedEditText(
                                     value = mockInputSting.value,
-                                    tipText = "模拟输入法(English Only)",
+                                    tipText = "输入法(English Only)",
                                     onValueChange = { mockInputSting.value = it },
-                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                                    modifier = Modifier.padding( end = 10.dp)
                                         .weight(1f).focusRequester(focusRequester),
                                     onEnterPressed = {
                                         mainStateHolder.inputText(mockInputSting.value)
