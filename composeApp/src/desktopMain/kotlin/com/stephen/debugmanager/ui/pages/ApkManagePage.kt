@@ -127,16 +127,18 @@ fun ApkManagePage(
                                 fadeInSpec = null,
                                 fadeOutSpec = null,
                                 placementSpec = tween(300)
-                            ),
-                            contentAlignment = Alignment.Center
+                            )
                         ) {
                             GridAppItem(
-                                packageName = it.packageName,
                                 label = it.label,
                                 iconFilePath = mainStateHolder.getIconFilePath(it.packageName),
                                 modifier = Modifier.padding(5.dp)
-                                    .size(100.dp).padding(5.dp)
-                                    .bounceClick().clickable {
+                                    .size(100.dp).clip(RoundedCornerShape(10))
+                                    .padding(5.dp)
+                                    .bounceClick().clickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) {
                                         dialogInfoItem.value = it
                                     },
                                 onClickShowInfo = {
@@ -183,7 +185,6 @@ fun ApkManagePage(
 
 @Composable
 fun GridAppItem(
-    packageName: String,
     label: String,
     iconFilePath: String,
     modifier: Modifier,
@@ -208,40 +209,44 @@ fun GridAppItem(
             },
         )
     }) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier.clip(RoundedCornerShape(10))
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center
         ) {
-            val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
-            Box {
-                // 错误和加载中，都显示默认值
-                val isNeedShowLoading =
-                    imageState.value is AsyncImagePainter.State.Error || imageState.value is AsyncImagePainter.State.Loading
-                if (isNeedShowLoading) {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_default_app_icon),
-                        contentDescription = "loading icon",
-                        modifier = Modifier.size(50.dp).padding(start = 5.dp)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                val imageState = remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
+                Box {
+                    // 错误和加载中，都显示默认值
+                    val isNeedShowLoading =
+                        imageState.value is AsyncImagePainter.State.Error || imageState.value is AsyncImagePainter.State.Loading
+                    if (isNeedShowLoading) {
+                        Image(
+                            painter = painterResource(Res.drawable.ic_default_app_icon),
+                            contentDescription = "loading icon",
+                            modifier = Modifier.size(50.dp).padding(start = 5.dp)
+                        )
+                    }
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalPlatformContext.current)
+                            .data(File(iconFilePath))
+                            .build(),
+                        modifier = Modifier.padding(start = 5.dp).size(50.dp),
+                        contentDescription = "app icon",
+                        onState = {
+                            imageState.value = it
+                        }
                     )
                 }
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalPlatformContext.current)
-                        .data(File(iconFilePath))
-                        .build(),
-                    modifier = Modifier.padding(start = 5.dp).size(50.dp),
-                    contentDescription = "app icon",
-                    onState = {
-                        imageState.value = it
-                    }
+
+                CenterText(
+                    label,
+                    modifier = Modifier.padding(6.dp),
+                    isNeedToClipText = true,
+                    style = infoText,
                 )
             }
-
-            CenterText(
-                label,
-                modifier = Modifier.padding(6.dp),
-                isNeedToClipText = true,
-                style = infoText,
-            )
         }
     }
 }
