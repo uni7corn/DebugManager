@@ -57,9 +57,10 @@ fun FileManagePage(
                 Row(
                     modifier = Modifier
                         .padding(bottom = 10.dp)
+                        .fillMaxWidth(1f)
                         .clip(RoundedCornerShape(10))
                         .background(MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = 10.dp, vertical = 2.dp),
+                        .padding(horizontal = 10.dp, vertical = 5.dp),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -100,32 +101,24 @@ fun FileManagePage(
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
                         contentDescription = "ic_delete"
                     )
-                    CenterText(
-                        "sdcard", modifier = Modifier
-                            .padding(end = 16.dp)
-                            .clip(RoundedCornerShape(10))
-                            .background(
-                                MaterialTheme.colorScheme.onSurface
-                            ).clickable {
-                                destinationCall(FileManager.SD_CARD)
-                            }.padding(horizontal = 4.dp, vertical = 2.dp)
+                    CommonButton(
+                        "sdcard",
+                        onClick = {
+                            destinationCall(FileManager.SD_CARD)
+                        },
+                        modifier = Modifier.padding(end = 16.dp)
                     )
-                    CenterText(
-                        "priv-app", modifier = Modifier
-                            .clip(RoundedCornerShape(10))
-                            .background(
-                                MaterialTheme.colorScheme.onSurface
-                            ).clickable {
-                                destinationCall(FileManager.PRIV_APP)
-                            }.padding(horizontal = 4.dp, vertical = 2.dp)
+                    CommonButton(
+                        "priv-app",
+                        onClick = {
+                            destinationCall(FileManager.PRIV_APP)
+                        }
                     )
                 }
 
                 // 目录列表
                 FileDragArea(
-                    modifier = Modifier.padding(5.dp)
-                        .fillMaxWidth(1f)
-                        .weight(1f),
+                    modifier = Modifier.fillMaxWidth(1f).weight(1f),
                     onSelectFile = {
                         desktopSelectedFile = it
                         pushFileConfirmDialogState.value = true
@@ -323,7 +316,7 @@ fun FileViewItem(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Image(
                     painter = if (isDirectory) painterResource(Res.drawable.ic_folder)
                     else painterResource(Res.drawable.ic_file),
