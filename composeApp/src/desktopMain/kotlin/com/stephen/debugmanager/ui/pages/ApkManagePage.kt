@@ -1,6 +1,9 @@
 package com.stephen.debugmanager.ui.pages
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
@@ -16,9 +19,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
@@ -26,6 +32,7 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_default_app_icon
+import com.stephen.composeapp.generated.resources.ic_refresh
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.InstallParams
 import com.stephen.debugmanager.data.bean.PackageInfo
@@ -36,6 +43,8 @@ import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import com.stephen.debugmanager.utils.size
 import com.stephen.debugmanager.utils.toDateString
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import java.io.File
@@ -58,7 +67,18 @@ fun ApkManagePage(
 
     var installParams by remember { mutableStateOf(InstallParams.DEFAULT.param) }
 
+    val rotateState = remember { mutableStateOf(false) }
+    val rotateAnimation by animateFloatAsState(
+        targetValue = if (rotateState.value) 720f else 0f,  // 修改为720度
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000),  // 修改为500毫秒
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
     val toastState = rememberToastState()
+
+    val scope = rememberCoroutineScope()
 
     BasePage("APP安装与管理") {
         Box {
@@ -84,7 +104,31 @@ fun ApkManagePage(
                         },
                         modifier = Modifier.padding(end = 5.dp).size(18.dp)
                     )
-                    CenterText("显示系统APP", style = infoText, modifier = Modifier.padding(end = 16.dp))
+                    CenterText("显示系统APP", style = infoText, modifier = Modifier.padding(end = 10.dp))
+                    Image(
+                        painter = painterResource(Res.drawable.ic_refresh),
+                        contentDescription = "刷新",
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .size(20.dp)
+                            .rotate(if (rotateState.value) rotateAnimation else 0f)  // 仅在rotateState为true时应用动画
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                if (!DoubleClickUtils.isFastDoubleClick(3000L)) {
+                                    mainStateHolder.getpackageListInfo(selectSystemAppState.value)
+                                    scope.launch {
+                                        rotateState.value = true
+                                        delay(2000)
+                                        rotateState.value = false
+                                    }
+                                } else {
+                                    toastState.show("切换太快了~")
+                                }
+                            }
+                    )
                     FileChooseWidget(
                         tintText = "拖动 APK 文件到此处 或 点击选取",
                         path = selectedApkFilePathState.value,
@@ -100,7 +144,7 @@ fun ApkManagePage(
                     DropdownSelector(
                         installOptions,
                         installParams,
-                        modifier = Modifier.width(100.dp)
+                        modifier = Modifier.padding(end = 5.dp).width(90.dp)
                     ) {
                         installParams = it
                     }
@@ -115,7 +159,6 @@ fun ApkManagePage(
                                 toastState.show("请选择一个要安装 apk 文件")
                             }
                         },
-                        modifier = Modifier.padding(start = 10.dp).padding(horizontal = 10.dp),
                         btnColor = MaterialTheme.colorScheme.tertiary
                     )
                 }

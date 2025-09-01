@@ -42,12 +42,12 @@ fun <T> DropdownSelector(
                 .clickable {
                     if (!DoubleClickUtils.isFastDoubleClick())
                         expanded = expanded.not()
-                }.padding(vertical = 2.dp, horizontal = 5.dp),
+                }.padding(vertical = 5.dp, horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CenterText(
                 text = "${options[selectedType]}",
-                modifier = Modifier.weight(1f).padding(5.dp)
+                modifier = Modifier.weight(1f).padding(end = 5.dp)
             )
 
             Image(
@@ -71,7 +71,7 @@ fun <T> DropdownSelector(
                 CenterText(it.value, modifier = modifier.fillMaxWidth(1f).clickable {
                     onSelected(it.key)
                     expanded = false
-                }.padding(vertical = 5.dp))
+                }.padding(vertical = 10.dp))
             }
         }
     }
