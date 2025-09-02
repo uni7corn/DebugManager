@@ -60,7 +60,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
             }
 
             else -> {
-                currentDirPath.add(path)
+                currentDirPath.add(path.replace(" ", "\\ "))
             }
         }
     }
@@ -70,10 +70,11 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     suspend fun updateCurrentFileList(): List<RemoteFile> {
         val files = mutableListOf<RemoteFile>()
+        LogUtils.printLog("updateCurrentFileList: ${getDirPath().joinToString(FILE_SEPARATOR)+FILE_SEPARATOR}")
         platformAdapter.executeCommandWithResult(
-            "${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls ${
+            "${platformAdapter.localAdbPath} -s ${adbClient.serial} shell ls \"${
                 getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR
-            } -l",
+            }\" -l",
             false
         ).apply {
             this.split("\n").filter {
@@ -148,7 +149,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
             LogUtils.printLog("deleteFileOrFolder: $deletePath")
             adbClient.getAndroidShellExecuteResult(
                 adbClient.serial,
-                "rm -r $deletePath"
+                "rm -r \"$deletePath\""
             )
         }
     }
@@ -159,7 +160,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     fun copyFileOrFolder(sourcePath: String, destinationPath: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("cp sourcePath: $sourcePath, destinationPath: $destinationPath")
-            adbClient.getAndroidShellExecuteResult(adbClient.serial, "cp -r $sourcePath $destinationPath")
+            adbClient.getAndroidShellExecuteResult(adbClient.serial, "cp -r \"$sourcePath\" \"$destinationPath\"")
         }
     }
 
@@ -169,7 +170,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
     fun moveFileOrFolder(sourcePath: String, destinationPath: String) {
         CoroutineScope(Dispatchers.IO).launch {
             LogUtils.printLog("mv sourcePath: $sourcePath, destinationPath: $destinationPath")
-            adbClient.getAndroidShellExecuteResult(adbClient.serial, "mv $sourcePath $destinationPath")
+            adbClient.getAndroidShellExecuteResult(adbClient.serial, "mv \"$sourcePath\" \"$destinationPath\"")
         }
     }
 
@@ -178,7 +179,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     suspend fun pushFileToAndroid(windowsPath: String, androidPath: String) = withContext(Dispatchers.IO) {
         runCatching {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} push $windowsPath $androidPath")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} push \"$windowsPath\" $androidPath")
         }.onFailure { e ->
             LogUtils.printLog("推送文件失败：${e.message}", LogUtils.LogLevel.ERROR)
         }
@@ -189,7 +190,7 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     fun pullFileFromAndroid(fileName: String) {
         val path = getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR + fileName
-        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull $path ${PlatformAdapter.pulledTempFolder}")
+        platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s ${adbClient.serial} pull \"$path\" ${PlatformAdapter.pulledTempFolder}")
     }
 
     /**

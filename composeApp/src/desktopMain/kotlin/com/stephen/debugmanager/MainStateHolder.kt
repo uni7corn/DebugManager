@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.text.SimpleDateFormat
 
-
 class MainStateHolder(
     private val adbClient: AdbClient,
     private val platformAdapter: PlatformAdapter,
@@ -465,9 +464,9 @@ class MainStateHolder(
      */
     fun installApp(filePath: String, installParams: String = "", onInstallResult: (String) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            LogUtils.printLog("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams $filePath")
+            LogUtils.printLog("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams \"$filePath\"")
             val result =
-                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams $filePath")
+                platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} -s ${adbClient.serial} install $installParams \"$filePath\"")
             if (result.contains("Success")) {
                 onInstallResult("安装成功")
             } else {
