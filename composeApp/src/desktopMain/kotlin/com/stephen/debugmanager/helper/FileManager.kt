@@ -145,11 +145,11 @@ class FileManager(private val adbClient: AdbClient, private val platformAdapter:
      */
     fun deleteFileOrFolder(path: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val deletePath = getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR + path
+            val deletePath = getDirPath().joinToString(FILE_SEPARATOR) + FILE_SEPARATOR + path.replace(" ", "\\ ")
             LogUtils.printLog("deleteFileOrFolder: $deletePath")
             adbClient.getAndroidShellExecuteResult(
                 adbClient.serial,
-                "rm -r \"$deletePath\""
+                "rm -r $deletePath"
             )
         }
     }
