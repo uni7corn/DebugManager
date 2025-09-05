@@ -54,7 +54,7 @@ fun ToolsPage() {
 
     val toastState = rememberToastState()
 
-    BasePage("实用工具") {
+    BasePage({
         LazyColumn {
             item {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -167,7 +167,7 @@ fun ToolsPage() {
             }
 
         }
-    }
+    })
 }
 
 @Composable

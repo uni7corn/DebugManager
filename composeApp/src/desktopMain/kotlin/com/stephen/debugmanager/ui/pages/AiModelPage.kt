@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun AiModelPage() {
-    BasePage("AI大模型对话") {
+    BasePage({
 
         val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
@@ -132,7 +132,7 @@ fun AiModelPage() {
                 )
             }
         }
-    }
+    })
 }
 
 @Composable

@@ -1,37 +1,37 @@
 package com.stephen.debugmanager.ui.pages
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.about_page_language_setting
+import com.stephen.composeapp.generated.resources.about_page_cache_folder_path
+import com.stephen.composeapp.generated.resources.about_page_open_cache_folder
+import com.stephen.composeapp.generated.resources.about_page_open_pulled_folder
+import com.stephen.composeapp.generated.resources.about_page_pulled_folder_path
+import com.stephen.composeapp.generated.resources.about_page_theme_setting
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants
-import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.ClickableLink
 import com.stephen.debugmanager.ui.component.CommonButton
 import com.stephen.debugmanager.ui.component.RadioGroupSwitcher
 import com.stephen.debugmanager.ui.theme.groupTitleText
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AboutPage() {
-    BasePage("关于DebugManager") {
+    BasePage({
 
         val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
@@ -58,7 +58,8 @@ fun AboutPage() {
         }
 
         CenterText(
-            "主题设置", style = groupTitleText,
+            stringResource(Res.string.about_page_theme_setting),
+            style = groupTitleText,
             modifier = Modifier.padding(bottom = 10.dp)
         )
         RadioGroupSwitcher(
@@ -70,7 +71,8 @@ fun AboutPage() {
         }
 
         CenterText(
-            "语言设置", style = groupTitleText,
+            stringResource(Res.string.about_page_language_setting),
+            style = groupTitleText,
             modifier = Modifier.padding(bottom = 10.dp)
         )
         RadioGroupSwitcher(
@@ -81,7 +83,11 @@ fun AboutPage() {
             mainStateHolder.setLanguageState(it)
         }
 
-        CenterText("缓存文件", style = groupTitleText, modifier = Modifier.padding(vertical = 10.dp))
+        CenterText(
+            stringResource(Res.string.about_page_cache_folder_path),
+            style = groupTitleText,
+            modifier = Modifier.padding(vertical = 10.dp)
+        )
 
         FlowRow(
             verticalArrangement = Arrangement.Center,
@@ -94,11 +100,15 @@ fun AboutPage() {
                 alignment = Alignment.CenterStart
             )
             CommonButton(
-                "打开缓存目录",
+                stringResource(Res.string.about_page_open_cache_folder),
                 btnColor = MaterialTheme.colorScheme.tertiary,
                 onClick = { mainStateHolder.openFolder(mainStateHolder.getUserTempFilePath()) })
         }
-        CenterText("PULL的Android文件存储目录", style = groupTitleText, modifier = Modifier.padding(vertical = 10.dp))
+        CenterText(
+            stringResource(Res.string.about_page_pulled_folder_path),
+            style = groupTitleText,
+            modifier = Modifier.padding(vertical = 10.dp)
+        )
         FlowRow(
             verticalArrangement = Arrangement.Center,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -110,9 +120,9 @@ fun AboutPage() {
                 alignment = Alignment.CenterStart
             )
             CommonButton(
-                "打开Android缓存目录",
+                stringResource(Res.string.about_page_open_pulled_folder),
                 btnColor = MaterialTheme.colorScheme.tertiary,
                 onClick = { mainStateHolder.openFolder(mainStateHolder.getDesktopTempFolder()) })
         }
-    }
+    })
 }

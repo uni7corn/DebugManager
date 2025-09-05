@@ -80,7 +80,7 @@ fun ApkManagePage(
 
     val scope = rememberCoroutineScope()
 
-    BasePage("APP安装与管理") {
+    BasePage({
         Box {
             Column {
                 // 功能按钮，删除，刷新等等
@@ -223,7 +223,7 @@ fun ApkManagePage(
                 DeviceNoneConnectShade()
             }
         }
-    }
+    })
 }
 
 @Composable

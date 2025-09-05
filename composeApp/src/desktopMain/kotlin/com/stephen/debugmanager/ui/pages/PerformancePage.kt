@@ -55,7 +55,7 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: List<PackageInfo>)
         }
     }
 
-    BasePage("性能测试") {
+    BasePage({
         Box {
             Row {
                 Column(
@@ -147,7 +147,7 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: List<PackageInfo>)
                 DeviceNoneConnectShade()
             }
         }
-    }
+    })
 }
 
 

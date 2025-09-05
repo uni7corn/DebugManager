@@ -3,7 +3,6 @@ package com.stephen.debugmanager.ui.pages
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -63,7 +62,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
         }
     }
 
-    BasePage("命令模式") {
+    BasePage({
         Box {
             Row {
                 Column(
@@ -125,8 +124,8 @@ fun CommandPage(isDeviceConnected: Boolean) {
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                             modifier = Modifier.size(28.dp).align(Alignment.TopEnd)
                                 .bounceClick().clickable {
-                                mainStateHolder.openSingleTerminalWindow()
-                            }
+                                    mainStateHolder.openSingleTerminalWindow()
+                                }
                         )
                     }
                 }
@@ -187,7 +186,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
                 DeviceNoneConnectShade()
             }
         }
-    }
+    })
 }
 
 @Composable

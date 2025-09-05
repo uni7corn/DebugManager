@@ -50,7 +50,7 @@ fun FileManagePage(
 
     var androidSelectedFile by remember { mutableStateOf("") }
 
-    BasePage("文件管理器") {
+    BasePage({
         Box {
             Column {
                 // 功能按钮，删除，刷新等等
@@ -277,7 +277,7 @@ fun FileManagePage(
                     onDismiss = { pushFolderConfirmDialogState.value = false }
                 )
         }
-    }
+    })
 }
 
 @Composable

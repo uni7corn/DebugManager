@@ -26,6 +26,47 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.device_page_android_version
+import com.stephen.composeapp.generated.resources.device_page_back_button
+import com.stephen.composeapp.generated.resources.device_page_basic_info
+import com.stephen.composeapp.generated.resources.device_page_build_type
+import com.stephen.composeapp.generated.resources.device_page_capture_save
+import com.stephen.composeapp.generated.resources.device_page_capture_trace
+import com.stephen.composeapp.generated.resources.device_page_clear_capture_cache
+import com.stephen.composeapp.generated.resources.device_page_clear_record_cache
+import com.stephen.composeapp.generated.resources.device_page_confirm
+import com.stephen.composeapp.generated.resources.device_page_cpu_arch
+import com.stephen.composeapp.generated.resources.device_page_display_id
+import com.stephen.composeapp.generated.resources.device_page_dpi
+import com.stephen.composeapp.generated.resources.device_page_google_settings
+import com.stephen.composeapp.generated.resources.device_page_home_button
+import com.stephen.composeapp.generated.resources.device_page_input_text
+import com.stephen.composeapp.generated.resources.device_page_internal_code
+import com.stephen.composeapp.generated.resources.device_page_lock_screen
+import com.stephen.composeapp.generated.resources.device_page_manufacturer
+import com.stephen.composeapp.generated.resources.device_page_model_name
+import com.stephen.composeapp.generated.resources.device_page_mute_switch
+import com.stephen.composeapp.generated.resources.device_page_os_version
+import com.stephen.composeapp.generated.resources.device_page_quick_operations
+import com.stephen.composeapp.generated.resources.device_page_reboot
+import com.stephen.composeapp.generated.resources.device_page_recents_button
+import com.stephen.composeapp.generated.resources.device_page_refresh
+import com.stephen.composeapp.generated.resources.device_page_remount
+import com.stephen.composeapp.generated.resources.device_page_resolution
+import com.stephen.composeapp.generated.resources.device_page_root
+import com.stephen.composeapp.generated.resources.device_page_scrcpy
+import com.stephen.composeapp.generated.resources.device_page_screen_record_capture
+import com.stephen.composeapp.generated.resources.device_page_serial_number
+import com.stephen.composeapp.generated.resources.device_page_set_duration
+import com.stephen.composeapp.generated.resources.device_page_shutdown
+import com.stephen.composeapp.generated.resources.device_page_sleep_screen
+import com.stephen.composeapp.generated.resources.device_page_start_record
+import com.stephen.composeapp.generated.resources.device_page_to_fastboot
+import com.stephen.composeapp.generated.resources.device_page_to_recovery
+import com.stephen.composeapp.generated.resources.device_page_virtual_buttons
+import com.stephen.composeapp.generated.resources.device_page_volume_down
+import com.stephen.composeapp.generated.resources.device_page_volume_up
+import com.stephen.composeapp.generated.resources.device_page_wake_screen
 import com.stephen.composeapp.generated.resources.ic_refresh
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
@@ -35,6 +76,7 @@ import com.stephen.debugmanager.ui.theme.groupTitleText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -56,7 +98,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
 
     val displayidString = remember { mutableStateOf("") }
 
-    BasePage("设备信息") {
+    BasePage({
         Box {
             LazyColumn {
                 item {
@@ -81,10 +123,10 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                         repeatMode = RepeatMode.Restart
                                     )
                                 )
-                                CenterText("设备基础信息", style = groupTitleText)
+                                CenterText(stringResource(Res.string.device_page_basic_info), style = groupTitleText)
                                 Image(
                                     painter = painterResource(Res.drawable.ic_refresh),
-                                    contentDescription = "刷新",
+                                    contentDescription = stringResource(Res.string.device_page_refresh),
                                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                                     modifier = Modifier
                                         .padding(start = 10.dp)
@@ -104,25 +146,55 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 )
                             }
 
-                            NameValueText("SerialNumber", deviceState.serial ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_serial_number),
+                                deviceState.serial ?: "null"
+                            )
 
-                            NameValueText("型号", deviceState.name ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_model_name),
+                                deviceState.name ?: "null"
+                            )
 
-                            NameValueText("内部代号", deviceState.innerName ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_internal_code),
+                                deviceState.innerName ?: "null"
+                            )
 
-                            NameValueText("制造商", deviceState.manufacturer ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_manufacturer),
+                                deviceState.manufacturer ?: "null"
+                            )
 
-                            NameValueText("操作系统版本", deviceState.systemVersion ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_os_version),
+                                deviceState.systemVersion ?: "null"
+                            )
 
-                            NameValueText("版本构建类型", deviceState.buildType ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_build_type),
+                                deviceState.buildType ?: "null"
+                            )
 
-                            NameValueText("Android版本", deviceState.sdkVersion ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_android_version),
+                                deviceState.sdkVersion ?: "null"
+                            )
 
-                            NameValueText("CPU架构", deviceState.cpuArch ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_cpu_arch),
+                                deviceState.cpuArch ?: "null"
+                            )
 
-                            NameValueText("分辨率", deviceState.resolution ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_resolution),
+                                deviceState.resolution ?: "null"
+                            )
 
-                            NameValueText("显示密度", deviceState.density ?: "null")
+                            NameValueText(
+                                stringResource(Res.string.device_page_dpi),
+                                deviceState.density ?: "null"
+                            )
                         }
 
                         // 功能按钮共用描述符
@@ -142,20 +214,20 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 .padding(10.dp)
                         ) {
                             CenterText(
-                                "快捷操作",
+                                stringResource(Res.string.device_page_quick_operations),
                                 style = groupTitleText,
                                 modifier = Modifier.padding(bottom = 10.dp)
                             )
                             Row {
                                 CommonButton(
-                                    "ROOT", onClick = {
+                                    stringResource(Res.string.device_page_root), onClick = {
                                         mainStateHolder.root()
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "REMOUNT", onClick = {
+                                    stringResource(Res.string.device_page_remount), onClick = {
                                         mainStateHolder.remount()
                                         toastState.show("已执行，如果是刷完机首次remount，请先重启设备")
                                     },
@@ -163,7 +235,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "To Recovery", onClick = {
+                                    stringResource(Res.string.device_page_to_recovery), onClick = {
                                         mainStateHolder.rebootRecovery()
                                     },
                                     modifier = itemButtonModifier,
@@ -173,7 +245,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                             }
                             Row {
                                 CommonButton(
-                                    "REBOOT", onClick = {
+                                    stringResource(Res.string.device_page_reboot), onClick = {
                                         mainStateHolder.rebootDevice()
                                     },
                                     modifier = itemButtonModifier,
@@ -181,7 +253,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "To Fastboot", onClick = {
+                                    stringResource(Res.string.device_page_to_fastboot), onClick = {
                                         mainStateHolder.rebootFastboot()
                                     },
                                     modifier = itemButtonModifier,
@@ -189,7 +261,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "关机", onClick = {
+                                    stringResource(Res.string.device_page_shutdown), onClick = {
                                         mainStateHolder.powerOff()
                                     },
                                     modifier = itemButtonModifier,
@@ -199,7 +271,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                             }
                             Row {
                                 CommonButton(
-                                    "抓取Trace", onClick = {
+                                    stringResource(Res.string.device_page_capture_trace), onClick = {
                                         mainStateHolder.startCollectTrace()
                                         toastState.show("默认抓取10s，$PULL_FILE_TOAST")
                                     },
@@ -207,7 +279,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "Google设置", onClick = {
+                                    stringResource(Res.string.device_page_google_settings), onClick = {
                                         mainStateHolder.openAndroidSettings()
                                     },
                                     modifier = itemButtonModifier,
@@ -220,7 +292,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                             ) {
                                 WrappedEditText(
                                     value = displayidString.value,
-                                    tipText = "DisplayId(默认为0)",
+                                    tipText = stringResource(Res.string.device_page_display_id),
                                     onValueChange = { displayidString.value = it },
                                     maxInputLenth = 1,
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -238,7 +310,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     }
                                 )
                                 CommonButton(
-                                    "Scrcpy投屏", onClick = {
+                                    stringResource(Res.string.device_page_scrcpy), onClick = {
                                         if (displayidString.value.isEmpty()) {
                                             toastState.show("参数为空，默认设置displayid为0")
                                             mainStateHolder.openScrcpyById()
@@ -264,7 +336,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 .padding(10.dp)
                         ) {
                             CenterText(
-                                "录屏与截屏",
+                                stringResource(Res.string.device_page_screen_record_capture),
                                 style = groupTitleText,
                                 modifier = Modifier.padding(bottom = 10.dp)
                             )
@@ -272,7 +344,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     WrappedEditText(
                                         value = recordTime.value,
-                                        tipText = "设置时长(s)",
+                                        tipText = stringResource(Res.string.device_page_set_duration),
                                         onValueChange = {
                                             recordTime.value = it
                                         },
@@ -283,7 +355,8 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                             .focusRequester(focusRequester)
                                     )
                                     CommonButton(
-                                        "开始录屏", onClick = {
+                                        stringResource(Res.string.device_page_start_record),
+                                        onClick = {
                                             if (mainStateHolder.isRecording) {
                                                 toastState.show("上次录制还未完成")
                                             } else if (recordTime.value.isEmpty()) {
@@ -311,7 +384,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     .padding(vertical = 5.dp)
 
                                 CommonButton(
-                                    "截屏保存", onClick = {
+                                    stringResource(Res.string.device_page_capture_save), onClick = {
                                         mainStateHolder.screenshot()
                                         toastState.show(PULL_FILE_TOAST)
                                     },
@@ -320,7 +393,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 )
 
                                 CommonButton(
-                                    "清空录屏缓存", onClick = {
+                                    stringResource(Res.string.device_page_clear_record_cache), onClick = {
                                         if (mainStateHolder.isRecording) {
                                             toastState.show("录屏中，请稍后再试")
                                         } else {
@@ -334,7 +407,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 )
 
                                 CommonButton(
-                                    "清空截屏图片缓存", onClick = {
+                                    stringResource(Res.string.device_page_clear_capture_cache), onClick = {
                                         mainStateHolder.clearScreenShotsCache()
                                         toastState.show("已清空缓存，节省空间")
                                     },
@@ -355,27 +428,27 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 .padding(10.dp)
                         ) {
                             CenterText(
-                                "模拟按键",
+                                stringResource(Res.string.device_page_virtual_buttons),
                                 style = groupTitleText,
                                 modifier = Modifier.padding(bottom = 10.dp)
                             )
                             Row {
                                 CommonButton(
-                                    "返回按键", onClick = {
+                                    stringResource(Res.string.device_page_back_button), onClick = {
                                         mainStateHolder.mockBackPressed()
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "回到桌面", onClick = {
+                                    stringResource(Res.string.device_page_home_button), onClick = {
                                         mainStateHolder.mockHomePressed()
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "最近任务", onClick = {
+                                    stringResource(Res.string.device_page_recents_button), onClick = {
                                         mainStateHolder.mockRecentPressed()
                                     },
                                     modifier = itemButtonModifier,
@@ -384,21 +457,21 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                             }
                             Row {
                                 CommonButton(
-                                    "亮屏", onClick = {
+                                    stringResource(Res.string.device_page_wake_screen), onClick = {
                                         mainStateHolder.turnOnScreen()
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "灭屏", onClick = {
+                                    stringResource(Res.string.device_page_sleep_screen), onClick = {
                                         mainStateHolder.turnOffScreen()
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "锁屏", onClick = {
+                                    stringResource(Res.string.device_page_lock_screen), onClick = {
                                         mainStateHolder.lockScreen()
                                     },
                                     modifier = itemButtonModifier,
@@ -407,21 +480,21 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                             }
                             Row {
                                 CommonButton(
-                                    "静音开关", onClick = {
+                                    stringResource(Res.string.device_page_mute_switch), onClick = {
                                         mainStateHolder.muteDevice()
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "音量+", onClick = {
+                                    stringResource(Res.string.device_page_volume_up), onClick = {
                                         mainStateHolder.volumeUp()
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
                                 )
                                 CommonButton(
-                                    "音量-", onClick = {
+                                    stringResource(Res.string.device_page_volume_down), onClick = {
                                         mainStateHolder.volumeDown()
                                     },
                                     modifier = itemButtonModifier,
@@ -434,9 +507,9 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                             ) {
                                 WrappedEditText(
                                     value = mockInputSting.value,
-                                    tipText = "输入法(English Only)",
+                                    tipText = stringResource(Res.string.device_page_input_text),
                                     onValueChange = { mockInputSting.value = it },
-                                    modifier = Modifier.padding( end = 10.dp)
+                                    modifier = Modifier.padding(end = 10.dp)
                                         .weight(1f).focusRequester(focusRequester),
                                     onEnterPressed = {
                                         mainStateHolder.inputText(mockInputSting.value)
@@ -444,7 +517,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                     }
                                 )
                                 CommonButton(
-                                    "确认", onClick = {
+                                    stringResource(Res.string.device_page_confirm), onClick = {
                                         mainStateHolder.inputText(mockInputSting.value)
                                         mockInputSting.value = ""
                                     },
@@ -463,5 +536,5 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                 DeviceNoneConnectShade()
             }
         }
-    }
+    })
 }

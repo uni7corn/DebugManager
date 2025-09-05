@@ -18,4 +18,58 @@
     <string name="theme_dark">深色</string>
     <string name="theme_light">浅色</string>
     <string name="theme_system">跟随系统</string>
+
+    <!--    设备信息页面-->
+    <string name="device_page_basic_info">设备基础信息</string>
+    <string name="device_page_refresh">刷新</string>
+    <string name="device_page_serial_number">SerialNumber</string>
+    <string name="device_page_model_name">型号</string>
+    <string name="device_page_internal_code">内部代号</string>
+    <string name="device_page_manufacturer">制造商</string>
+    <string name="device_page_os_version">操作系统版本</string>
+    <string name="device_page_build_type">版本构建类型</string>
+    <string name="device_page_android_version">Android版本</string>
+    <string name="device_page_cpu_arch">CPU架构</string>
+    <string name="device_page_resolution">分辨率</string>
+    <string name="device_page_dpi">显示密度</string>
+
+    <string name="device_page_quick_operations">快捷操作</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">To Recovery</string>
+    <string name="device_page_reboot">REBOOT</string>
+    <string name="device_page_to_fastboot">To Fastboot</string>
+    <string name="device_page_shutdown">关机</string>
+    <string name="device_page_capture_trace">抓取Trace</string>
+    <string name="device_page_google_settings">Google设置</string>
+    <string name="device_page_display_id">DisplayId(默认为0)</string>
+    <string name="device_page_scrcpy">Scrcpy投屏</string>
+
+    <string name="device_page_screen_record_capture">录屏与截屏</string>
+    <string name="device_page_set_duration">设置时长(s)</string>
+    <string name="device_page_start_record">开始录屏</string>
+    <string name="device_page_capture_save">截屏保存</string>
+    <string name="device_page_clear_record_cache">清空录屏缓存</string>
+    <string name="device_page_clear_capture_cache">清空截屏图片缓存</string>
+
+    <string name="device_page_virtual_buttons">模拟按键</string>
+    <string name="device_page_back_button">返回按键</string>
+    <string name="device_page_home_button">回到桌面</string>
+    <string name="device_page_recents_button">最近任务</string>
+    <string name="device_page_wake_screen">亮屏</string>
+    <string name="device_page_sleep_screen">灭屏</string>
+    <string name="device_page_lock_screen">锁屏</string>
+    <string name="device_page_mute_switch">静音开关</string>
+    <string name="device_page_volume_up">音量+</string>
+    <string name="device_page_volume_down">音量-</string>
+    <string name="device_page_input_text">输入法(English Only)</string>
+    <string name="device_page_confirm">确认</string>
+
+
+    <string name="about_page_theme_setting">主题设置</string>
+    <string name="about_page_language_setting">语言设置</string>
+    <string name="about_page_cache_folder_path">缓存路径</string>
+    <string name="about_page_open_cache_folder">打开缓存文件夹</string>
+    <string name="about_page_pulled_folder_path">PULL文件路径</string>
+    <string name="about_page_open_pulled_folder">打开PULL文件夹</string>
 </resources>

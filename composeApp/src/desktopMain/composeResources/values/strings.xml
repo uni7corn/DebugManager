@@ -19,4 +19,57 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_light">Light</string>
     <string name="theme_system">System</string>
+
+    <!--    设备信息页面-->
+    <string name="device_page_basic_info">Basic Device Info</string>
+    <string name="device_page_refresh">Refresh</string>
+    <string name="device_page_serial_number">SerialNumber</string>
+    <string name="device_page_model_name">Model</string>
+    <string name="device_page_internal_code">Internal Code</string>
+    <string name="device_page_manufacturer">Manufacturer</string>
+    <string name="device_page_os_version">OS Version</string>
+    <string name="device_page_build_type">Build Type</string>
+    <string name="device_page_android_version">Android Version</string>
+    <string name="device_page_cpu_arch">CPU Architecture</string>
+    <string name="device_page_resolution">Resolution</string>
+    <string name="device_page_dpi">Display Density</string>
+
+    <string name="device_page_quick_operations">Quick Operations</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">To Recovery</string>
+    <string name="device_page_reboot">REBOOT</string>
+    <string name="device_page_to_fastboot">To Fastboot</string>
+    <string name="device_page_shutdown">Shutdown</string>
+    <string name="device_page_capture_trace">Capture Trace</string>
+    <string name="device_page_google_settings">Google Settings</string>
+    <string name="device_page_display_id">DisplayId (default to 0)</string>
+    <string name="device_page_scrcpy">Scrcpy Mirroring</string>
+
+    <string name="device_page_screen_record_capture">Screen Record and Capture</string>
+    <string name="device_page_set_duration">Set Duration(s)</string>
+    <string name="device_page_start_record">Start Recording</string>
+    <string name="device_page_capture_save">Save Screenshot</string>
+    <string name="device_page_clear_record_cache">Clear Record Cache</string>
+    <string name="device_page_clear_capture_cache">Clear Screenshot Cache</string>
+
+    <string name="device_page_virtual_buttons">Virtual Buttons</string>
+    <string name="device_page_back_button">Back Button</string>
+    <string name="device_page_home_button">Home Button</string>
+    <string name="device_page_recents_button">Recent Tasks</string>
+    <string name="device_page_wake_screen">Wake Screen</string>
+    <string name="device_page_sleep_screen">Sleep Screen</string>
+    <string name="device_page_lock_screen">Lock Screen</string>
+    <string name="device_page_mute_switch">Mute Switch</string>
+    <string name="device_page_volume_up">Volume+</string>
+    <string name="device_page_volume_down">Volume-</string>
+    <string name="device_page_input_text">Input Method(English Only)</string>
+    <string name="device_page_confirm">Confirm</string>
+
+    <string name="about_page_theme_setting">Theme Setting</string>
+    <string name="about_page_language_setting">Language Setting</string>
+    <string name="about_page_cache_folder_path">Cache Folder Path</string>
+    <string name="about_page_open_cache_folder">Open Cache Folder</string>
+    <string name="about_page_pulled_folder_path">PULLED Folder Path</string>
+    <string name="about_page_open_pulled_folder">Open PULLED Folder</string>
 </resources>
