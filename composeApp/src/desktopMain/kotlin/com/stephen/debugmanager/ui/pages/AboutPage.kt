@@ -18,11 +18,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.stephen.debugmanager.MainStateHolder
+import com.stephen.debugmanager.data.Constants
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.component.ClickableLink
 import com.stephen.debugmanager.ui.component.CommonButton
+import com.stephen.debugmanager.ui.component.RadioGroupSwitcher
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import org.koin.core.context.GlobalContext
 
@@ -35,12 +37,14 @@ fun AboutPage() {
 
         val themeState = mainStateHolder.themeStateStateFlow.collectAsState()
 
+        val languageState = mainStateHolder.languageStateStateFlow.collectAsState()
+
         CenterText(
             "Version: ${mainStateHolder.getDebugManagetVersion()}",
             modifier = Modifier.padding(bottom = 10.dp)
         )
         Row(
-            modifier = Modifier.padding(bottom = 20.dp),
+            modifier = Modifier.padding(bottom = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CenterText(
@@ -55,10 +59,26 @@ fun AboutPage() {
 
         CenterText(
             "主题设置", style = groupTitleText,
-            modifier = Modifier.padding(vertical = 10.dp)
+            modifier = Modifier.padding(bottom = 10.dp)
         )
-        ThemeSwitcher(themeState.value) {
+        RadioGroupSwitcher(
+            Constants.themeMap,
+            themeState.value,
+            modifier = Modifier.padding(bottom = 10.dp)
+        ) {
             mainStateHolder.setThemeState(it)
+        }
+
+        CenterText(
+            "语言设置", style = groupTitleText,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
+        RadioGroupSwitcher(
+            Constants.languageMap,
+            languageState.value,
+            modifier = Modifier.padding(bottom = 10.dp)
+        ) {
+            mainStateHolder.setLanguageState(it)
         }
 
         CenterText("缓存文件", style = groupTitleText, modifier = Modifier.padding(vertical = 10.dp))
@@ -93,39 +113,6 @@ fun AboutPage() {
                 "打开Android缓存目录",
                 btnColor = MaterialTheme.colorScheme.tertiary,
                 onClick = { mainStateHolder.openFolder(mainStateHolder.getDesktopTempFolder()) })
-        }
-    }
-}
-
-@Composable
-fun ThemeSwitcher(currentTheme: Int, onThemeChange: (Int) -> Unit) {
-    val themeMap = mapOf<String, Int>(
-        "深色" to ThemeState.DARK,
-        "浅色" to ThemeState.LIGHT,
-        "跟随系统" to ThemeState.SYSTEM
-    )
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 10.dp)
-            .width(IntrinsicSize.Max)
-            .clip(RoundedCornerShape(50))
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(5.dp)
-    ) {
-        themeMap.forEach {
-            val themeName = it.key
-            val themeValue = it.value
-            CenterText(
-                text = themeName,
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(50))
-                    .background(if (currentTheme == themeValue) MaterialTheme.colorScheme.primary else Color.Transparent)
-                    .clickable {
-                        onThemeChange(themeValue)
-                    }
-                    .padding(vertical = 5.dp, horizontal = 10.dp)
-            )
         }
     }
 }

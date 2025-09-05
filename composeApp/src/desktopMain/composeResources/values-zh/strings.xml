@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">调试助手</string>
+
+    <string name="side_menu_deviceinfo">设备信息</string>
+    <string name="side_menu_app_manege">软件管理</string>
+    <string name="side_menu_command">命令模式</string>
+    <string name="side_menu_filemanage">文件管理</string>
+    <string name="side_menu_performance">性能监测</string>
+    <string name="side_menu_tools">实用工具</string>
+    <string name="side_menu_about">关于</string>
+    <string name="side_menu_aimodel">AI大模型</string>
+
+    <string name="language_chinese">中文</string>
+    <string name="language_english">English</string>
+    <string name="language_system">系统</string>
+
+    <string name="theme_dark">深色</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_system">跟随系统</string>
+</resources>

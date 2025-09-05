@@ -8,6 +8,7 @@ import com.stephen.debugmanager.base.AdbClient
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.PlatformAdapter.Companion.dataStoreFileName
 import com.stephen.debugmanager.data.AIModels
+import com.stephen.debugmanager.data.LanguageState
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.data.bean.PackageInfo
 import com.stephen.debugmanager.data.bean.Role
@@ -63,6 +64,11 @@ class MainStateHolder(
     val themeStateStateFlow = _themeState.asStateFlow()
     private val themePreferencesKey = stringPreferencesKey("ThemeState")
 
+    //语言
+    private val _languageState = MutableStateFlow(LanguageState.AUTO)
+    val languageStateStateFlow = _languageState.asStateFlow()
+    private val languagePreferencesKey = stringPreferencesKey("LanguageState")
+
     // ai模型对话
     private val _aiModelChatListState = MutableStateFlow(AiModelState())
     val aiModelChatListStateFlow = _aiModelChatListState.asStateFlow()
@@ -93,7 +99,7 @@ class MainStateHolder(
                 adbClient.init()
                 dataStoreHelper.init(dataStoreFileName)
                 recycleCheckConnection()
-                initThemeState()
+                initThemeAndLanguageState()
                 CoroutineScope(Dispatchers.IO).launch {
                     platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} start-server")
                     adbClient.runRootScript()
@@ -129,15 +135,35 @@ class MainStateHolder(
     }
 
     /**
-     * 获取本地存储的主题
+     * 下发语言切换，存储在dataStore中
      */
-    fun initThemeState() {
+    fun setLanguageState(languageState: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreHelper.dataStore.edit {
+                it[languagePreferencesKey] = languageState.toString()
+            }
+        }
+        _languageState.update {
+            languageState
+        }
+    }
+
+    /**
+     * 获取本地存储的主题和语言
+     */
+    fun initThemeAndLanguageState() {
         CoroutineScope(Dispatchers.IO).launch {
             dataStoreHelper.dataStore.data.collect {
                 val themeState = it[themePreferencesKey]?.toInt() ?: ThemeState.DARK
                 LogUtils.printLog("getThemeState-> themeState:$themeState", LogUtils.LogLevel.INFO)
                 _themeState.update {
                     themeState
+                }
+
+                val languageState = it[languagePreferencesKey]?.toInt()?: LanguageState.CHINESE
+                LogUtils.printLog("getLanguageState-> languageState:$languageState", LogUtils.LogLevel.INFO)
+                _languageState.update {
+                    languageState
                 }
             }
         }

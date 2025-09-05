@@ -1,20 +1,63 @@
 package com.stephen.debugmanager.data
 
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.ic_about
+import com.stephen.composeapp.generated.resources.ic_devices
+import com.stephen.composeapp.generated.resources.ic_file_manage
+import com.stephen.composeapp.generated.resources.ic_performance
+import com.stephen.composeapp.generated.resources.ic_robot
+import com.stephen.composeapp.generated.resources.ic_software
+import com.stephen.composeapp.generated.resources.ic_terminal
+import com.stephen.composeapp.generated.resources.ic_tools
+import com.stephen.composeapp.generated.resources.language_chinese
+import com.stephen.composeapp.generated.resources.language_english
+import com.stephen.composeapp.generated.resources.language_system
+import com.stephen.composeapp.generated.resources.side_menu_about
+import com.stephen.composeapp.generated.resources.side_menu_aimodel
+import com.stephen.composeapp.generated.resources.side_menu_app_manege
+import com.stephen.composeapp.generated.resources.side_menu_command
+import com.stephen.composeapp.generated.resources.side_menu_deviceinfo
+import com.stephen.composeapp.generated.resources.side_menu_filemanage
+import com.stephen.composeapp.generated.resources.side_menu_performance
+import com.stephen.composeapp.generated.resources.side_menu_tools
+import com.stephen.composeapp.generated.resources.theme_dark
+import com.stephen.composeapp.generated.resources.theme_light
+import com.stephen.composeapp.generated.resources.theme_system
+import com.stephen.debugmanager.data.bean.MainTabItem
+
 object Constants {
     //  主条目
-    const val DEVICE_INFO = "设备信息"
-    const val INSTALL = "软件管理"
-    const val COMMAND = "命令模式"
-    const val FILE_MANAGE = "文件管理"
-    const val PERFORMANCE = "性能监测"
-    const val TOOLS = "实用工具"
-    const val ABOUT = "关        于"
-    const val AI_MODEL = "AI大模型"
+    const val DEVICE_INFO = "DEVICE_INFO"
+    const val APP_MANAGE = "APP_MANAGE"
+    const val FILE_MANAGE = "FILE_MANAGE"
+    const val COMMAND = "COMMAND"
+    const val PERFORMANCE = "PERFORMANCE"
+    const val TOOLS = "TOOLS"
+    const val ABOUT = "ABOUT"
+    const val AI_MODEL = "AI_MODEL"
 
-    const val DEFAULT = "DEFAULT"
+    val mainItemMap = mapOf(
+        DEVICE_INFO to MainTabItem(Res.string.side_menu_deviceinfo, Res.drawable.ic_devices),
+        APP_MANAGE to MainTabItem(Res.string.side_menu_app_manege, Res.drawable.ic_software),
+        FILE_MANAGE to MainTabItem(Res.string.side_menu_filemanage, Res.drawable.ic_file_manage),
+        COMMAND to MainTabItem(Res.string.side_menu_command, Res.drawable.ic_terminal),
+        PERFORMANCE to MainTabItem(Res.string.side_menu_performance, Res.drawable.ic_performance),
+        TOOLS to MainTabItem(Res.string.side_menu_tools, Res.drawable.ic_tools),
+        AI_MODEL to MainTabItem(Res.string.side_menu_aimodel, Res.drawable.ic_robot),
+        ABOUT to MainTabItem(Res.string.side_menu_about, Res.drawable.ic_about),
+    )
 
-    // 向左的箭头
-    const val LEFT_ARROW = "\u2190"
+    val themeMap = mapOf(
+        Res.string.theme_dark to ThemeState.DARK,
+        Res.string.theme_light to ThemeState.LIGHT,
+        Res.string.theme_system to ThemeState.SYSTEM
+    )
+
+    val languageMap = mapOf(
+        Res.string.language_chinese to LanguageState.CHINESE,
+        Res.string.language_english to LanguageState.ENGLISH,
+        Res.string.language_system to LanguageState.AUTO
+    )
 
     const val PULL_FILE_TOAST = "拉取中，拉取完毕后会自动打开文件夹"
 }

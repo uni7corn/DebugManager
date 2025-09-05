@@ -23,6 +23,8 @@ import androidx.compose.ui.window.rememberTrayState
 import androidx.compose.ui.window.rememberWindowState
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
+import com.stephen.debugmanager.base.PlatformAdapter
+import com.stephen.debugmanager.data.LanguageState
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
@@ -33,10 +35,12 @@ import com.stephen.debugmanager.ui.component.CustomTitleBar
 import com.stephen.debugmanager.ui.pages.SplashScreen
 import com.stephen.debugmanager.ui.theme.DarkColorScheme
 import com.stephen.debugmanager.ui.theme.LightColorScheme
+import com.stephen.debugmanager.utils.LogUtils
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import java.awt.Dimension
+import java.util.Locale
 
 fun main() = application {
 
@@ -51,6 +55,8 @@ fun main() = application {
     val dialogState = remember { mutableStateOf(false) }
 
     val themeState = mainStateHolder.themeStateStateFlow.collectAsState()
+
+    val languageState = mainStateHolder.languageStateStateFlow.collectAsState()
 
     val isMenuExpanded = remember { mutableStateOf(true) }
 
@@ -111,7 +117,30 @@ fun main() = application {
                     else -> if (isSystemInDarkTheme()) DarkDefaultContextMenuRepresentation
                     else LightDefaultContextMenuRepresentation
                 }
-                CompositionLocalProvider(LocalContextMenuRepresentation provides contextMenuRepresentation) {
+
+                val LocalLocalization = staticCompositionLocalOf { "en" }
+                var languageCode by remember { mutableStateOf("en") }
+
+                LaunchedEffect(languageState.value) {
+                    LogUtils.printLog("languageState.value: ${languageState.value}")
+                    val locale = when (languageState.value) {
+                        LanguageState.CHINESE -> Locale("zh", "CN")
+                        LanguageState.ENGLISH -> Locale("en", "US")
+                        else -> PlatformAdapter.systemLocale
+                    }
+                    Locale.setDefault(locale)
+                    languageCode = when (languageState.value) {
+                        LanguageState.CHINESE -> "zh"
+                        LanguageState.ENGLISH -> "en"
+                        else -> PlatformAdapter.systemLanguage
+                    }
+                    LogUtils.printLog("languageCode: $languageCode")
+                }
+
+                CompositionLocalProvider(
+                    LocalContextMenuRepresentation provides contextMenuRepresentation,
+                    LocalLocalization provides languageCode
+                ) {
                     BoxWithConstraints {
                         val windowWidth = maxWidth
 
@@ -127,7 +156,6 @@ fun main() = application {
                         ) {
                             WindowDraggableArea {
                                 CustomTitleBar(
-                                    title = "DebugManager",
                                     windowState = windowState,
                                     onClose = {
                                         dialogState.value = true

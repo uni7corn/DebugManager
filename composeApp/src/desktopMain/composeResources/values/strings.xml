@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="side_menu_deviceinfo">Device Info</string>
+    <string name="side_menu_app_manege">App Manage</string>
+    <string name="side_menu_command">Command</string>
+    <string name="side_menu_filemanage">File Explorer</string>
+    <string name="side_menu_performance">Performance</string>
+    <string name="side_menu_tools">Desktop Tools</string>
+    <string name="side_menu_about">About</string>
+    <string name="side_menu_aimodel">AI Model</string>
+
+
+    <string name="language_chinese">中文</string>
+    <string name="language_english">English</string>
+    <string name="language_system">System</string>
+
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_system">System</string>
+</resources>

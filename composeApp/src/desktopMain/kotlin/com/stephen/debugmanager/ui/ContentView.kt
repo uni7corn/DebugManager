@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.stephen.composeapp.generated.resources.*
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.Constants
+import com.stephen.debugmanager.data.Constants.mainItemMap
 import com.stephen.debugmanager.data.bean.MainTabItem
 import com.stephen.debugmanager.data.uistate.DirectoryState
 import com.stephen.debugmanager.ui.component.CenterText
@@ -32,25 +32,13 @@ import com.stephen.debugmanager.ui.pages.*
 import com.stephen.debugmanager.ui.theme.defaultText
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 
 @Composable
 fun ContentView(isMenuExpanded: Boolean) {
 
-    val mainItemList = listOf(
-        Constants.DEVICE_INFO to Res.drawable.ic_devices,
-        Constants.INSTALL to Res.drawable.ic_software,
-        Constants.FILE_MANAGE to Res.drawable.ic_file_manage,
-        Constants.COMMAND to Res.drawable.ic_terminal,
-        Constants.PERFORMANCE to Res.drawable.ic_performance,
-        Constants.TOOLS to Res.drawable.ic_tools,
-        Constants.AI_MODEL to Res.drawable.ic_robot,
-        Constants.ABOUT to Res.drawable.ic_about,
-    ).map { (name, icon) -> MainTabItem(name, icon) }
-
-
-
-    val choosedTab = remember { mutableStateOf(mainItemList[0]) }
+    val choosedTab = remember { mutableStateOf(mainItemMap.keys.toList()[0]) }
 
     val mainStateHolder by remember { mutableStateOf(GlobalContext.get().get<MainStateHolder>()) }
 
@@ -79,11 +67,11 @@ fun ContentView(isMenuExpanded: Boolean) {
                             mainStateHolder.setChooseDevice(it)
                             mainStateHolder.getCurrentDeviceInfo()
                         },
-                        mainItemList,
+                        mainItemMap,
                         onItemClick = {
                             // 检查当前是否已经在目标页面，如果不是则进行导航
-                            if (navController.currentDestination?.route != it.name) {
-                                navController.navigate(it.name)
+                            if (navController.currentDestination?.route != it) {
+                                navController.navigate(it)
                             }
                             choosedTab.value = it
                         },
@@ -105,8 +93,8 @@ fun ContentView(isMenuExpanded: Boolean) {
                             mainStateHolder.getpackageListInfo()
                         })
                 }
-                composable(Constants.INSTALL) {
-                    ApkManagePage(appListState, deviceState.isConnected){
+                composable(Constants.APP_MANAGE) {
+                    ApkManagePage(appListState, deviceState.isConnected) {
                         mainStateHolder.getpackageListInfo(it)
                     }
                 }
@@ -148,9 +136,9 @@ fun SideTabBar(
     deviceMap: Map<String, String>,
     serialNumber: String,
     onDeviceSelect: (String) -> Unit,
-    mainItemList: List<MainTabItem>,
-    onItemClick: (name: MainTabItem) -> Unit,
-    chooseTabItem: MainTabItem,
+    mainItemMap: Map<String, MainTabItem>,
+    onItemClick: (name: String) -> Unit,
+    chooseTabItem: String,
     modifier: Modifier = Modifier
 ) {
     val sideBarWidth = 180.dp
@@ -173,18 +161,20 @@ fun SideTabBar(
         }
         item {
             Column(Modifier.width(sideBarWidth)) {
-                mainItemList.forEach { it ->
-                    SideTabItem(
-                        icon = it.icon,
-                        title = it.name,
-                        isSelected = chooseTabItem == it,
-                        modifier = Modifier.fillMaxWidth(1f).clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                        ) {
-                            onItemClick(it)
-                        },
-                    )
+                mainItemMap.keys.forEach { itemCode ->
+                    mainItemMap[itemCode]?.let { item ->
+                        SideTabItem(
+                            icon = item.icon,
+                            title = stringResource(item.name),
+                            isSelected = chooseTabItem == itemCode,
+                            modifier = Modifier.fillMaxWidth(1f).clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                onItemClick(itemCode)
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -200,17 +190,20 @@ fun SideTabItem(icon: DrawableResource, title: String, modifier: Modifier, isSel
             .padding(vertical = 10.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(Modifier.weight(1f))
             Image(
                 painter = painterResource(icon),
-                modifier = Modifier.padding(end = 10.dp).size(20.dp),
+                modifier = Modifier.padding(end = 10.dp).weight(2f).size(20.dp),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                 contentDescription = "tab_icon"
             )
             CenterText(
                 title,
                 style = defaultText,
+                modifier = Modifier.weight(6f),
                 color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary
             )
+            Spacer(Modifier.weight(1f))
         }
     }
 }

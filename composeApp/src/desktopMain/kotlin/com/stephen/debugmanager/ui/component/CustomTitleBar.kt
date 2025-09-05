@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.app_name
 import com.stephen.composeapp.generated.resources.ic_android_debug
 import com.stephen.composeapp.generated.resources.ic_close
 import com.stephen.composeapp.generated.resources.ic_floating
@@ -23,10 +24,10 @@ import com.stephen.composeapp.generated.resources.ic_menu_collapse
 import com.stephen.composeapp.generated.resources.ic_menu_expand
 import com.stephen.composeapp.generated.resources.ic_minimize
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CustomTitleBar(
-    title: String,
     windowState: WindowState,
     onClose: () -> Unit,
     onMinimize: () -> Unit = {
@@ -73,7 +74,7 @@ fun CustomTitleBar(
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                     modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10))
                 )
-                CenterText(text = title, modifier = Modifier.padding(start = 4.dp))
+                CenterText(text = stringResource(Res.string.app_name), modifier = Modifier.padding(start = 4.dp))
             }
 
             Row(modifier = Modifier.align(Alignment.CenterEnd)) {

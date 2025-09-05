@@ -56,6 +56,9 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         val dataStoreFileName = "${userConfigFile}${sp}local_datastore.preferences_pb"
 
         val lockFilePath = "${userConfigFile}${sp}app.lock"
+
+        val systemLocale = Locale.getDefault()
+        val systemLanguage = Locale.getDefault().toString().split("_").first()
     }
 
     val localAdbPath =
