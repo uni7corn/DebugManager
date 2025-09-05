@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +28,9 @@ fun RadioGroupSwitcher(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.width(IntrinsicSize.Max)
+        modifier = modifier
+            .width(IntrinsicSize.Max)
+            .height(IntrinsicSize.Max)
             .clip(RoundedCornerShape(50))
             .background(MaterialTheme.colorScheme.surface)
             .padding(5.dp)
@@ -37,6 +41,7 @@ fun RadioGroupSwitcher(
             CenterText(
                 text = stringResource(itemNameResource),
                 modifier = Modifier
+                    .fillMaxHeight(1f)
                     .weight(1f)
                     .clip(RoundedCornerShape(50))
                     .background(if (currentTheme == itemValue) MaterialTheme.colorScheme.primary else Color.Transparent)

@@ -45,13 +45,15 @@ fun <T> DropdownSelector(
                 }.padding(vertical = 5.dp, horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Spacer(Modifier.weight(1f))
+
             CenterText(
                 text = "${options[selectedType]}",
-                modifier = Modifier.weight(1f).padding(end = 5.dp)
+                modifier = Modifier.weight(8f).padding(end = 5.dp)
             )
 
             Image(
-                modifier = Modifier.size(14.dp).rotate(rotateAnimation),
+                modifier = Modifier.weight(1f).size(14.dp).rotate(rotateAnimation),
                 painter = painterResource(Res.drawable.ic_expand),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "Dropdown"
