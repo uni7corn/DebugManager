@@ -32,6 +32,7 @@ import com.stephen.composeapp.generated.resources.device_page_basic_info
 import com.stephen.composeapp.generated.resources.device_page_build_type
 import com.stephen.composeapp.generated.resources.device_page_capture_save
 import com.stephen.composeapp.generated.resources.device_page_capture_trace
+import com.stephen.composeapp.generated.resources.device_page_chche_clear_tip
 import com.stephen.composeapp.generated.resources.device_page_clear_capture_cache
 import com.stephen.composeapp.generated.resources.device_page_clear_record_cache
 import com.stephen.composeapp.generated.resources.device_page_confirm
@@ -42,34 +43,42 @@ import com.stephen.composeapp.generated.resources.device_page_google_settings
 import com.stephen.composeapp.generated.resources.device_page_home_button
 import com.stephen.composeapp.generated.resources.device_page_input_text
 import com.stephen.composeapp.generated.resources.device_page_internal_code
+import com.stephen.composeapp.generated.resources.device_page_last_record_unfinish
 import com.stephen.composeapp.generated.resources.device_page_lock_screen
 import com.stephen.composeapp.generated.resources.device_page_manufacturer
 import com.stephen.composeapp.generated.resources.device_page_model_name
 import com.stephen.composeapp.generated.resources.device_page_mute_switch
 import com.stephen.composeapp.generated.resources.device_page_os_version
+import com.stephen.composeapp.generated.resources.device_page_pull_file_tip
 import com.stephen.composeapp.generated.resources.device_page_quick_operations
 import com.stephen.composeapp.generated.resources.device_page_reboot
 import com.stephen.composeapp.generated.resources.device_page_recents_button
+import com.stephen.composeapp.generated.resources.device_page_record_time_tip
+import com.stephen.composeapp.generated.resources.device_page_recording
+import com.stephen.composeapp.generated.resources.device_page_recors_param_wrong
 import com.stephen.composeapp.generated.resources.device_page_refresh
 import com.stephen.composeapp.generated.resources.device_page_remount
+import com.stephen.composeapp.generated.resources.device_page_remount_tip
 import com.stephen.composeapp.generated.resources.device_page_resolution
 import com.stephen.composeapp.generated.resources.device_page_root
 import com.stephen.composeapp.generated.resources.device_page_scrcpy
+import com.stephen.composeapp.generated.resources.device_page_scrcpy_display_tip
 import com.stephen.composeapp.generated.resources.device_page_screen_record_capture
 import com.stephen.composeapp.generated.resources.device_page_serial_number
 import com.stephen.composeapp.generated.resources.device_page_set_duration
 import com.stephen.composeapp.generated.resources.device_page_shutdown
 import com.stephen.composeapp.generated.resources.device_page_sleep_screen
 import com.stephen.composeapp.generated.resources.device_page_start_record
+import com.stephen.composeapp.generated.resources.device_page_start_record_tip
 import com.stephen.composeapp.generated.resources.device_page_to_fastboot
 import com.stephen.composeapp.generated.resources.device_page_to_recovery
+import com.stephen.composeapp.generated.resources.device_page_trace_file_tip
 import com.stephen.composeapp.generated.resources.device_page_virtual_buttons
 import com.stephen.composeapp.generated.resources.device_page_volume_down
 import com.stephen.composeapp.generated.resources.device_page_volume_up
 import com.stephen.composeapp.generated.resources.device_page_wake_screen
 import com.stephen.composeapp.generated.resources.ic_refresh
 import com.stephen.debugmanager.MainStateHolder
-import com.stephen.debugmanager.data.Constants.PULL_FILE_TOAST
 import com.stephen.debugmanager.data.uistate.DeviceState
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.groupTitleText
@@ -97,6 +106,17 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
     val recordTime = remember { mutableStateOf("") }
 
     val displayidString = remember { mutableStateOf("") }
+
+    val remountTip = stringResource(Res.string.device_page_remount_tip)
+    val traceFileTip = stringResource(Res.string.device_page_trace_file_tip)
+    val scrcpyDisplayTip = stringResource(Res.string.device_page_scrcpy_display_tip)
+    val lastRecordUnfinishTip = stringResource(Res.string.device_page_last_record_unfinish)
+    val recordTimeTip = stringResource(Res.string.device_page_record_time_tip)
+    val startRecordTip = stringResource(Res.string.device_page_start_record_tip)
+    val recorsParamWrongTip = stringResource(Res.string.device_page_recors_param_wrong)
+    val pullFileTip = stringResource(Res.string.device_page_pull_file_tip)
+    val recordingTip = stringResource(Res.string.device_page_recording)
+    val chcheClearTip = stringResource(Res.string.device_page_chche_clear_tip)
 
     BasePage({
         Box {
@@ -229,7 +249,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 CommonButton(
                                     stringResource(Res.string.device_page_remount), onClick = {
                                         mainStateHolder.remount()
-                                        toastState.show("已执行，如果是刷完机首次remount，请先重启设备")
+                                        toastState.show(remountTip)
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
@@ -273,7 +293,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 CommonButton(
                                     stringResource(Res.string.device_page_capture_trace), onClick = {
                                         mainStateHolder.startCollectTrace()
-                                        toastState.show("默认抓取10s，$PULL_FILE_TOAST")
+                                        toastState.show(traceFileTip)
                                     },
                                     modifier = itemButtonModifier,
                                     textModifier = itemButtonTextModifier
@@ -301,7 +321,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                         .weight(1f).focusRequester(focusRequester),
                                     onEnterPressed = {
                                         if (displayidString.value.isEmpty()) {
-                                            toastState.show("参数为空，默认设置displayid为0")
+                                            toastState.show(scrcpyDisplayTip)
                                             mainStateHolder.openScrcpyById()
                                         } else {
                                             mainStateHolder.openScrcpyById(displayidString.value)
@@ -312,7 +332,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 CommonButton(
                                     stringResource(Res.string.device_page_scrcpy), onClick = {
                                         if (displayidString.value.isEmpty()) {
-                                            toastState.show("参数为空，默认设置displayid为0")
+                                            toastState.show(scrcpyDisplayTip)
                                             mainStateHolder.openScrcpyById()
                                         } else {
                                             mainStateHolder.openScrcpyById(displayidString.value)
@@ -358,17 +378,17 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                         stringResource(Res.string.device_page_start_record),
                                         onClick = {
                                             if (mainStateHolder.isRecording) {
-                                                toastState.show("上次录制还未完成")
+                                                toastState.show(lastRecordUnfinishTip)
                                             } else if (recordTime.value.isEmpty()) {
-                                                toastState.show("请先输入录制时长")
+                                                toastState.show(recordTimeTip)
                                             } else {
                                                 runCatching {
                                                     val timeInt = recordTime.value.toInt()
                                                     mainStateHolder.startScreenRecord(timeInt)
                                                     recordTime.value = ""
-                                                    toastState.show("已开始，录制期间会显示手指点击位置，$PULL_FILE_TOAST")
+                                                    toastState.show(startRecordTip)
                                                 }.onFailure {
-                                                    toastState.show("请输入正确的时长")
+                                                    toastState.show(recorsParamWrongTip)
                                                     recordTime.value = ""
                                                 }
                                             }
@@ -386,7 +406,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 CommonButton(
                                     stringResource(Res.string.device_page_capture_save), onClick = {
                                         mainStateHolder.screenshot()
-                                        toastState.show(PULL_FILE_TOAST)
+                                        toastState.show(pullFileTip)
                                     },
                                     modifier = btnModifier,
                                     textModifier = itemButtonTextModifier
@@ -395,10 +415,10 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 CommonButton(
                                     stringResource(Res.string.device_page_clear_record_cache), onClick = {
                                         if (mainStateHolder.isRecording) {
-                                            toastState.show("录屏中，请稍后再试")
+                                            toastState.show(recordingTip)
                                         } else {
                                             mainStateHolder.clearRecordCache()
-                                            toastState.show("已清空缓存，节省空间")
+                                            toastState.show(chcheClearTip)
                                         }
                                     },
                                     modifier = btnModifier,
@@ -409,7 +429,7 @@ fun DeviceInfoPage(deviceState: DeviceState, onRefresh: () -> Unit) {
                                 CommonButton(
                                     stringResource(Res.string.device_page_clear_capture_cache), onClick = {
                                         mainStateHolder.clearScreenShotsCache()
-                                        toastState.show("已清空缓存，节省空间")
+                                        toastState.show(chcheClearTip)
                                     },
                                     modifier = btnModifier,
                                     btnColor = MaterialTheme.colorScheme.error,

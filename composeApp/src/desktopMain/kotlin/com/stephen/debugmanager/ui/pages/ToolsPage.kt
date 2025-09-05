@@ -29,6 +29,16 @@ import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.ic_add_one
 import com.stephen.composeapp.generated.resources.ic_delete_two
+import com.stephen.composeapp.generated.resources.tools_log_page_drag_drop_tip
+import com.stephen.composeapp.generated.resources.tools_log_page_folder_empty_tip
+import com.stephen.composeapp.generated.resources.tools_log_page_process_button
+import com.stephen.composeapp.generated.resources.tools_log_page_process_start_tip
+import com.stephen.composeapp.generated.resources.tools_log_page_process_tip
+import com.stephen.composeapp.generated.resources.tools_log_page_tag_empty_tip
+import com.stephen.composeapp.generated.resources.tools_log_page_tag_exist_tip
+import com.stephen.composeapp.generated.resources.tools_log_page_tag_hint
+import com.stephen.composeapp.generated.resources.tools_log_page_tag_max_tip
+import com.stephen.composeapp.generated.resources.tools_log_page_title
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.ui.component.BasePage
 import com.stephen.debugmanager.ui.component.CenterText
@@ -38,6 +48,7 @@ import com.stephen.debugmanager.ui.component.WrappedEditText
 import com.stephen.debugmanager.ui.component.rememberToastState
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -54,6 +65,14 @@ fun ToolsPage() {
 
     val toastState = rememberToastState()
 
+    val processNarrowTip = stringResource(Res.string.tools_log_page_process_tip)
+    val tagMaxTip = stringResource(Res.string.tools_log_page_tag_max_tip)
+    val tagExistTip = stringResource(Res.string.tools_log_page_tag_exist_tip)
+    val tagEmptyTip = stringResource(Res.string.tools_log_page_tag_empty_tip)
+    val folderEmptyTip = stringResource(Res.string.tools_log_page_folder_empty_tip)
+    val processStartTip = stringResource(Res.string.tools_log_page_process_start_tip)
+
+
     BasePage({
         LazyColumn {
             item {
@@ -67,19 +86,19 @@ fun ToolsPage() {
                             .padding(10.dp)
                     ) {
                         CenterText(
-                            "日志文件处理",
+                            stringResource(Res.string.tools_log_page_title),
                             style = groupTitleText,
                             modifier = Modifier.padding(bottom = 10.dp)
                         )
                         Column(modifier = Modifier.width(IntrinsicSize.Min)) {
                             FileChooseWidget(
-                                tintText = "将日志文件夹拖到此处 或 点击选取",
+                                tintText = stringResource(Res.string.tools_log_page_drag_drop_tip),
                                 modifier = Modifier.fillMaxWidth(1f).weight(0.5f).padding(bottom = 10.dp),
                                 path = logFolderPath,
                                 isChooseFile = false
                             ) {
                                 logFolderPath = it
-                                toastState.show("开始之前，尽量缩小范围，删除无关日志，以免搜索耗时过长")
+                                toastState.show(processNarrowTip)
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -87,38 +106,38 @@ fun ToolsPage() {
                             ) {
                                 WrappedEditText(
                                     value = logTag.value,
-                                    tipText = "Tag(区分大小写)",
+                                    tipText = stringResource(Res.string.tools_log_page_tag_hint),
                                     onValueChange = {
                                         logTag.value = it
                                     },
                                     onEnterPressed = {
                                         if (logTagList.size >= 10) {
-                                            toastState.show("最多只能添加10个tag")
+                                            toastState.show(tagMaxTip)
                                         } else if (logTagList.contains(logTag.value)) {
-                                            toastState.show("已存在该tag")
+                                            toastState.show(tagExistTip)
                                         } else if (logTag.value.isNotEmpty()) {
                                             logTagList.add(logTag.value)
                                             logTag.value = ""
                                         } else {
-                                            toastState.show("请先输入tag")
+                                            toastState.show(tagEmptyTip)
                                         }
                                     },
-                                    modifier = Modifier.padding(end = 10.dp).weight(1f)
+                                    modifier = Modifier.padding(end = 5.dp).weight(1f)
                                 )
                                 Image(
                                     painter = painterResource(Res.drawable.ic_add_one),
                                     contentDescription = "add a tag",
                                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                                    modifier = Modifier.size(36.dp).clickable {
+                                    modifier = Modifier.size(28.dp).clickable {
                                         if (logTagList.size >= 10) {
-                                            toastState.show("最多只能添加10个tag")
+                                            toastState.show(tagMaxTip)
                                         } else if (logTagList.contains(logTag.value)) {
-                                            toastState.show("已存在该tag")
+                                            toastState.show(tagExistTip)
                                         } else if (logTag.value.isNotEmpty()) {
                                             logTagList.add(logTag.value)
                                             logTag.value = ""
                                         } else {
-                                            toastState.show("请先输入tag")
+                                            toastState.show(tagEmptyTip)
                                         }
                                     }
                                 )
@@ -144,14 +163,14 @@ fun ToolsPage() {
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             ) {
                                 CommonButton(
-                                    "开始处理",
+                                    stringResource(Res.string.tools_log_page_process_button),
                                     onClick = {
                                         if (logFolderPath.isEmpty()) {
-                                            toastState.show("请先选择日志文件")
+                                            toastState.show(folderEmptyTip)
                                         } else if (logTagList.isEmpty()) {
-                                            toastState.show("请先输入待寻找的tag")
+                                            toastState.show(tagEmptyTip)
                                         } else {
-                                            toastState.show("开始处理，完成后将自动打开所在文件夹")
+                                            toastState.show(processStartTip)
                                             mainStateHolder.processLogFiles(
                                                 logFolderPath,
                                                 logTagList

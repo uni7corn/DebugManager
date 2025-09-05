@@ -31,6 +31,22 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.app_manage_page_apk_file_drag_tip
+import com.stephen.composeapp.generated.resources.app_manage_page_apk_file_null_tip
+import com.stephen.composeapp.generated.resources.app_manage_page_apk_size
+import com.stephen.composeapp.generated.resources.app_manage_page_extract_apk
+import com.stephen.composeapp.generated.resources.app_manage_page_force_stop
+import com.stephen.composeapp.generated.resources.app_manage_page_install_apk
+import com.stephen.composeapp.generated.resources.app_manage_page_install_path
+import com.stephen.composeapp.generated.resources.app_manage_page_is_system_app
+import com.stephen.composeapp.generated.resources.app_manage_page_last_update_time
+import com.stephen.composeapp.generated.resources.app_manage_page_min_sdk_version
+import com.stephen.composeapp.generated.resources.app_manage_page_show_app_info
+import com.stephen.composeapp.generated.resources.app_manage_page_showsystemapp
+import com.stephen.composeapp.generated.resources.app_manage_page_start_an_app
+import com.stephen.composeapp.generated.resources.app_manage_page_switch_too_fast
+import com.stephen.composeapp.generated.resources.app_manage_page_target_sdk_version
+import com.stephen.composeapp.generated.resources.device_page_refresh
 import com.stephen.composeapp.generated.resources.ic_default_app_icon
 import com.stephen.composeapp.generated.resources.ic_refresh
 import com.stephen.debugmanager.MainStateHolder
@@ -46,6 +62,7 @@ import com.stephen.debugmanager.utils.toDateString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 import java.io.File
 
@@ -80,6 +97,10 @@ fun ApkManagePage(
 
     val scope = rememberCoroutineScope()
 
+    val refreshTooFastTip = stringResource(Res.string.app_manage_page_switch_too_fast)
+    val apkFileNullTip = stringResource(Res.string.app_manage_page_apk_file_null_tip)
+
+
     BasePage({
         Box {
             Column {
@@ -99,15 +120,19 @@ fun ApkManagePage(
                                 mainStateHolder.setSelectSystemApp(it)
                                 onChangeSystemAppShowState(it)
                             } else {
-                                toastState.show("切换太快了~")
+                                toastState.show(refreshTooFastTip)
                             }
                         },
                         modifier = Modifier.padding(end = 5.dp).size(18.dp)
                     )
-                    CenterText("显示系统APP", style = infoText, modifier = Modifier.padding(end = 10.dp))
+                    CenterText(
+                        stringResource(Res.string.app_manage_page_showsystemapp),
+                        style = infoText,
+                        modifier = Modifier.padding(end = 10.dp)
+                    )
                     Image(
                         painter = painterResource(Res.drawable.ic_refresh),
-                        contentDescription = "刷新",
+                        contentDescription = stringResource(Res.string.device_page_refresh),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                         modifier = Modifier
                             .padding(end = 10.dp)
@@ -125,12 +150,12 @@ fun ApkManagePage(
                                         rotateState.value = false
                                     }
                                 } else {
-                                    toastState.show("切换太快了~")
+                                    toastState.show(refreshTooFastTip)
                                 }
                             }
                     )
                     FileChooseWidget(
-                        tintText = "拖动 APK 文件到此处 或 点击选取",
+                        tintText = stringResource(Res.string.app_manage_page_apk_file_drag_tip),
                         path = selectedApkFilePathState.value,
                         modifier = Modifier.weight(1f).padding(end = 8.dp),
                         isChooseFile = true,
@@ -142,21 +167,21 @@ fun ApkManagePage(
                         mainStateHolder.setSelectedApkFile(path)
                     }
                     DropdownSelector(
-                        installOptions,
+                        installOptions.mapValues { stringResource(it.value) },
                         installParams,
                         modifier = Modifier.padding(end = 5.dp).width(90.dp)
                     ) {
                         installParams = it
                     }
                     CommonButton(
-                        text = "安装",
+                        text = stringResource(Res.string.app_manage_page_install_apk),
                         onClick = {
                             if (selectedApkFilePathState.value.isNotEmpty()) {
                                 mainStateHolder.installApp(selectedApkFilePathState.value, installParams) {
                                     toastState.show(it)
                                 }
                             } else {
-                                toastState.show("请选择一个要安装 apk 文件")
+                                toastState.show(apkFileNullTip)
                             }
                         },
                         btnColor = MaterialTheme.colorScheme.tertiary
@@ -216,7 +241,9 @@ fun ApkManagePage(
                 AppInfoDialog(
                     dialogInfoItem.value,
                     mainStateHolder.getIconFilePath(dialogInfoItem.value?.packageName ?: "")
-                )
+                ) {
+                    mainStateHolder.copyPathToClipboard(it)
+                }
             }
             // 设备未连接，显示提示文案
             if (isDeviceConnected.not()) {
@@ -236,18 +263,22 @@ fun GridAppItem(
     onForceStop: () -> Unit,
     onExtractApk: () -> Unit,
 ) {
+    val startApp = stringResource(Res.string.app_manage_page_start_an_app)
+    val forceStop = stringResource(Res.string.app_manage_page_force_stop)
+    val showInfo = stringResource(Res.string.app_manage_page_show_app_info)
+    val extractApk = stringResource(Res.string.app_manage_page_extract_apk)
     ContextMenuArea(items = {
         listOf(
-            ContextMenuItem("打开") {
+            ContextMenuItem(startApp) {
                 onClickOpen()
             },
-            ContextMenuItem("强制停止") {
+            ContextMenuItem(forceStop) {
                 onForceStop()
             },
-            ContextMenuItem("展示信息") {
+            ContextMenuItem(showInfo) {
                 onClickShowInfo()
             },
-            ContextMenuItem("提取安装包") {
+            ContextMenuItem(extractApk) {
                 onExtractApk()
             },
         )
@@ -341,17 +372,49 @@ fun AppInfoDialog(infoItem: PackageInfo?, iconFilePath: String, onClickStringCop
                 }
             }
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
-            NameValueText("是否系统APP", if (infoItem?.system == true) "是" else "否", nameWeight = 0.3f)
+            NameValueText(
+                stringResource(Res.string.app_manage_page_is_system_app),
+                if (infoItem?.system == true) "是" else "否",
+                nameWeight = 0.3f,
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                ) {
+                    onClickStringCopy("${infoItem?.packageName}")
+                })
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
-            NameValueText("最小SDK版本", "${infoItem?.minSdkVersion}", nameWeight = 0.3f)
+            NameValueText(
+                stringResource(Res.string.app_manage_page_min_sdk_version),
+                "${infoItem?.minSdkVersion}",
+                nameWeight = 0.3f
+            )
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
-            NameValueText("目标SDK版本", "${infoItem?.targetSdkVersion}", nameWeight = 0.3f)
+            NameValueText(
+                stringResource(Res.string.app_manage_page_target_sdk_version),
+                "${infoItem?.targetSdkVersion}",
+                nameWeight = 0.3f
+            )
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
-            NameValueText("安装包大小", "${infoItem?.apkSize?.size()}", nameWeight = 0.3f)
+            NameValueText(
+                stringResource(Res.string.app_manage_page_apk_size),
+                "${infoItem?.apkSize?.size()}",
+                nameWeight = 0.3f
+            )
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
-            NameValueText("安装路径", "${infoItem?.apkPath}", nameWeight = 0.3f)
+            NameValueText(
+                stringResource(Res.string.app_manage_page_install_path),
+                "${infoItem?.apkPath}", nameWeight = 0.3f,
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                ) {
+                    onClickStringCopy("${infoItem?.apkPath}")
+                })
             SimpleDivider(Modifier.fillMaxWidth(1f).height(1.dp))
-            NameValueText("最后更新时间", "${infoItem?.lastUpdateTime?.toDateString()}", nameWeight = 0.3f)
+            NameValueText(
+                stringResource(Res.string.app_manage_page_last_update_time),
+                "${infoItem?.lastUpdateTime?.toDateString()}", nameWeight = 0.3f
+            )
         }
     }
 }

@@ -12,6 +12,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.dialog_cancel
+import com.stephen.composeapp.generated.resources.dialog_confirm
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CommonDialog(title: String, onConfirm: () -> Unit, onCancel: () -> Unit, onDismiss: () -> Unit) {
@@ -23,8 +27,10 @@ fun CommonDialog(title: String, onConfirm: () -> Unit, onCancel: () -> Unit, onD
             modifier = Modifier.width(240.dp).clip(RoundedCornerShape(10.dp))
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            Row(modifier = Modifier.padding(vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 CenterText(title, modifier = Modifier.fillMaxWidth(1f).padding(10.dp))
             }
             Row(
@@ -35,12 +41,12 @@ fun CommonDialog(title: String, onConfirm: () -> Unit, onCancel: () -> Unit, onD
                     SimpleDivider(Modifier.height(1.dp).fillMaxWidth(1f))
                     Row {
                         CenterText(
-                            "取消",
+                            stringResource(Res.string.dialog_cancel),
                             modifier = Modifier.clickable { onCancel() }.weight(1f).fillMaxHeight(1f)
                         )
                         SimpleDivider(Modifier.width(1.dp).fillMaxHeight(1f))
                         CenterText(
-                            "确认",
+                            stringResource(Res.string.dialog_confirm),
                             modifier = Modifier.clickable { onConfirm() }.weight(1f).fillMaxHeight(1f)
                         )
                     }

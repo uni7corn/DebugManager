@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.model.MarkdownColors
 import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.ai_page_empty_tip
+import com.stephen.composeapp.generated.resources.ai_page_input_chat_word
+import com.stephen.composeapp.generated.resources.ai_page_send
 import com.stephen.composeapp.generated.resources.ic_robot
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.AIModels
@@ -29,6 +32,7 @@ import com.stephen.debugmanager.net.KimiRepository
 import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.*
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 import java.text.SimpleDateFormat
 
@@ -60,6 +64,8 @@ fun AiModelPage() {
         }
 
         val toastState = rememberToastState()
+
+        val emptyTip = stringResource(Res.string.ai_page_empty_tip)
 
         LaunchedEffect(Unit) {
             // 获取上一次记忆的模型
@@ -106,12 +112,12 @@ fun AiModelPage() {
             ) {
                 WrappedEditText(
                     value = userInputSting.value,
-                    tipText = "输入对话文字",
+                    tipText = stringResource(Res.string.ai_page_input_chat_word),
                     onValueChange = { userInputSting.value = it },
                     modifier = Modifier.padding(start = 10.dp, end = 10.dp).weight(1f),
                     onEnterPressed = {
                         if (userInputSting.value.isEmpty()) {
-                            toastState.show("请先输入对话内容")
+                            toastState.show(emptyTip)
                         } else {
                             mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
                             userInputSting.value = ""
@@ -119,9 +125,9 @@ fun AiModelPage() {
                     }
                 )
                 CommonButton(
-                    "发送", onClick = {
+                    stringResource(Res.string.ai_page_send), onClick = {
                         if (userInputSting.value.isEmpty()) {
-                            toastState.show("请先输入对话内容")
+                            toastState.show(emptyTip)
                         } else {
                             mainStateHolder.chatWithAI(selectedModel.value, userInputSting.value)
                             userInputSting.value = ""

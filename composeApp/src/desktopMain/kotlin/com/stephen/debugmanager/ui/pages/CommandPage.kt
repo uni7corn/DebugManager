@@ -22,6 +22,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.command_page_adb_command
+import com.stephen.composeapp.generated.resources.command_page_android_shell
+import com.stephen.composeapp.generated.resources.command_page_command_tip
+import com.stephen.composeapp.generated.resources.command_page_execute
+import com.stephen.composeapp.generated.resources.command_page_input_command
+import com.stephen.composeapp.generated.resources.command_page_terminal
 import com.stephen.composeapp.generated.resources.ic_terminal_window
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.bean.TerminalCommandData
@@ -29,6 +35,7 @@ import com.stephen.debugmanager.ui.component.*
 import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.infoText
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 
 @Composable
@@ -49,6 +56,8 @@ fun CommandPage(isDeviceConnected: Boolean) {
 
     val terminalListScrollState = rememberLazyListState()
     val androidListScrollState = rememberLazyListState()
+
+    val inputEmpytTip = stringResource(Res.string.command_page_command_tip)
 
     LaunchedEffect(terminalExecuteList.size) {
         if (terminalExecuteList.isNotEmpty()) {
@@ -73,7 +82,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
                     Box {
                         Column {
                             CenterText(
-                                "Terminal",
+                                stringResource(Res.string.command_page_terminal),
                                 modifier = Modifier.padding(bottom = 10.dp),
                                 style = groupTitleText
                             )
@@ -89,14 +98,14 @@ fun CommandPage(isDeviceConnected: Boolean) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 WrappedEditText(
                                     value = terminalCommand,
-                                    tipText = "输入Terminal命令",
+                                    tipText = stringResource(Res.string.command_page_input_command),
                                     onValueChange = { terminalCommand = it },
                                     modifier = Modifier
                                         .padding(start = 10.dp, end = 10.dp).weight(1f)
                                         .focusRequester(focusRequester),
                                     onEnterPressed = {
                                         if (terminalCommand.isEmpty()) {
-                                            toastState.show("请输入命令")
+                                            toastState.show(inputEmpytTip)
                                         } else {
                                             mainStateHolder.executeTerminalCommand(terminalCommand)
                                             terminalCommand = ""
@@ -104,15 +113,15 @@ fun CommandPage(isDeviceConnected: Boolean) {
                                     }
                                 )
                                 CommonButton(
-                                    "执行", onClick = {
+                                    stringResource(Res.string.command_page_execute),
+                                    onClick = {
                                         if (terminalCommand.isEmpty()) {
-                                            toastState.show("请输入命令")
+                                            toastState.show(inputEmpytTip)
                                         } else {
                                             mainStateHolder.executeTerminalCommand(terminalCommand)
                                             terminalCommand = ""
                                         }
                                     },
-                                    modifier = Modifier.padding(10.dp),
                                     btnColor = MaterialTheme.colorScheme.tertiary
                                 )
                             }
@@ -122,7 +131,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
                             painter = painterResource(Res.drawable.ic_terminal_window),
                             contentDescription = null,
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                            modifier = Modifier.size(28.dp).align(Alignment.TopEnd)
+                            modifier = Modifier.size(26.dp).align(Alignment.TopEnd)
                                 .bounceClick().clickable {
                                     mainStateHolder.openSingleTerminalWindow()
                                 }
@@ -136,7 +145,7 @@ fun CommandPage(isDeviceConnected: Boolean) {
                         .padding(10.dp)
                 ) {
                     CenterText(
-                        "Android Shell",
+                        stringResource(Res.string.command_page_android_shell),
                         modifier = Modifier.padding(bottom = 10.dp),
                         style = groupTitleText
                     )
@@ -152,14 +161,14 @@ fun CommandPage(isDeviceConnected: Boolean) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         WrappedEditText(
                             value = androidShellCommand,
-                            tipText = "输入adb命令",
+                            tipText = stringResource(Res.string.command_page_adb_command),
                             onValueChange = { androidShellCommand = it },
                             modifier = Modifier
                                 .padding(start = 10.dp, end = 10.dp).weight(1f)
                                 .focusRequester(focusRequester),
                             onEnterPressed = {
                                 if (androidShellCommand.isEmpty()) {
-                                    toastState.show("请输入命令")
+                                    toastState.show(inputEmpytTip)
                                 } else {
                                     mainStateHolder.executeAndroidShellCommand(androidShellCommand)
                                     androidShellCommand = ""
@@ -167,15 +176,15 @@ fun CommandPage(isDeviceConnected: Boolean) {
                             }
                         )
                         CommonButton(
-                            "执行", onClick = {
+                            stringResource(Res.string.command_page_execute),
+                            onClick = {
                                 if (androidShellCommand.isEmpty()) {
-                                    toastState.show("请输入命令")
+                                    toastState.show(inputEmpytTip)
                                 } else {
                                     mainStateHolder.executeAndroidShellCommand(androidShellCommand)
                                     androidShellCommand = ""
                                 }
                             },
-                            modifier = Modifier.padding(10.dp),
                             btnColor = MaterialTheme.colorScheme.tertiary
                         )
                     }

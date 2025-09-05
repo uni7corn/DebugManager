@@ -26,6 +26,7 @@ import com.stephen.debugmanager.ui.theme.infoText
 import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.utils.DoubleClickUtils
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
@@ -49,6 +50,10 @@ fun FileManagePage(
     var desktopSelectedFile by remember { mutableStateOf("") }
 
     var androidSelectedFile by remember { mutableStateOf("") }
+
+    val rootTip = stringResource(Res.string.file_manage_page_root_tip)
+    val chooseFirstTip = stringResource(Res.string.file_manage_page_choose_first_tip)
+    val copyTip = stringResource(Res.string.file_manage_page_copied_tip)
 
     BasePage({
         Box {
@@ -75,7 +80,7 @@ fun FileManagePage(
                             ) {
                                 // 判断是否是根目录
                                 if (directoryState.currentdirectory == FileManager.ROOT_DIR) {
-                                    toastState.show("已在根目录")
+                                    toastState.show(rootTip)
                                 } else {
                                     destinationCall(FileManager.LAST_FOLDER)
                                 }
@@ -93,7 +98,7 @@ fun FileManagePage(
                                 indication = null
                             ) {
                                 if (androidSelectedFile.isEmpty()) {
-                                    toastState.show("请先选择文件")
+                                    toastState.show(chooseFirstTip)
                                 } else {
                                     deleteConfirmDialogState.value = true
                                 }
@@ -128,10 +133,11 @@ fun FileManagePage(
                         pushFolderConfirmDialogState.value = true
                     }
                 ) {
+                    val refreshString = stringResource(Res.string.device_page_refresh)
                     // 文件列表
                     ContextMenuArea(items = {
                         listOf(
-                            ContextMenuItem("刷新") {
+                            ContextMenuItem(refreshString) {
                                 androidSelectedFile = ""
                                 directoryState.currentdirectory.let { mainStateHolder.updateFileList(it) }
                             }
@@ -217,7 +223,7 @@ fun FileManagePage(
                                                 androidSelectedFile = name
                                                 val path = directoryState.currentdirectory + "/" + androidSelectedFile
                                                 mainStateHolder.copyPathToClipboard(path)
-                                                toastState.show("复制路径到剪切板")
+                                                toastState.show(copyTip)
                                             }
                                         )
                                     }
@@ -227,7 +233,7 @@ fun FileManagePage(
                     }
                 }
                 CenterText(
-                    "可直接拖动文件到此处来实现push操作",
+                    stringResource(Res.string.file_manage_page_drag_tip),
                     style = infoText,
                     color = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier.fillMaxWidth(1f)
@@ -240,7 +246,7 @@ fun FileManagePage(
             // 删除确认弹窗
             if (deleteConfirmDialogState.value)
                 CommonDialog(
-                    title = "确认删除${androidSelectedFile}？",
+                    title = stringResource(Res.string.file_manage_page_delete_confirm, androidSelectedFile),
                     onConfirm = {
                         deleteConfirmDialogState.value = false
                         mainStateHolder.deleteFileOrFolder(androidSelectedFile)
@@ -291,21 +297,26 @@ fun FileViewItem(
     onClickPull: (name: String) -> Unit = {},
     onClickCopyPath: (name: String) -> Unit = {},
 ) {
+    val deleteString = stringResource(Res.string.file_manage_page_delete)
+    val moveString = stringResource(Res.string.file_manage_page_move)
+    val copyString = stringResource(Res.string.file_manage_page_copy)
+    val pullString = stringResource(Res.string.file_manage_page_pull)
+    val copyPathString = stringResource(Res.string.file_manage_page_copy_path)
     ContextMenuArea(items = {
         listOf(
-            ContextMenuItem("删除") {
+            ContextMenuItem(deleteString) {
                 onClickDelete(name)
             },
-            ContextMenuItem("移动到") {
+            ContextMenuItem(moveString) {
                 onClickMove(name)
             },
-            ContextMenuItem("复制到") {
+            ContextMenuItem(copyString) {
                 onClickCopy(name)
             },
-            ContextMenuItem("拉取到电脑") {
+            ContextMenuItem(pullString) {
                 onClickPull(name)
             },
-            ContextMenuItem("复制文件路径") {
+            ContextMenuItem(copyPathString) {
                 onClickCopyPath(name)
             },
         )

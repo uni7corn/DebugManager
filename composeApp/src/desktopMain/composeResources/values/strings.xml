@@ -2,6 +2,12 @@
 <resources>
     <string name="app_name">DebugManager</string>
 
+    <string name="app_splash_welcome">Welcome to DebugManager</string>
+
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_confirm_exit">Confirm to exit the application?</string>
+
     <string name="side_menu_deviceinfo">Device Info</string>
     <string name="side_menu_app_manege">App Manage</string>
     <string name="side_menu_command">Command</string>
@@ -43,7 +49,7 @@
     <string name="device_page_shutdown">Shutdown</string>
     <string name="device_page_capture_trace">Capture Trace</string>
     <string name="device_page_google_settings">Google Settings</string>
-    <string name="device_page_display_id">DisplayId (default to 0)</string>
+    <string name="device_page_display_id">DisplayId (0 default)</string>
     <string name="device_page_scrcpy">Scrcpy Mirroring</string>
 
     <string name="device_page_screen_record_capture">Screen Record and Capture</string>
@@ -66,6 +72,109 @@
     <string name="device_page_input_text">Input Method(English Only)</string>
     <string name="device_page_confirm">Confirm</string>
 
+    <!--    toast提示-->
+    <string name="device_page_remount_tip">Executed. If this is the first remount after flashing, please reboot the
+        device.
+    </string>
+    <string name="device_page_trace_file_tip">Captures 10 seconds by default. The folder will open automatically when
+        completed.
+    </string>
+    <string name="device_page_scrcpy_display_tip">Parameter is empty. The display ID is set to 0 by default.</string>
+    <string name="device_page_last_record_unfinish">The last recording has not been completed.</string>
+    <string name="device_page_record_time_tip">Please enter a recording duration.</string>
+    <string name="device_page_start_record_tip">Recording has started. Finger taps will be displayed during the
+        recording. The folder will open automatically when completed.
+    </string>
+    <string name="device_page_recors_param_wrong">Please enter a valid numeric value for the duration.</string>
+    <string name="device_page_pull_file_tip">The folder will open automatically when completed.</string>
+    <string name="device_page_recording">Recording in progress. Please try again later.</string>
+    <string name="device_page_chche_clear_tip">Cache cleared to free up space.</string>
+
+    <!--    软件管理页面-->
+    <string name="app_manage_page_showsystemapp">Show System Apps</string>
+    <string name="app_manage_page_switch_too_fast">Switching too fast~</string>
+    <string name="app_manage_page_apk_file_drag_tip">Drag an APK file here or click to select</string>
+    <string name="app_manage_page_install_apk">Install</string>
+    <string name="app_manage_page_apk_file_null_tip">Please select an APK file to install</string>
+    <string name="app_manage_page_yes">Yes</string>
+    <string name="app_manage_page_no">No</string>
+    <string name="app_manage_page_start_an_app">Open</string>
+    <string name="app_manage_page_force_stop">Force Stop</string>
+    <string name="app_manage_page_show_app_info">Show Info</string>
+    <string name="app_manage_page_extract_apk">Extract APK</string>
+    <string name="app_manage_page_install_directly">default</string>
+    <string name="app_manage_page_reinstall">-r</string>
+    <string name="app_manage_page_test_install">-t</string>
+    <string name="app_manage_page_downgrade">-d</string>
+    <string name="app_manage_page_grant_permission">-g</string>
+    <string name="app_manage_page_is_system_app">Is System App</string>
+    <string name="app_manage_page_min_sdk_version">Min SDK Version</string>
+    <string name="app_manage_page_target_sdk_version">Target SDK Version</string>
+    <string name="app_manage_page_apk_size">Apk Size</string>
+    <string name="app_manage_page_install_path">Install Path</string>
+    <string name="app_manage_page_last_update_time">Last Update Time</string>
+
+    <!--    文件管理-->
+    <string name="file_manage_page_delete">Delete</string>
+    <string name="file_manage_page_move">Move to</string>
+    <string name="file_manage_page_copy">Copy to</string>
+    <string name="file_manage_page_pull">Pull to PC</string>
+    <string name="file_manage_page_copy_path">Copy File Path</string>
+    <string name="file_manage_page_root_tip">You are already at the root directory.</string>
+    <string name="file_manage_page_choose_first_tip">Please select a file first.</string>
+    <string name="file_manage_page_copied_tip">Path copied to clipboard.</string>
+    <string name="file_manage_page_drag_tip">Drag files here to push them to the device.</string>
+    <string name="file_manage_page_file_modify_time">Modified Time</string>
+    <string name="file_manage_page_delete_confirm">Delete %1$s?</string>
+
+    <!--command page-->
+    <string name="command_page_terminal">Terminal</string>
+    <string name="command_page_command_tip">Please enter a command.</string>
+    <string name="command_page_execute">Execute</string>
+    <string name="command_page_input_command">Enter terminal command</string>
+    <string name="command_page_android_shell">Android Shell</string>
+    <string name="command_page_adb_command">Enter adb command</string>
+
+    <!--    性能监控-->
+    <string name="performance_page_cpu_overview">CPU Overview</string>
+    <string name="performance_page_cpu_total">Total</string>
+    <string name="performance_page_cpu_user">User</string>
+    <string name="performance_page_cpu_sys">System</string>
+    <string name="performance_page_cpu_nice">Nice</string>
+    <string name="performance_page_cpu_idle">Idle</string>
+    <string name="performance_page_cpu_io">I/O Wait</string>
+    <string name="performance_page_cpu_irq">Hardware IRQ</string>
+    <string name="performance_page_cpu_sirq">Software IRQ</string>
+    <string name="performance_page_cpu_host">Host</string>
+    <string name="performance_page_memory_overview">Memory Overview</string>
+    <string name="performance_page_memory_total">Total</string>
+    <string name="performance_page_memory_free">Free</string>
+    <string name="performance_page_memory_used">Used</string>
+    <string name="performance_page_app_performance">App Performance</string>
+    <string name="performance_page_user_id">UID</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">RSS</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">Process Name</string>
+
+    <!--    AI页面-->
+    <string name="ai_page_input_chat_word">Enter a message</string>
+    <string name="ai_page_empty_tip">Please enter a message first.</string>
+    <string name="ai_page_send">Send</string>
+
+    <!--    工具页面-->
+    <string name="tools_log_page_title">Log File Processing</string>
+    <string name="tools_log_page_drag_drop_tip">Drag log folder here or click to select</string>
+    <string name="tools_log_page_tag_hint">Tag (Case sensitive)</string>
+    <string name="tools_log_page_process_button">Start Processing</string>
+    <string name="tools_log_page_process_tip">Before starting, try to narrow down the scope and remove unnecessary logs to avoid long search times.</string>
+    <string name="tools_log_page_tag_max_tip">You can only add a maximum of 10 tags.</string>
+    <string name="tools_log_page_tag_exist_tip">This tag already exists.</string>
+    <string name="tools_log_page_tag_empty_tip">Please enter a tag first.</string>
+    <string name="tools_log_page_folder_empty_tip">Please select the log file first.</string>
+    <string name="tools_log_page_process_start_tip">Starting the process. The folder will open automatically when completed.</string>
+
+    <!--    关于页面-->
     <string name="about_page_theme_setting">Theme Setting</string>
     <string name="about_page_language_setting">Language Setting</string>
     <string name="about_page_cache_folder_path">Cache Folder Path</string>

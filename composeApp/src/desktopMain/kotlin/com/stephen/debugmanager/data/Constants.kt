@@ -58,6 +58,4 @@ object Constants {
         Res.string.language_english to LanguageState.ENGLISH,
         Res.string.language_system to LanguageState.AUTO
     )
-
-    const val PULL_FILE_TOAST = "拉取中，拉取完毕后会自动打开文件夹"
 }

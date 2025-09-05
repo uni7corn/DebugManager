@@ -23,6 +23,7 @@ import androidx.compose.ui.window.rememberTrayState
 import androidx.compose.ui.window.rememberWindowState
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
+import com.stephen.composeapp.generated.resources.dialog_confirm_exit
 import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.data.LanguageState
 import com.stephen.debugmanager.data.ThemeState
@@ -37,6 +38,7 @@ import com.stephen.debugmanager.ui.theme.DarkColorScheme
 import com.stephen.debugmanager.ui.theme.LightColorScheme
 import com.stephen.debugmanager.utils.LogUtils
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import java.awt.Dimension
@@ -173,7 +175,7 @@ fun main() = application {
 
                             if (dialogState.value) {
                                 CommonDialog(
-                                    title = "确认退出应用程序？",
+                                    title = stringResource(Res.string.dialog_confirm_exit),
                                     onConfirm = {
                                         exitApplication()
                                     },

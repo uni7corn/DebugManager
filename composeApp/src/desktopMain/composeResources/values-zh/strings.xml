@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">调试助手</string>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">Welcome to DebugManager</string>
+
+    <string name="dialog_confirm">确认</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_confirm_exit">确认退出应用程序？</string>
 
     <string name="side_menu_deviceinfo">设备信息</string>
     <string name="side_menu_app_manege">软件管理</string>
@@ -65,7 +71,104 @@
     <string name="device_page_input_text">输入法(English Only)</string>
     <string name="device_page_confirm">确认</string>
 
+    <!--    toast提示-->
+    <string name="device_page_remount_tip">已执行，如果是刷完机首次remount，请先重启设备</string>
+    <string name="device_page_trace_file_tip">默认抓取10s，抓取完成后会自动打开文件夹</string>
+    <string name="device_page_scrcpy_display_tip">参数为空，默认设置displayid为0</string>
+    <string name="device_page_last_record_unfinish">上次录制还未完成</string>
+    <string name="device_page_record_time_tip">请先输入录制时长</string>
+    <string name="device_page_start_record_tip">已开始，录制期间会显示手指点击位置，完成后会自动打开文件夹</string>
+    <string name="device_page_recors_param_wrong">请输入正确的时长数值</string>
+    <string name="device_page_pull_file_tip">完成后会自动打开文件夹</string>
+    <string name="device_page_recording">录屏中，请稍后再试</string>
+    <string name="device_page_chche_clear_tip">已清空缓存，节省空间</string>
 
+
+    <!--  app管理页面-->
+    <string name="app_manage_page_showsystemapp">显示系统应用</string>
+    <string name="app_manage_page_switch_too_fast">切换太快了~</string>
+    <string name="app_manage_page_apk_file_drag_tip">拖动 APK 文件到此处 或 点击选取</string>
+    <string name="app_manage_page_install_apk">安装</string>
+    <string name="app_manage_page_apk_file_null_tip">请选择一个要安装 apk 文件</string>
+    <string name="app_manage_page_yes">是</string>
+    <string name="app_manage_page_no">否</string>
+    <string name="app_manage_page_start_an_app">打开</string>
+    <string name="app_manage_page_force_stop">强制停止</string>
+    <string name="app_manage_page_show_app_info">展示信息</string>
+    <string name="app_manage_page_extract_apk">提取安装包</string>
+    <string name="app_manage_page_install_directly">直接安装</string>
+    <string name="app_manage_page_reinstall">重新安装</string>
+    <string name="app_manage_page_test_install">测试安装</string>
+    <string name="app_manage_page_downgrade">降级安装</string>
+    <string name="app_manage_page_grant_permission">赋权安装</string>
+    <string name="app_manage_page_is_system_app">是否系统应用</string>
+    <string name="app_manage_page_min_sdk_version">最小SDK版本</string>
+    <string name="app_manage_page_target_sdk_version">目标SDK版本</string>
+    <string name="app_manage_page_apk_size">安装包大小</string>
+    <string name="app_manage_page_install_path">安装路径</string>
+    <string name="app_manage_page_last_update_time">最后更新时间</string>
+
+    <!--    文件管理-->
+    <string name="file_manage_page_delete">删除</string>
+    <string name="file_manage_page_move">移动到</string>
+    <string name="file_manage_page_copy">复制到</string>
+    <string name="file_manage_page_pull">拉取到电脑</string>
+    <string name="file_manage_page_copy_path">复制文件路径</string>
+    <string name="file_manage_page_root_tip">已在根目录</string>
+    <string name="file_manage_page_choose_first_tip">请先选择文件</string>
+    <string name="file_manage_page_copied_tip">已复制路径到剪切板</string>
+    <string name="file_manage_page_drag_tip">可直接拖动文件到此处来实现push操作</string>
+    <string name="file_manage_page_file_modify_time">修改时间</string>
+    <string name="file_manage_page_delete_confirm">确认删除 %1$s？</string>
+
+    <!--    command-->
+    <string name="command_page_terminal">Terminal</string>
+    <string name="command_page_command_tip">请输入命令</string>
+    <string name="command_page_execute">执行</string>
+    <string name="command_page_input_command">输入Terminal命令</string>
+    <string name="command_page_android_shell">Android Shell</string>
+    <string name="command_page_adb_command">输入adb命令</string>
+
+    <!--    性能页面-->
+    <string name="performance_page_cpu_overview">CPU 概览</string>
+    <string name="performance_page_cpu_total">Total 总量</string>
+    <string name="performance_page_cpu_user">User 用户</string>
+    <string name="performance_page_cpu_sys">Sys 系统</string>
+    <string name="performance_page_cpu_nice">Nice 低优先级</string>
+    <string name="performance_page_cpu_idle">Idle 空闲</string>
+    <string name="performance_page_cpu_io">IO 等待</string>
+    <string name="performance_page_cpu_irq">IRQ 硬中断</string>
+    <string name="performance_page_cpu_sirq">SIRQ 软中断</string>
+    <string name="performance_page_cpu_host">Host 虚拟机</string>
+    <string name="performance_page_memory_overview">内存概览</string>
+    <string name="performance_page_memory_total">Total 总量</string>
+    <string name="performance_page_memory_free">Free 空闲</string>
+    <string name="performance_page_memory_used">Used 使用</string>
+    <string name="performance_page_app_performance">APP性能</string>
+    <string name="performance_page_user_id">用户ID</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">物理内存</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">进程名</string>
+
+    <!--    AI页面-->
+    <string name="ai_page_input_chat_word">输入对话文字</string>
+    <string name="ai_page_empty_tip">请先输入对话内容</string>
+    <string name="ai_page_send">发送</string>
+
+    <!--    工具页面-->
+    <string name="tools_log_page_title">日志文件处理</string>
+    <string name="tools_log_page_drag_drop_tip">将日志文件夹拖到此处 或 点击选取</string>
+    <string name="tools_log_page_tag_hint">Tag (区分大小写)</string>
+    <string name="tools_log_page_process_button">开始处理</string>
+    <string name="tools_log_page_process_tip">开始之前，尽量缩小范围，删除无关日志，以免搜索耗时过长</string>
+    <string name="tools_log_page_tag_max_tip">最多只能添加10个tag</string>
+    <string name="tools_log_page_tag_exist_tip">已存在该tag</string>
+    <string name="tools_log_page_tag_empty_tip">请先输入tag</string>
+    <string name="tools_log_page_folder_empty_tip">请先选择日志文件</string>
+    <string name="tools_log_page_process_start_tip">开始处理，完成后将自动打开所在文件夹</string>
+
+    <!--    关于页面-->
     <string name="about_page_theme_setting">主题设置</string>
     <string name="about_page_language_setting">语言设置</string>
     <string name="about_page_cache_folder_path">缓存路径</string>

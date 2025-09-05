@@ -1,5 +1,12 @@
 package com.stephen.debugmanager.data
 
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.app_manage_page_downgrade
+import com.stephen.composeapp.generated.resources.app_manage_page_grant_permission
+import com.stephen.composeapp.generated.resources.app_manage_page_install_directly
+import com.stephen.composeapp.generated.resources.app_manage_page_reinstall
+import com.stephen.composeapp.generated.resources.app_manage_page_test_install
+
 /**
  * 安装参数
  */
@@ -12,9 +19,9 @@ enum class InstallParams(val param: String) {
 }
 
 val installOptions = mapOf(
-    InstallParams.DEFAULT.param to "直接安装",
-    InstallParams.REINSTALL.param to "重新安装",
-    InstallParams.TEST.param to "测试安装",
-    InstallParams.DOWNGRADE.param to "降级安装",
-    InstallParams.GRANT.param to "赋权安装"
+    InstallParams.DEFAULT.param to Res.string.app_manage_page_install_directly,
+    InstallParams.REINSTALL.param to Res.string.app_manage_page_reinstall,
+    InstallParams.TEST.param to  Res.string.app_manage_page_test_install,
+    InstallParams.DOWNGRADE.param to  Res.string.app_manage_page_downgrade,
+    InstallParams.GRANT.param to  Res.string.app_manage_page_grant_permission
 )

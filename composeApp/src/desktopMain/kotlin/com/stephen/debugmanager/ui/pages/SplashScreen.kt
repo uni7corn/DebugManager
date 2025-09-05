@@ -15,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.app_splash_welcome
 import com.stephen.composeapp.generated.resources.ic_android_debug
 import com.stephen.debugmanager.ui.component.CenterText
 import com.stephen.debugmanager.ui.theme.pageTitleText
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -61,13 +63,14 @@ fun SplashScreenContent(modifier: Modifier = Modifier) {
                 painter = painterResource(Res.drawable.ic_android_debug),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "Splash Logo",
-                modifier = Modifier.size(120.dp)
+                modifier = Modifier.size(108.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             CenterText(
-                text = "Welcome to DebugManager",
+                text = stringResource(Res.string.app_splash_welcome),
                 style = pageTitleText,
             )
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

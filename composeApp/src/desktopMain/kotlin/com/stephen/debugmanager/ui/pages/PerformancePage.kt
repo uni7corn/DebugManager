@@ -19,6 +19,27 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.LocalPlatformContext
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.performance_page_app_performance
+import com.stephen.composeapp.generated.resources.performance_page_cpu
+import com.stephen.composeapp.generated.resources.performance_page_cpu_host
+import com.stephen.composeapp.generated.resources.performance_page_cpu_idle
+import com.stephen.composeapp.generated.resources.performance_page_cpu_io
+import com.stephen.composeapp.generated.resources.performance_page_cpu_irq
+import com.stephen.composeapp.generated.resources.performance_page_cpu_nice
+import com.stephen.composeapp.generated.resources.performance_page_cpu_overview
+import com.stephen.composeapp.generated.resources.performance_page_cpu_sirq
+import com.stephen.composeapp.generated.resources.performance_page_cpu_sys
+import com.stephen.composeapp.generated.resources.performance_page_cpu_total
+import com.stephen.composeapp.generated.resources.performance_page_cpu_user
+import com.stephen.composeapp.generated.resources.performance_page_memory_free
+import com.stephen.composeapp.generated.resources.performance_page_memory_overview
+import com.stephen.composeapp.generated.resources.performance_page_memory_total
+import com.stephen.composeapp.generated.resources.performance_page_memory_used
+import com.stephen.composeapp.generated.resources.performance_page_physical_memory
+import com.stephen.composeapp.generated.resources.performance_page_pid
+import com.stephen.composeapp.generated.resources.performance_page_process_name
+import com.stephen.composeapp.generated.resources.performance_page_user_id
 import com.stephen.debugmanager.MainStateHolder
 import com.stephen.debugmanager.data.bean.PackageInfo
 import com.stephen.debugmanager.data.uistate.ProcessPerfState
@@ -31,6 +52,7 @@ import com.stephen.debugmanager.ui.theme.groupTitleText
 import com.stephen.debugmanager.ui.theme.itemKeyText
 import com.stephen.debugmanager.ui.theme.itemValueText
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 import java.io.File
 
@@ -72,20 +94,47 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: List<PackageInfo>)
                             .padding(10.dp)
                     ) {
                         CenterText(
-                            "CPU概览",
+                            stringResource(Res.string.performance_page_cpu_overview),
                             modifier = Modifier.padding(bottom = 20.dp),
                             style = groupTitleText
                         )
                         Column {
-                            NameValueText("Total总量", performanceState.value.cpuTotal)
-                            NameValueText("User用户", performanceState.value.cpuUser)
-                            NameValueText("Sys系统", performanceState.value.cpuSys)
-                            NameValueText("Nice低优先级", performanceState.value.cpuNice)
-                            NameValueText("Idle空闲", performanceState.value.cpuIdle)
-                            NameValueText("IO等待", performanceState.value.cpuIOWait)
-                            NameValueText("IRQ硬中断", performanceState.value.cpuIRQ)
-                            NameValueText("SIRQ软中断", performanceState.value.cpuSoftIRQ)
-                            NameValueText("Host虚拟机", performanceState.value.cpuHost)
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_total),
+                                performanceState.value.cpuTotal
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_user),
+                                performanceState.value.cpuUser
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_sys),
+                                performanceState.value.cpuSys
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_nice),
+                                performanceState.value.cpuNice
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_idle),
+                                performanceState.value.cpuIdle
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_io),
+                                performanceState.value.cpuIOWait
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_irq),
+                                performanceState.value.cpuIRQ
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_sirq),
+                                performanceState.value.cpuSoftIRQ
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_cpu_host),
+                                performanceState.value.cpuHost
+                            )
                         }
                     }
 
@@ -97,14 +146,23 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: List<PackageInfo>)
                             .padding(10.dp)
                     ) {
                         CenterText(
-                            "内存概览",
+                            stringResource(Res.string.performance_page_memory_overview),
                             modifier = Modifier.padding(bottom = 20.dp),
                             style = groupTitleText
                         )
                         Column {
-                            NameValueText("Total总量", performanceState.value.memTotal)
-                            NameValueText("Free空闲", performanceState.value.memFree)
-                            NameValueText("Used使用", performanceState.value.memUsed)
+                            NameValueText(
+                                stringResource(Res.string.performance_page_memory_total),
+                                performanceState.value.memTotal
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_memory_free),
+                                performanceState.value.memFree
+                            )
+                            NameValueText(
+                                stringResource(Res.string.performance_page_memory_used),
+                                performanceState.value.memUsed
+                            )
                         }
                     }
                 }
@@ -117,7 +175,7 @@ fun PerformancePage(isDeviceConnected: Boolean, appListState: List<PackageInfo>)
                         .padding(10.dp)
                 ) {
                     CenterText(
-                        "APP性能",
+                        stringResource(Res.string.performance_page_app_performance),
                         modifier = Modifier.padding(bottom = 10.dp),
                         style = groupTitleText
                     )
@@ -191,11 +249,11 @@ fun PerformanceAppItem(
         if (isNeedToExpand) {
             Column(modifier = Modifier.fillMaxWidth(1f).padding(top = 10.dp)) {
                 Row(modifier = Modifier.padding(bottom = 10.dp)) {
-                    CenterText(text = "用户ID", style = itemKeyText, modifier = Modifier.weight(1f))
-                    CenterText(text = "PID", style = itemKeyText, modifier = Modifier.weight(1f))
-                    CenterText(text = "物理内存", style = itemKeyText, modifier = Modifier.weight(1f))
-                    CenterText(text = "CPU", style = itemKeyText, modifier = Modifier.weight(1f))
-                    CenterText(text = "进程名", style = itemKeyText, modifier = Modifier.weight(3f))
+                    CenterText(text = stringResource(Res.string.performance_page_user_id), style = itemKeyText, modifier = Modifier.weight(1f))
+                    CenterText(text = stringResource(Res.string.performance_page_pid), style = itemKeyText, modifier = Modifier.weight(1f))
+                    CenterText(text = stringResource(Res.string.performance_page_physical_memory), style = itemKeyText, modifier = Modifier.weight(1f))
+                    CenterText(text = stringResource(Res.string.performance_page_cpu), style = itemKeyText, modifier = Modifier.weight(1f))
+                    CenterText(text = stringResource(Res.string.performance_page_process_name), style = itemKeyText, modifier = Modifier.weight(3f))
                 }
                 perfState.forEach {
                     Row(modifier = Modifier.padding(bottom = 10.dp)) {
