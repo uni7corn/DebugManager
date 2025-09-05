@@ -28,112 +28,111 @@ A Compose Multiplatform Desktop software, for Android device debugging.
 
 [license-image]: https://img.shields.io/github/license/stepheneasyshot/debugmanager?style=flat-square
 
-## 介绍
+## Introduction
+This is a desktop software for debugging Android devices, particularly in-car systems. It is based on Compose Multiplatform and supports Windows, Linux, and macOS platforms.
 
-Desktop端调试车机Android设备的软件，基于Compose Multiplatform，支持Windows，Linux，MacOS三个平台。
+## Declaration
+This software is for learning and communication purposes only. Do not use it for illegal activities, or you will be responsible for the consequences.
 
-## 声明
+## Feature Description
 
-本软件仅用于学习交流，请勿用于非法用途，否则后果自负。
-
-## 功能说明
-
-### 设备信息
+### Device Information
 
 ![](/screenshots/blogs_dark_deviceinfo.png)
 
-1. root和remount，这两个是点击后自动执行adbd获取root权限，remount重载。一般情况下这两个操作会在刚启动软件就自动执行，特殊的场景下可能需要手动点击。如果刚刷完机，最好打开软件后立即重启一次设备，使文件系统重载生效，否则很多文件相关的功能可能会执行失败
-2. 抓取trace，在进行性能分析时使用，自动执行为期10s的trace记录，抓取完毕会自动提取到电脑桌面
-3. 打开google设置，可以打开内置的原生Settings，一般需要开启某些调试开关时使用
-4. fastboot和recovery，这两个操作会直接重启到对应模式
-5. 打开投屏，可以将车机画面投屏到电脑上，在台架没有屏幕时，或者远距离操作车机时使用
-6. 录屏，可以自定义输入录屏时长，录屏期间屏幕上会显示一个手指点按位置的小点，记录操作，预设的录屏时间到了之后，会自动把录屏MP4提取到电脑桌面，之后不再显示手指点按位置的小点；
-7. 截屏，把此时屏幕上的显示图像自动提取到桌面。使用完毕建议点击清空缓存，以免占用车机存储空间。
-8. 最下面有一些模拟按键输入的按钮，模拟侧滑返回，回到launcher桌面，亮灭屏，音量加减等，还可以将文本输入到输入框内，输入功能目前只支持英文和数字。
+1. Root and Remount: Clicking these buttons automatically executes adbd to gain root access and remount the filesystem. In most cases, these operations are performed automatically upon software startup, but in special scenarios, they may need to be manually triggered. If you have just flashed a new system, it is best to reboot the device immediately after starting the software to ensure the filesystem reloads properly, otherwise many file-related functions may fail.
+2. Capture Trace: Used for performance analysis. It automatically records a 10-second trace. The trace file will be automatically extracted to the desktop upon completion.
+3. Open Google Settings: Can open the built-in native Settings app. This is typically used when you need to enable specific debugging switches.
+4. Fastboot and Recovery: These operations will reboot the device directly into the corresponding mode.
+5. Open Screencast: Mirrors the in-car system's screen to your computer. Useful when the test bench lacks a screen or for long-distance device operation.
+6. Screen Recording: You can set a custom recording duration. During the recording, a small dot will appear to show finger tap locations. After the preset time, the recorded MP4 file will be automatically extracted to your desktop, and the tap location dot will no longer be displayed.
+7. Screenshot: Automatically extracts a screenshot of the current screen display to your desktop. It is recommended to click "Clear Cache" after use to save space on the device.
+8. At the bottom, there are buttons to simulate key inputs, such as back, home, power (on/off), and volume up/down. You can also type text into the input field; this function currently only supports English letters and numbers.
 
-### APP管理
+### APP Management
 
 ![](/screenshots/blogs_cmp_appmanage.png)
 
-1. 上方的软件安装，可以选取电脑中的apk文件。再配置正确的安装参数，降级安装，覆盖安装等，可将apk安装到系统。一般在安装第三方的apk做验证时使用，需要注意车机系统内置的priv-app，不可以通过install来更新，只能通过下面的push功能来置换。
-2. 下面的app列表展示了此系统里的一些软件的名称，版本，包名，更新时间，列表可以选择筛选后的精简部分还是显示全部app。每个条目最右侧有三个点，点开则为更详细的操作弹窗。
-3. 打开应用界面，可以直接打开对应app的主界面，需要注意这个对于Activity驱动的普通app可以生效，而对于空调，座椅，allapp这种悬浮窗架构的app是不生效的。
-4. 卸载，一般用于直接run进去的app，或者第三方app，对于系统预制的app，直接利用uninstall卸载是没有用的，只能移除apk来实现。
-5. 提取apk，将对应系统内软件的apk文件提取到桌面。
-6. 置换apk，选择电脑端的apk文件，替换掉车机里面原来的apk，达到精准更新软件的目的，适合在不刷机的情况下进行小范围验证操作。选择文件后点击开始PUSH，就会自动替换了。在所有的待替换的apk更新完毕之后，重启设备，下次开机即为新的apk了。注意PUSH的耗时时间和apk体积有关，100Mb以上的apk文件，push后请等待10s以上，再进行重启。
+1. Install App: The "Software Installation" function at the top allows you to select an APK file from your computer. By configuring the correct installation parameters (e.g., downgrade, overwrite), you can install the APK onto the system. This is typically used for verifying third-party APKs. Note that system-built-in priv-apps cannot be updated with the install function; you must use the "Push" function below to replace them.
+2. App List: The app list below shows the name, version, package name, and update time of apps on the system. You can choose to display a simplified list or all apps. On the far right of each entry, a three-dot menu opens a detailed operation pop-up.
+3. Open App: This can directly open the main interface of the corresponding app. Note that this works for regular Activity-driven apps, but not for floating-window-based apps like those for A/C, seats, or all apps.
+4. Uninstall: Generally used for apps installed via run or third-party apps. For system-preloaded apps, direct uninstallation via uninstall is ineffective; they can only be removed by physically removing the APK file.
+5. Extract APK: Extracts the APK file of the corresponding software from the system to the desktop.
+6. Replace APK: Allows you to select an APK file from your computer to replace the original one on the device, enabling precise software updates. This is suitable for small-scale verification without a full system flash. After selecting the file, click "Start PUSH," and the replacement will happen automatically. After all pending APKs are replaced, reboot the device. The new APKs will be in effect on the next boot. Be aware that the push duration depends on the APK size; for APKs over 100MB, wait at least 10 seconds before rebooting.
 
-### 文件管理
+### File Management
 
 ![](/screenshots/blogs_cmp_filemanage.png)
 
-文件管理界面，提供了更精细的文件操作:
+The file management interface provides more detailed file operations:
 
-1. 可以在Android设备删除文件和文件夹
-2. 支持电脑文件的推送，android设备文件的拉取
-3. 现已支持文件拖动添加push功能
-4. 请非专业人员不要进行文件的删除和移动操作，以免造成车机异常。
-5. 上方提供了一些快捷操作按钮，可以返回上级页面，根目录，sdcard页面，priv-app页面，达到快速切换目录。
+1. Delete: You can delete files and folders on the Android device.
+2. Push/Pull: It supports pushing files from your computer and pulling files from the Android device.
+3. Drag-and-Drop: The push function now supports drag-and-drop.
+4. Warning: Non-professionals should not delete or move files to avoid causing device malfunctions.
+5. Quick Access: The top provides shortcut buttons to navigate to the parent directory, root directory, sdcard page, and priv-app page for quick directory switching.
 
-### 命令界面
-
-这个页面是一些输入指令的调试功能。
+### Command Interface
 
 ![](/screenshots/blogs_cmp_command_page.png)
 
-1. 左侧是terminal命令，可以执行一些低权限简单命令
-2. 右边是adb操作，注意这里没有加入上下文机制，适合执行单次生效的命令，像reboot，发送广播，更新系统数据库，拉起activity，拉起service等。
-3. 在车机上我们还联动语音可见模拟，进行快速调试
-4. 内部版本同时也支持了carservice信号可视化模拟
+1. This page provides debugging functions for entering commands.
+2. Terminal: The left side is for terminal commands, which can execute simple, low-privilege commands.
+3. ADB: The right side is for ADB operations. Note that it lacks a context mechanism and is suitable for single-shot commands like reboot, sending broadcasts, updating system databases, or launching activities/services.
+4. Voice Simulation: For in-car systems, we have also integrated a visible voice simulation for quick debugging.
+5. CarService Signal Simulation: The internal version also supports visual simulation of carservice signals.
 
-### 性能监测
+### Performance Monitoring
 
 ![](/screenshots/blogs_dark_performance.png)
 
-1. 左侧是系统总体占用概览，可以查看cpu和内存信息
-2. 右侧是根据每一个app，查看其各个进程的cpu和内存占用情况
+1. System Overview: The left side provides a general overview of system usage, showing CPU and memory information.
+2. App Details: The right side shows the CPU and memory usage for each process within a specific app.
 
-### AI体验
-
-现在的软件不集成下大模型，感觉都落伍了，做了下简单的对话UI页面。
+### AI Experience
 
 ![](/screenshots/blogs_cmp_debugmanager_ai_model.png)
 
-目前对接了Kimi开发者平台，Deepseek平台，后续准备基于llama.cpp集成本地模型。
+It feels outdated for software today to not integrate a large language model, so a simple chat UI has been created.
 
-### 关于页
+Currently, it is integrated with the Kimi and Deepseek developer platforms, with plans to integrate a local model based on llama.cpp in the future.
 
-1. 展示软件版本号，开源项目链接。
-2. 电脑上两个缓存文件夹的快速入口。
-3. 还有主题切换功能，目前是深浅两套，加入了渐变动画切换，后期计划完全适配Material Design，并加入多套动态主题。
+### About
+
+1. Information: Displays the software version and links to the open-source project.
+2. Cache Folders: Provides quick access to two cache folders on your computer.
+3. Theme: Includes a theme-switching function with light and dark themes and a gradient animation. There are plans to fully adapt to Material Design and add more dynamic themes later.
+4. Language: Supports English and Chinese languages now.
 
 ![](/screenshots/blogs_dark_about.png)
 
 ![](/screenshots/blogs_light_about.png)
 
-### 自适应布局
+### Adaptive Layout
 
-支持自适应布局，采用了最小窗口尺寸设定、流式布局和自动折叠侧边栏等策略。
+Supports adaptive layout with minimum window size settings, fluid layout, and automatic sidebar collapse.
 
-保证在不同窗口尺寸下，也能有较好的交互和页面表现。
+Ensures good interaction and page performance across different window sizes.
 
-一下是部分页面自适应的运行情况：
+Here are some screenshots of the adaptive layout in action:
 
 <div style="display: flex; justify-content: center;">
   <img src="/screenshots/blogs_cmp_debugmanager_file_narrow_screen.png" alt="Image 1" style="width: 45%; margin-right: 5%;">
   <img src="/screenshots/blogs_cmp_debugmanager_app_narrow_screen.png" alt="Image 2" style="width: 45%;">
 </div>
 
-### 单例与多窗口
-此前单例运行采用文件锁检测机制，如果缓存目录里有锁文件生成，就直接退出当前进程。
+### Singleton and Multi-window
 
-v2.4.0版本开始加入多窗口机制，有实例运行时，显示一个提示窗口，阻断后续的数据处理逻辑，提示用户当前有实例在运行，不能重复运行。
+Previously, singleton behavior was handled by a file-lock detection mechanism, where the process would exit if a lock file was found in the cache directory.
+
+Starting from version 2.4.0, a multi-window mechanism has been introduced. If an instance is already running, a warning window is displayed to block further data processing logic, notifying the user that the application cannot be run multiple times.
 
 ![](/screenshots/blogs_multi_window_singleinstance.png)
 
-### 开源库使用
+### Open-Source Libraries Used
 
-1. [AYA的服务端](https://github.com/liriliri/aya) 此前是一个apk的形式，安装进入设备，拉起Activity来读取所有的appinfo，存储Icon到本地，再拉取到Desktop，拿来显示
-2. [Ktor](https://ktor.io/) 用于搭建http服务
-3. [Koin](https://insert-koin.io/) 用于依赖注入
-4. [Coil](https://coil-kt.github.io/coil/) 用于图片加载
-5. [DataStore](https://klibs.io/project/androidx/androidx) 主题数据持久化存储
+1. [AYA Server](https://github.com/liriliri/aya) The previous method for retrieving app icons involved installing an APK and launching a service, which required dealing with permission issues. Using the AYA Server, a DEX file is pushed to the device to hook system services, which then starts as a Linux process to store the icons.
+2. [Ktor](https://ktor.io/) Used for building the HTTP service.
+3. [Koin](https://insert-koin.io/) Used for dependency injection.
+4. [Coil](https://coil-kt.github.io/coil/) Used for image loading.
+5. [DataStore](https://klibs.io/project/androidx/androidx) Used for persistent storage of theme and language.
