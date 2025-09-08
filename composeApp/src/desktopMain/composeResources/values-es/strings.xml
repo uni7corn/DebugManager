@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">Bienvenido a DebugManager</string>
+
+    <string name="dialog_confirm">Confirmar</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="dialog_confirm_exit">¿Confirmar la salida de la aplicación?</string>
+
+    <string name="side_menu_deviceinfo">Información del dispositivo</string>
+    <string name="side_menu_app_manege">Gestión de aplicaciones</string>
+    <string name="side_menu_command">Modo de comandos</string>
+    <string name="side_menu_filemanage">Gestión de archivos</string>
+    <string name="side_menu_performance">Monitorización del rendimiento</string>
+    <string name="side_menu_tools">Herramientas</string>
+    <string name="side_menu_about">Acerca de</string>
+    <string name="side_menu_aimodel">Modelo grande de IA</string>
+
+    <string name="language_english">Inglés</string>
+    <string name="language_chinese">Chino</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_russian">Ruso</string>
+    <string name="language_korean">Coreano</string>
+    <string name="language_japanese">Japonés</string>
+    <string name="language_hindi">Hindi</string>
+    <string name="language_french">Francés</string>
+    <string name="language_german">Alemán</string>
+    <string name="language_arabic">Árabe</string>
+    <string name="system_default">Seguir el sistema</string>
+
+    <string name="theme_dark">Oscuro</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_system">Seguir el sistema</string>
+
+    <string name="device_page_basic_info">Información básica del dispositivo</string>
+    <string name="device_page_refresh">Actualizar</string>
+    <string name="device_page_serial_number">Número de serie</string>
+    <string name="device_page_model_name">Modelo</string>
+    <string name="device_page_internal_code">Nombre de código interno</string>
+    <string name="device_page_manufacturer">Fabricante</string>
+    <string name="device_page_os_version">Versión del sistema operativo</string>
+    <string name="device_page_build_type">Tipo de compilación</string>
+    <string name="device_page_android_version">Versión de Android</string>
+    <string name="device_page_cpu_arch">Arquitectura de CPU</string>
+    <string name="device_page_resolution">Resolución</string>
+    <string name="device_page_dpi">Densidad de pantalla</string>
+
+    <string name="device_page_quick_operations">Operaciones rápidas</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">TO Recovery</string>
+    <string name="device_page_reboot">REBOOT</string>
+    <string name="device_page_to_fastboot">TO Fastboot</string>
+    <string name="device_page_shutdown">Apagar</string>
+    <string name="device_page_capture_trace">Capturar Trace</string>
+    <string name="device_page_google_settings">Configuración de Google</string>
+    <string name="device_page_display_id">ID de pantalla (por defecto 0)</string>
+    <string name="device_page_scrcpy">Scrcpy duplicar pantalla</string>
+
+    <string name="device_page_screen_record_capture">Grabar y capturar pantalla</string>
+    <string name="device_page_set_duration">Establecer duración (s)</string>
+    <string name="device_page_start_record">Iniciar grabación de pantalla</string>
+    <string name="device_page_capture_save">Guardar captura de pantalla</string>
+    <string name="device_page_clear_record_cache">Limpiar caché de grabación</string>
+    <string name="device_page_clear_capture_cache">Limpiar caché de capturas</string>
+
+    <string name="device_page_virtual_buttons">Botones virtuales</string>
+    <string name="device_page_back_button">Botón de atrás</string>
+    <string name="device_page_home_button">Ir a la pantalla de inicio</string>
+    <string name="device_page_recents_button">Tareas recientes</string>
+    <string name="device_page_wake_screen">Encender pantalla</string>
+    <string name="device_page_sleep_screen">Apagar pantalla</string>
+    <string name="device_page_lock_screen">Bloquear pantalla</string>
+    <string name="device_page_mute_switch">Interruptor de silencio</string>
+    <string name="device_page_volume_up">Volumen +</string>
+    <string name="device_page_volume_down">Volumen -</string>
+    <string name="device_page_input_text">Método de entrada (solo inglés)</string>
+    <string name="device_page_confirm">Confirmar</string>
+
+    <string name="device_page_remount_tip">Ejecutado. Si es el primer remount después de flashear, por favor reinicie el dispositivo primero</string>
+    <string name="device_page_trace_file_tip">Captura por defecto 10s. Al finalizar, la carpeta se abrirá automáticamente</string>
+    <string name="device_page_scrcpy_display_tip">El parámetro está vacío, el displayId por defecto es 0</string>
+    <string name="device_page_last_record_unfinish">La última grabación aún no se ha completado</string>
+    <string name="device_page_record_time_tip">Por favor, introduzca la duración de la grabación primero</string>
+    <string name="device_page_start_record_tip">Iniciado. La posición del clic del dedo se mostrará durante la grabación. Al finalizar, la carpeta se abrirá automáticamente</string>
+    <string name="device_page_recors_param_wrong">Por favor, introduzca un valor de duración correcto</string>
+    <string name="device_page_pull_file_tip">Al finalizar, la carpeta se abrirá automáticamente</string>
+    <string name="device_page_recording">Grabando, por favor, intente de nuevo más tarde</string>
+    <string name="device_page_chche_clear_tip">Caché borrada, espacio guardado</string>
+
+
+    <string name="app_manage_page_showsystemapp">Mostrar aplicaciones del sistema</string>
+    <string name="app_manage_page_switch_too_fast">¡Cambio demasiado rápido!</string>
+    <string name="app_manage_page_apk_file_drag_tip">Arrastre el archivo APK aquí o haga clic para seleccionar</string>
+    <string name="app_manage_page_install_apk">Instalar</string>
+    <string name="app_manage_page_apk_file_null_tip">Por favor, seleccione un archivo apk para instalar</string>
+    <string name="app_manage_page_yes">Sí</string>
+    <string name="app_manage_page_no">No</string>
+    <string name="app_manage_page_start_an_app">Abrir</string>
+    <string name="app_manage_page_force_stop">Forzar detención</string>
+    <string name="app_manage_page_show_app_info">Mostrar información</string>
+    <string name="app_manage_page_extract_apk">Extraer paquete de instalación</string>
+    <string name="app_manage_page_install_directly">Instalar directamente</string>
+    <string name="app_manage_page_reinstall">Reinstalar</string>
+    <string name="app_manage_page_test_install">Instalación de prueba</string>
+    <string name="app_manage_page_downgrade">Instalación de versión inferior</string>
+    <string name="app_manage_page_grant_permission">Instalar con permisos</string>
+    <string name="app_manage_page_is_system_app">¿Es una aplicación del sistema?</string>
+    <string name="app_manage_page_min_sdk_version">Versión mínima de SDK</string>
+    <string name="app_manage_page_target_sdk_version">Versión de SDK objetivo</string>
+    <string name="app_manage_page_apk_size">Tamaño del paquete de instalación</string>
+    <string name="app_manage_page_install_path">Ruta de instalación</string>
+    <string name="app_manage_page_last_update_time">Última hora de actualización</string>
+
+    <string name="file_manage_page_delete">Eliminar</string>
+    <string name="file_manage_page_move">Mover a</string>
+    <string name="file_manage_page_copy">Copiar a</string>
+    <string name="file_manage_page_pull">Extraer al PC</string>
+    <string name="file_manage_page_copy_path">Copiar ruta del archivo</string>
+    <string name="file_manage_page_root_tip">Ya está en el directorio raíz</string>
+    <string name="file_manage_page_choose_first_tip">Por favor, seleccione un archivo primero</string>
+    <string name="file_manage_page_copied_tip">Ruta copiada al portapapeles</string>
+    <string name="file_manage_page_drag_tip">Puede arrastrar archivos aquí para la operación de "push"</string>
+    <string name="file_manage_page_file_modify_time">Hora de modificación</string>
+    <string name="file_manage_page_delete_confirm">¿Confirmar la eliminación de %1$s?</string>
+
+    <string name="command_page_terminal">Terminal</string>
+    <string name="command_page_command_tip">Por favor, introduzca el comando</string>
+    <string name="command_page_execute">Ejecutar</string>
+    <string name="command_page_input_command">Introducir comando de Terminal</string>
+    <string name="command_page_android_shell">Shell de Android</string>
+    <string name="command_page_adb_command">Introducir comando adb</string>
+
+    <string name="performance_page_cpu_overview">Visión general de la CPU</string>
+    <string name="performance_page_cpu_total">Total</string>
+    <string name="performance_page_cpu_user">Usuario</string>
+    <string name="performance_page_cpu_sys">Sistema</string>
+    <string name="performance_page_cpu_nice">Nice (baja prioridad)</string>
+    <string name="performance_page_cpu_idle">Inactivo</string>
+    <string name="performance_page_cpu_io">Espera de E/S</string>
+    <string name="performance_page_cpu_irq">IRQ (interrupción de hardware)</string>
+    <string name="performance_page_cpu_sirq">SIRQ (interrupción de software)</string>
+    <string name="performance_page_cpu_host">Host (máquina virtual)</string>
+    <string name="performance_page_memory_overview">Visión general de la memoria</string>
+    <string name="performance_page_memory_total">Total</string>
+    <string name="performance_page_memory_free">Libre</string>
+    <string name="performance_page_memory_used">Usado</string>
+    <string name="performance_page_app_performance">Rendimiento de la aplicación</string>
+    <string name="performance_page_user_id">ID de usuario</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">Memoria física</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">Nombre del proceso</string>
+
+    <string name="ai_page_input_chat_word">Introducir texto de conversación</string>
+    <string name="ai_page_empty_tip">Por favor, introduzca el contenido de la conversación primero</string>
+    <string name="ai_page_send">Enviar</string>
+
+    <string name="tools_log_page_title">Procesamiento de archivos de registro</string>
+    <string name="tools_log_page_drag_drop_tip">Arrastre la carpeta de registro aquí o haga clic para seleccionar</string>
+    <string name="tools_log_page_tag_hint">Etiqueta (distingue mayúsculas de minúsculas)</string>
+    <string name="tools_log_page_process_button">Comenzar a procesar</string>
+    <string name="tools_log_page_process_tip">Antes de comenzar, intente reducir el alcance y eliminar registros irrelevantes para evitar que la búsqueda tarde demasiado</string>
+    <string name="tools_log_page_tag_max_tip">Se pueden agregar un máximo de 10 etiquetas</string>
+    <string name="tools_log_page_tag_exist_tip">Esta etiqueta ya existe</string>
+    <string name="tools_log_page_tag_empty_tip">Por favor, introduzca una etiqueta primero</string>
+    <string name="tools_log_page_folder_empty_tip">Por favor, seleccione un archivo de registro primero</string>
+    <string name="tools_log_page_process_start_tip">Procesamiento iniciado. Al finalizar, la carpeta correspondiente se abrirá automáticamente</string>
+
+    <string name="about_page_theme_setting">Configuración del tema</string>
+    <string name="about_page_language_setting">Configuración del idioma</string>
+    <string name="about_page_cache_folder_path">Ruta de caché</string>
+    <string name="about_page_open_cache_folder">Abrir carpeta de caché</string>
+    <string name="about_page_pulled_folder_path">Ruta del archivo PULL</string>
+    <string name="about_page_open_pulled_folder">Abrir carpeta PULL</string>
+</resources>

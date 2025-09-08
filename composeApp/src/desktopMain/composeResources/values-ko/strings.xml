@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">DebugManager에 오신 것을 환영합니다</string>
+
+    <string name="dialog_confirm">확인</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_confirm_exit">앱을 종료하시겠습니까?</string>
+
+    <string name="side_menu_deviceinfo">장치 정보</string>
+    <string name="side_menu_app_manege">앱 관리</string>
+    <string name="side_menu_command">명령 모드</string>
+    <string name="side_menu_filemanage">파일 관리</string>
+    <string name="side_menu_performance">성능 모니터링</string>
+    <string name="side_menu_tools">유틸리티</string>
+    <string name="side_menu_about">정보</string>
+    <string name="side_menu_aimodel">AI 대형 모델</string>
+
+    <string name="language_english">영어</string>
+    <string name="language_chinese">중국어</string>
+    <string name="language_spanish">스페인어</string>
+    <string name="language_russian">러시아어</string>
+    <string name="language_korean">한국어</string>
+    <string name="language_japanese">일본어</string>
+    <string name="language_hindi">힌디어</string>
+    <string name="language_french">프랑스어</string>
+    <string name="language_german">독일어</string>
+    <string name="language_arabic">아랍어</string>
+    <string name="system_default">시스템 설정 따르기</string>
+
+    <string name="theme_dark">어두움</string>
+    <string name="theme_light">밝음</string>
+    <string name="theme_system">시스템 설정 따르기</string>
+
+    <string name="device_page_basic_info">장치 기본 정보</string>
+    <string name="device_page_refresh">새로고침</string>
+    <string name="device_page_serial_number">일련번호</string>
+    <string name="device_page_model_name">모델</string>
+    <string name="device_page_internal_code">내부 코드명</string>
+    <string name="device_page_manufacturer">제조업체</string>
+    <string name="device_page_os_version">OS 버전</string>
+    <string name="device_page_build_type">빌드 유형</string>
+    <string name="device_page_android_version">Android 버전</string>
+    <string name="device_page_cpu_arch">CPU 아키텍처</string>
+    <string name="device_page_resolution">해상도</string>
+    <string name="device_page_dpi">디스플레이 밀도</string>
+
+    <string name="device_page_quick_operations">빠른 작업</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">Recovery로 이동</string>
+    <string name="device_page_reboot">재부팅</string>
+    <string name="device_page_to_fastboot">Fastboot로 이동</string>
+    <string name="device_page_shutdown">종료</string>
+    <string name="device_page_capture_trace">트레이스 캡처</string>
+    <string name="device_page_google_settings">Google 설정</string>
+    <string name="device_page_display_id">디스플레이 ID (기본값 0)</string>
+    <string name="device_page_scrcpy">Scrcpy 스크린 미러링</string>
+
+    <string name="device_page_screen_record_capture">화면 녹화 및 스크린샷</string>
+    <string name="device_page_set_duration">지속 시간 설정(초)</string>
+    <string name="device_page_start_record">녹화 시작</string>
+    <string name="device_page_capture_save">스크린샷 저장</string>
+    <string name="device_page_clear_record_cache">녹화 캐시 지우기</string>
+    <string name="device_page_clear_capture_cache">스크린샷 이미지 캐시 지우기</string>
+
+    <string name="device_page_virtual_buttons">가상 키</string>
+    <string name="device_page_back_button">뒤로 가기 키</string>
+    <string name="device_page_home_button">홈으로</string>
+    <string name="device_page_recents_button">최근 작업</string>
+    <string name="device_page_wake_screen">화면 켜기</string>
+    <string name="device_page_sleep_screen">화면 끄기</string>
+    <string name="device_page_lock_screen">화면 잠금</string>
+    <string name="device_page_mute_switch">음소거 스위치</string>
+    <string name="device_page_volume_up">볼륨 +</string>
+    <string name="device_page_volume_down">볼륨 -</string>
+    <string name="device_page_input_text">입력기 (영어만 해당)</string>
+    <string name="device_page_confirm">확인</string>
+
+    <string name="device_page_remount_tip">실행되었습니다. 플래시 후 첫 번째 리마운트인 경우 먼저 장치를 재부팅하십시오</string>
+    <string name="device_page_trace_file_tip">기본적으로 10초 동안 캡처합니다. 완료되면 폴더가 자동으로 열립니다</string>
+    <string name="device_page_scrcpy_display_tip">매개변수가 비어 있습니다. displayId는 기본값 0으로 설정됩니다</string>
+    <string name="device_page_last_record_unfinish">이전 녹화가 아직 완료되지 않았습니다</string>
+    <string name="device_page_record_time_tip">먼저 녹화 시간을 입력하십시오</string>
+    <string name="device_page_start_record_tip">시작되었습니다. 녹화 중 손가락 클릭 위치가 표시됩니다. 완료되면 폴더가 자동으로 열립니다</string>
+    <string name="device_page_recors_param_wrong">올바른 시간 값을 입력하십시오</string>
+    <string name="device_page_pull_file_tip">완료되면 폴더가 자동으로 열립니다</string>
+    <string name="device_page_recording">녹화 중입니다. 잠시 후 다시 시도하십시오</string>
+    <string name="device_page_chche_clear_tip">캐시가 지워졌습니다. 공간이 확보되었습니다</string>
+
+
+    <string name="app_manage_page_showsystemapp">시스템 앱 표시</string>
+    <string name="app_manage_page_switch_too_fast">너무 빨리 전환했습니다~</string>
+    <string name="app_manage_page_apk_file_drag_tip">APK 파일을 여기로 드래그하거나 클릭하여 선택</string>
+    <string name="app_manage_page_install_apk">설치</string>
+    <string name="app_manage_page_apk_file_null_tip">설치할 apk 파일을 선택하십시오</string>
+    <string name="app_manage_page_yes">예</string>
+    <string name="app_manage_page_no">아니오</string>
+    <string name="app_manage_page_start_an_app">열기</string>
+    <string name="app_manage_page_force_stop">강제 중지</string>
+    <string name="app_manage_page_show_app_info">정보 표시</string>
+    <string name="app_manage_page_extract_apk">설치 패키지 추출</string>
+    <string name="app_manage_page_install_directly">직접 설치</string>
+    <string name="app_manage_page_reinstall">재설치</string>
+    <string name="app_manage_page_test_install">테스트 설치</string>
+    <string name="app_manage_page_downgrade">다운그레이드 설치</string>
+    <string name="app_manage_page_grant_permission">권한 부여 설치</string>
+    <string name="app_manage_page_is_system_app">시스템 앱인가요?</string>
+    <string name="app_manage_page_min_sdk_version">최소 SDK 버전</string>
+    <string name="app_manage_page_target_sdk_version">대상 SDK 버전</string>
+    <string name="app_manage_page_apk_size">설치 패키지 크기</string>
+    <string name="app_manage_page_install_path">설치 경로</string>
+    <string name="app_manage_page_last_update_time">최종 업데이트 시간</string>
+
+    <string name="file_manage_page_delete">삭제</string>
+    <string name="file_manage_page_move">이동</string>
+    <string name="file_manage_page_copy">복사</string>
+    <string name="file_manage_page_pull">PC로 가져오기</string>
+    <string name="file_manage_page_copy_path">파일 경로 복사</string>
+    <string name="file_manage_page_root_tip">이미 루트 디렉터리에 있습니다</string>
+    <string name="file_manage_page_choose_first_tip">먼저 파일을 선택하십시오</string>
+    <string name="file_manage_page_copied_tip">경로가 클립보드에 복사되었습니다</string>
+    <string name="file_manage_page_drag_tip">파일을 여기로 직접 드래그하여 푸시 작업을 수행할 수 있습니다</string>
+    <string name="file_manage_page_file_modify_time">수정 시간</string>
+    <string name="file_manage_page_delete_confirm">%1$s를 삭제하시겠습니까?</string>
+
+    <string name="command_page_terminal">터미널</string>
+    <string name="command_page_command_tip">명령어를 입력하십시오</string>
+    <string name="command_page_execute">실행</string>
+    <string name="command_page_input_command">터미널 명령어 입력</string>
+    <string name="command_page_android_shell">Android 셸</string>
+    <string name="command_page_adb_command">adb 명령어 입력</string>
+
+    <string name="performance_page_cpu_overview">CPU 개요</string>
+    <string name="performance_page_cpu_total">총량</string>
+    <string name="performance_page_cpu_user">사용자</string>
+    <string name="performance_page_cpu_sys">시스템</string>
+    <string name="performance_page_cpu_nice">낮은 우선순위</string>
+    <string name="performance_page_cpu_idle">유휴</string>
+    <string name="performance_page_cpu_io">IO 대기</string>
+    <string name="performance_page_cpu_irq">하드웨어 인터럽트</string>
+    <string name="performance_page_cpu_sirq">소프트웨어 인터럽트</string>
+    <string name="performance_page_cpu_host">호스트 (가상 머신)</string>
+    <string name="performance_page_memory_overview">메모리 개요</string>
+    <string name="performance_page_memory_total">총량</string>
+    <string name="performance_page_memory_free">자유</string>
+    <string name="performance_page_memory_used">사용됨</string>
+    <string name="performance_page_app_performance">앱 성능</string>
+    <string name="performance_page_user_id">사용자 ID</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">물리적 메모리</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">프로세스 이름</string>
+
+    <string name="ai_page_input_chat_word">대화 내용 입력</string>
+    <string name="ai_page_empty_tip">먼저 대화 내용을 입력하십시오</string>
+    <string name="ai_page_send">보내기</string>
+
+    <string name="tools_log_page_title">로그 파일 처리</string>
+    <string name="tools_log_page_drag_drop_tip">로그 폴더를 여기로 드래그하거나 클릭하여 선택</string>
+    <string name="tools_log_page_tag_hint">태그 (대소문자 구분)</string>
+    <string name="tools_log_page_process_button">처리 시작</string>
+    <string name="tools_log_page_process_tip">시작하기 전에 검색 시간을 줄이기 위해 범위를 좁히고 관련 없는 로그를 삭제하는 것이 좋습니다</string>
+    <string name="tools_log_page_tag_max_tip">최대 10개의 태그만 추가할 수 있습니다</string>
+    <string name="tools_log_page_tag_exist_tip">이미 존재하는 태그입니다</string>
+    <string name="tools_log_page_tag_empty_tip">먼저 태그를 입력하십시오</string>
+    <string name="tools_log_page_folder_empty_tip">먼저 로그 파일을 선택하십시오</string>
+    <string name="tools_log_page_process_start_tip">처리가 시작되었습니다. 완료되면 해당 폴더가 자동으로 열립니다</string>
+
+    <string name="about_page_theme_setting">테마 설정</string>
+    <string name="about_page_language_setting">언어 설정</string>
+    <string name="about_page_cache_folder_path">캐시 경로</string>
+    <string name="about_page_open_cache_folder">캐시 폴더 열기</string>
+    <string name="about_page_pulled_folder_path">PULL 파일 경로</string>
+    <string name="about_page_open_pulled_folder">PULL 폴더 열기</string>
+</resources>

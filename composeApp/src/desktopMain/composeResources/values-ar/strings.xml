@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">مرحبًا بك في DebugManager</string>
+
+    <string name="dialog_confirm">تأكيد</string>
+    <string name="dialog_cancel">إلغاء</string>
+    <string name="dialog_confirm_exit">تأكيد الخروج من التطبيق؟</string>
+
+    <string name="side_menu_deviceinfo">معلومات الجهاز</string>
+    <string name="side_menu_app_manege">إدارة التطبيقات</string>
+    <string name="side_menu_command">وضع الأوامر</string>
+    <string name="side_menu_filemanage">إدارة الملفات</string>
+    <string name="side_menu_performance">مراقبة الأداء</string>
+    <string name="side_menu_tools">أدوات مساعدة</string>
+    <string name="side_menu_about">حول</string>
+    <string name="side_menu_aimodel">نموذج الذكاء الاصطناعي</string>
+
+    <string name="language_english">الإنجليزية</string>
+    <string name="language_chinese">الصينية</string>
+    <string name="language_spanish">الإسبانية</string>
+    <string name="language_russian">الروسية</string>
+    <string name="language_korean">الكورية</string>
+    <string name="language_japanese">اليابانية</string>
+    <string name="language_hindi">الهندية</string>
+    <string name="language_french">الفرنسية</string>
+    <string name="language_german">الألمانية</string>
+    <string name="language_arabic">العربية</string>
+    <string name="system_default">افتراضي النظام</string>
+
+    <string name="theme_dark">داكن</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_system">افتراضي النظام</string>
+
+    <string name="device_page_basic_info">معلومات الجهاز الأساسية</string>
+    <string name="device_page_refresh">تحديث</string>
+    <string name="device_page_serial_number">الرقم التسلسلي</string>
+    <string name="device_page_model_name">الطراز</string>
+    <string name="device_page_internal_code">الاسم الرمزي الداخلي</string>
+    <string name="device_page_manufacturer">الشركة المصنعة</string>
+    <string name="device_page_os_version">إصدار نظام التشغيل</string>
+    <string name="device_page_build_type">نوع بناء الإصدار</string>
+    <string name="device_page_android_version">إصدار Android</string>
+    <string name="device_page_cpu_arch">هندسة وحدة المعالجة المركزية</string>
+    <string name="device_page_resolution">الدقة</string>
+    <string name="device_page_dpi">كثافة العرض</string>
+
+    <string name="device_page_quick_operations">عمليات سريعة</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">TO RECOVERY</string>
+    <string name="device_page_reboot">REBOOT</string>
+    <string name="device_page_to_fastboot">TO FASTBOOT</string>
+    <string name="device_page_shutdown">إيقاف التشغيل</string>
+    <string name="device_page_capture_trace">التقاط Trace</string>
+    <string name="device_page_google_settings">إعدادات Google</string>
+    <string name="device_page_display_id">معرف العرض (افتراضي 0)</string>
+    <string name="device_page_scrcpy">عرض الشاشة Scrcpy</string>
+
+    <string name="device_page_screen_record_capture">تسجيل الشاشة والتقاطها</string>
+    <string name="device_page_set_duration">تعيين المدة (ثانية)</string>
+    <string name="device_page_start_record">بدء التسجيل</string>
+    <string name="device_page_capture_save">حفظ لقطة الشاشة</string>
+    <string name="device_page_clear_record_cache">مسح ذاكرة التخزين المؤقت للتسجيل</string>
+    <string name="device_page_clear_capture_cache">مسح ذاكرة التخزين المؤقت للقطات الشاشة</string>
+
+    <string name="device_page_virtual_buttons">الأزرار الافتراضية</string>
+    <string name="device_page_back_button">زر العودة</string>
+    <string name="device_page_home_button">العودة إلى الشاشة الرئيسية</string>
+    <string name="device_page_recents_button">التطبيقات الحديثة</string>
+    <string name="device_page_wake_screen">تشغيل الشاشة</string>
+    <string name="device_page_sleep_screen">إطفاء الشاشة</string>
+    <string name="device_page_lock_screen">قفل الشاشة</string>
+    <string name="device_page_mute_switch">زر كتم الصوت</string>
+    <string name="device_page_volume_up">الصوت+</string>
+    <string name="device_page_volume_down">الصوت-</string>
+    <string name="device_page_input_text">طريقة الإدخال (الإنجليزية فقط)</string>
+    <string name="device_page_confirm">تأكيد</string>
+
+    <string name="device_page_remount_tip">تم التنفيذ، إذا كانت هذه هي المرة الأولى لإعادة التحميل بعد تثبيت ROM، يرجى إعادة تشغيل الجهاز أولاً</string>
+    <string name="device_page_trace_file_tip">يتم الالتقاط الافتراضي لمدة 10 ثوانٍ، وسيتم فتح المجلد تلقائيًا بعد الانتهاء</string>
+    <string name="device_page_scrcpy_display_tip">المعلمة فارغة، سيتم تعيين معرف العرض الافتراضي على 0</string>
+    <string name="device_page_last_record_unfinish">التسجيل السابق لم يكتمل بعد</string>
+    <string name="device_page_record_time_tip">الرجاء إدخال مدة التسجيل أولاً</string>
+    <string name="device_page_start_record_tip">تم البدء، ستظهر مواضع النقر بالأصابع أثناء التسجيل، وسيتم فتح المجلد تلقائيًا بعد الانتهاء</string>
+    <string name="device_page_recors_param_wrong">الرجاء إدخال قيمة مدة صحيحة</string>
+    <string name="device_page_pull_file_tip">سيتم فتح المجلد تلقائيًا بعد الانتهاء</string>
+    <string name="device_page_recording">جاري تسجيل الشاشة، يرجى المحاولة لاحقًا</string>
+    <string name="device_page_chche_clear_tip">تم مسح ذاكرة التخزين المؤقت، لتوفير المساحة</string>
+
+
+    <string name="app_manage_page_showsystemapp">إظهار تطبيقات النظام</string>
+    <string name="app_manage_page_switch_too_fast">التبديل سريع جدًا~</string>
+    <string name="app_manage_page_apk_file_drag_tip">اسحب ملف APK إلى هنا أو انقر للاختيار</string>
+    <string name="app_manage_page_install_apk">تثبيت</string>
+    <string name="app_manage_page_apk_file_null_tip">الرجاء تحديد ملف APK للتثبيت</string>
+    <string name="app_manage_page_yes">نعم</string>
+    <string name="app_manage_page_no">لا</string>
+    <string name="app_manage_page_start_an_app">فتح</string>
+    <string name="app_manage_page_force_stop">إيقاف إجباري</string>
+    <string name="app_manage_page_show_app_info">عرض المعلومات</string>
+    <string name="app_manage_page_extract_apk">استخراج حزمة التثبيت</string>
+    <string name="app_manage_page_install_directly">تثبيت مباشر</string>
+    <string name="app_manage_page_reinstall">إعادة التثبيت</string>
+    <string name="app_manage_page_test_install">تثبيت للاختبار</string>
+    <string name="app_manage_page_downgrade">تثبيت إصدار سابق</string>
+    <string name="app_manage_page_grant_permission">تثبيت مع صلاحيات</string>
+    <string name="app_manage_page_is_system_app">هل هو تطبيق نظام</string>
+    <string name="app_manage_page_min_sdk_version">أدنى إصدار SDK</string>
+    <string name="app_manage_page_target_sdk_version">إصدار SDK الهدف</string>
+    <string name="app_manage_page_apk_size">حجم حزمة التثبيت</string>
+    <string name="app_manage_page_install_path">مسار التثبيت</string>
+    <string name="app_manage_page_last_update_time">آخر وقت تحديث</string>
+
+    <string name="file_manage_page_delete">حذف</string>
+    <string name="file_manage_page_move">نقل إلى</string>
+    <string name="file_manage_page_copy">نسخ إلى</string>
+    <string name="file_manage_page_pull">سحب إلى الكمبيوتر</string>
+    <string name="file_manage_page_copy_path">نسخ مسار الملف</string>
+    <string name="file_manage_page_root_tip">بالفعل في المجلد الجذر</string>
+    <string name="file_manage_page_choose_first_tip">الرجاء تحديد ملف أولاً</string>
+    <string name="file_manage_page_copied_tip">تم نسخ المسار إلى الحافظة</string>
+    <string name="file_manage_page_drag_tip">يمكن سحب الملفات مباشرة إلى هنا لتنفيذ عملية "push"</string>
+    <string name="file_manage_page_file_modify_time">وقت التعديل</string>
+    <string name="file_manage_page_delete_confirm">تأكيد حذف %1$s؟</string>
+
+    <string name="command_page_terminal">الطرفية</string>
+    <string name="command_page_command_tip">الرجاء إدخال الأمر</string>
+    <string name="command_page_execute">تنفيذ</string>
+    <string name="command_page_input_command">إدخال أمر الطرفية</string>
+    <string name="command_page_android_shell">قشرة Android</string>
+    <string name="command_page_adb_command">إدخال أمر adb</string>
+
+    <string name="performance_page_cpu_overview">نظرة عامة على وحدة المعالجة المركزية</string>
+    <string name="performance_page_cpu_total">الإجمالي</string>
+    <string name="performance_page_cpu_user">المستخدم</string>
+    <string name="performance_page_cpu_sys">النظام</string>
+    <string name="performance_page_cpu_nice">الأولوية المنخفضة (Nice)</string>
+    <string name="performance_page_cpu_idle">الخمول</string>
+    <string name="performance_page_cpu_io">انتظار الإدخال/الإخراج</string>
+    <string name="performance_page_cpu_irq">مقاطعة صلبة (IRQ)</string>
+    <string name="performance_page_cpu_sirq">مقاطعة ناعمة (SIRQ)</string>
+    <string name="performance_page_cpu_host">الخادم (جهاز افتراضي)</string>
+    <string name="performance_page_memory_overview">نظرة عامة على الذاكرة</string>
+    <string name="performance_page_memory_total">الإجمالي</string>
+    <string name="performance_page_memory_free">حر</string>
+    <string name="performance_page_memory_used">مستخدم</string>
+    <string name="performance_page_app_performance">أداء التطبيق</string>
+    <string name="performance_page_user_id">معرف المستخدم</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">الذاكرة الفيزيائية</string>
+    <string name="performance_page_cpu">وحدة المعالجة المركزية</string>
+    <string name="performance_page_process_name">اسم العملية</string>
+
+    <string name="ai_page_input_chat_word">إدخال نص المحادثة</string>
+    <string name="ai_page_empty_tip">الرجاء إدخال محتوى المحادثة أولاً</string>
+    <string name="ai_page_send">إرسال</string>
+
+    <string name="tools_log_page_title">معالجة ملفات السجل</string>
+    <string name="tools_log_page_drag_drop_tip">اسحب مجلد السجل إلى هنا أو انقر للاختيار</string>
+    <string name="tools_log_page_tag_hint">علامة (حساسة لحالة الأحرف)</string>
+    <string name="tools_log_page_process_button">بدء المعالجة</string>
+    <string name="tools_log_page_process_tip">قبل البدء، حاول تضييق النطاق قدر الإمكان وحذف السجلات غير ذات الصلة لتجنب استغراق البحث وقتًا طويلاً</string>
+    <string name="tools_log_page_tag_max_tip">يمكن إضافة 10 علامات فقط كحد أقصى</string>
+    <string name="tools_log_page_tag_exist_tip">العلامة موجودة بالفعل</string>
+    <string name="tools_log_page_tag_empty_tip">الرجاء إدخال علامة أولاً</string>
+    <string name="tools_log_page_folder_empty_tip">الرجاء تحديد ملف سجل أولاً</string>
+    <string name="tools_log_page_process_start_tip">بدأت المعالجة، وسيتم فتح المجلد تلقائيًا بعد الانتهاء</string>
+
+    <string name="about_page_theme_setting">إعدادات المظهر</string>
+    <string name="about_page_language_setting">إعدادات اللغة</string>
+    <string name="about_page_cache_folder_path">مسار ذاكرة التخزين المؤقت</string>
+    <string name="about_page_open_cache_folder">فتح مجلد ذاكرة التخزين المؤقت</string>
+    <string name="about_page_pulled_folder_path">مسار ملف PULL</string>
+    <string name="about_page_open_pulled_folder">فتح مجلد PULL</string>
+</resources>

@@ -47,11 +47,11 @@
     <string name="device_page_dpi">डिस्प्ले घनत्व</string>
 
     <string name="device_page_quick_operations">त्वरित संचालन</string>
-    <string name="device_page_root">रूट</string>
-    <string name="device_page_remount">रीमाउंट</string>
-    <string name="device_page_to_recovery">रिकवरी पर जाएं</string>
-    <string name="device_page_reboot">रीबूट करें</string>
-    <string name="device_page_to_fastboot">फ़ास्टबूट पर जाएं</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">TO RECOVERY</string>
+    <string name="device_page_reboot">REBOOT</string>
+    <string name="device_page_to_fastboot">TO FASTBOOT</string>
     <string name="device_page_shutdown">बंद करें</string>
     <string name="device_page_capture_trace">ट्रेस कैप्चर करें</string>
     <string name="device_page_google_settings">Google सेटिंग्स</string>

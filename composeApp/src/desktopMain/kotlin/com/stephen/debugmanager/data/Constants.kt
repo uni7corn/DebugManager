@@ -9,10 +9,16 @@ import com.stephen.composeapp.generated.resources.ic_robot
 import com.stephen.composeapp.generated.resources.ic_software
 import com.stephen.composeapp.generated.resources.ic_terminal
 import com.stephen.composeapp.generated.resources.ic_tools
+import com.stephen.composeapp.generated.resources.language_arabic
 import com.stephen.composeapp.generated.resources.language_chinese
 import com.stephen.composeapp.generated.resources.language_english
+import com.stephen.composeapp.generated.resources.language_french
+import com.stephen.composeapp.generated.resources.language_german
 import com.stephen.composeapp.generated.resources.language_hindi
+import com.stephen.composeapp.generated.resources.language_japanese
+import com.stephen.composeapp.generated.resources.language_korean
 import com.stephen.composeapp.generated.resources.language_russian
+import com.stephen.composeapp.generated.resources.language_spanish
 import com.stephen.composeapp.generated.resources.side_menu_about
 import com.stephen.composeapp.generated.resources.side_menu_aimodel
 import com.stephen.composeapp.generated.resources.side_menu_app_manege
@@ -60,6 +66,12 @@ object Constants {
         LanguageState.ENGLISH to Res.string.language_english,
         LanguageState.RUSSIAN to Res.string.language_russian,
         LanguageState.HINDI to Res.string.language_hindi,
+        LanguageState.SPANISH to Res.string.language_spanish,
+        LanguageState.FRENCH to Res.string.language_french,
+        LanguageState.GERMAN to Res.string.language_german,
+        LanguageState.KOREAN to Res.string.language_korean,
+        LanguageState.JAPANESE to Res.string.language_japanese,
+        LanguageState.ARABIC to Res.string.language_arabic,
         LanguageState.AUTO to Res.string.system_default
     )
 }

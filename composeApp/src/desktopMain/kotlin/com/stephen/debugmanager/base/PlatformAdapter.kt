@@ -173,11 +173,6 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
                 errorBuilder.append(errorLine).append("\n")
                 trySend(errorBuilder.toString())
             }
-
-            // 等待进程结束
-            val exitCode = process.waitFor()
-            LogUtils.printLog("process exit code: $exitCode")
-
             // 拼接最终结果
             val overallResult = StringBuilder()
             if (outputBuilder.isNotEmpty()) {
@@ -289,6 +284,12 @@ fun getLanguageLocale(languageState: Int): Locale {
         LanguageState.ENGLISH -> Locale("en", "US")
         LanguageState.RUSSIAN -> Locale("ru", "RU")
         LanguageState.HINDI -> Locale("hi", "IN")
+        LanguageState.SPANISH -> Locale("es", "ES")
+        LanguageState.FRENCH -> Locale("fr", "FR")
+        LanguageState.GERMAN -> Locale("de", "DE")
+        LanguageState.KOREAN -> Locale("ko", "KR")
+        LanguageState.JAPANESE -> Locale("ja", "JP")
+        LanguageState.ARABIC -> Locale("ar", "SA")
         else -> PlatformAdapter.systemLocale
     }
 }
@@ -304,6 +305,12 @@ fun getLanguageCode(languageState: Int): String {
         LanguageState.ENGLISH -> "en"
         LanguageState.RUSSIAN -> "ru"
         LanguageState.HINDI -> "hi"
+        LanguageState.SPANISH -> "es"
+        LanguageState.FRENCH -> "fr"
+        LanguageState.GERMAN -> "de"
+        LanguageState.KOREAN -> "ko"
+        LanguageState.JAPANESE -> "ja"
+        LanguageState.ARABIC -> "ar"
         else -> PlatformAdapter.systemLanguage
     }
 }

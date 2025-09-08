@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">DebugManagerへようこそ</string>
+
+    <string name="dialog_confirm">確認</string>
+    <string name="dialog_cancel">キャンセル</string>
+    <string name="dialog_confirm_exit">アプリケーションを終了しますか？</string>
+
+    <string name="side_menu_deviceinfo">デバイス情報</string>
+    <string name="side_menu_app_manege">アプリ管理</string>
+    <string name="side_menu_command">コマンドモード</string>
+    <string name="side_menu_filemanage">ファイル管理</string>
+    <string name="side_menu_performance">性能モニタリング</string>
+    <string name="side_menu_tools">ユーティリティ</string>
+    <string name="side_menu_about">について</string>
+    <string name="side_menu_aimodel">AI大規模モデル</string>
+
+    <string name="language_english">英語</string>
+    <string name="language_chinese">中国語</string>
+    <string name="language_spanish">スペイン語</string>
+    <string name="language_russian">ロシア語</string>
+    <string name="language_korean">韓国語</string>
+    <string name="language_japanese">日本語</string>
+    <string name="language_hindi">ヒンディー語</string>
+    <string name="language_french">フランス語</string>
+    <string name="language_german">ドイツ語</string>
+    <string name="language_arabic">アラビア語</string>
+    <string name="system_default">システムに従う</string>
+
+    <string name="theme_dark">ダーク</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_system">システムに従う</string>
+
+    <string name="device_page_basic_info">デバイス基本情報</string>
+    <string name="device_page_refresh">更新</string>
+    <string name="device_page_serial_number">シリアルナンバー</string>
+    <string name="device_page_model_name">モデル</string>
+    <string name="device_page_internal_code">内部コード名</string>
+    <string name="device_page_manufacturer">製造元</string>
+    <string name="device_page_os_version">OSバージョン</string>
+    <string name="device_page_build_type">ビルドタイプ</string>
+    <string name="device_page_android_version">Androidバージョン</string>
+    <string name="device_page_cpu_arch">CPUアーキテクチャ</string>
+    <string name="device_page_resolution">解像度</string>
+    <string name="device_page_dpi">ディスプレイ密度</string>
+
+    <string name="device_page_quick_operations">ショートカット操作</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">Recoveryへ</string>
+    <string name="device_page_reboot">再起動</string>
+    <string name="device_page_to_fastboot">Fastbootへ</string>
+    <string name="device_page_shutdown">シャットダウン</string>
+    <string name="device_page_capture_trace">トレースキャプチャ</string>
+    <string name="device_page_google_settings">Google設定</string>
+    <string name="device_page_display_id">ディスプレイID（デフォルトは0）</string>
+    <string name="device_page_scrcpy">Scrcpyスクリーンミラーリング</string>
+
+    <string name="device_page_screen_record_capture">画面録画とスクリーンショット</string>
+    <string name="device_page_set_duration">時間設定（秒）</string>
+    <string name="device_page_start_record">録画開始</string>
+    <string name="device_page_capture_save">スクリーンショット保存</string>
+    <string name="device_page_clear_record_cache">録画キャッシュをクリア</string>
+    <string name="device_page_clear_capture_cache">スクリーンショットキャッシュをクリア</string>
+
+    <string name="device_page_virtual_buttons">仮想ボタン</string>
+    <string name="device_page_back_button">戻るボタン</string>
+    <string name="device_page_home_button">ホームに戻る</string>
+    <string name="device_page_recents_button">最近のタスク</string>
+    <string name="device_page_wake_screen">画面を点灯</string>
+    <string name="device_page_sleep_screen">画面を消灯</string>
+    <string name="device_page_lock_screen">画面をロック</string>
+    <string name="device_page_mute_switch">ミュートスイッチ</string>
+    <string name="device_page_volume_up">音量+</string>
+    <string name="device_page_volume_down">音量-</string>
+    <string name="device_page_input_text">入力方法（英語のみ）</string>
+    <string name="device_page_confirm">確認</string>
+
+    <string name="device_page_remount_tip">実行されました。OSインストール後初めてのリマウントの場合、先にデバイスを再起動してください</string>
+    <string name="device_page_trace_file_tip">デフォルトで10秒間キャプチャします。完了後、フォルダが自動的に開きます</string>
+    <string name="device_page_scrcpy_display_tip">パラメータが空です。displayIdはデフォルトで0に設定されます</string>
+    <string name="device_page_last_record_unfinish">前回の録画がまだ完了していません</string>
+    <string name="device_page_record_time_tip">まず録画時間を入力してください</string>
+    <string name="device_page_start_record_tip">開始しました。録画中に指のタップ位置が表示されます。完了後、フォルダが自動的に開きます</string>
+    <string name="device_page_recors_param_wrong">正しい時間値を入力してください</string>
+    <string name="device_page_pull_file_tip">完了後、フォルダが自動的に開きます</string>
+    <string name="device_page_recording">録画中です。後でもう一度お試しください</string>
+    <string name="device_page_chche_clear_tip">キャッシュをクリアしました。スペースを節約しました</string>
+
+
+    <string name="app_manage_page_showsystemapp">システムアプリを表示</string>
+    <string name="app_manage_page_switch_too_fast">切り替えが速すぎます〜</string>
+    <string name="app_manage_page_apk_file_drag_tip">APKファイルをここにドラッグするか、クリックして選択</string>
+    <string name="app_manage_page_install_apk">インストール</string>
+    <string name="app_manage_page_apk_file_null_tip">インストールするapkファイルを選択してください</string>
+    <string name="app_manage_page_yes">はい</string>
+    <string name="app_manage_page_no">いいえ</string>
+    <string name="app_manage_page_start_an_app">開く</string>
+    <string name="app_manage_page_force_stop">強制停止</string>
+    <string name="app_manage_page_show_app_info">情報表示</string>
+    <string name="app_manage_page_extract_apk">インストールパッケージを抽出</string>
+    <string name="app_manage_page_install_directly">直接インストール</string>
+    <string name="app_manage_page_reinstall">再インストール</string>
+    <string name="app_manage_page_test_install">テストインストール</string>
+    <string name="app_manage_page_downgrade">ダウングレードインストール</string>
+    <string name="app_manage_page_grant_permission">権限を付与してインストール</string>
+    <string name="app_manage_page_is_system_app">システムアプリですか</string>
+    <string name="app_manage_page_min_sdk_version">最小SDKバージョン</string>
+    <string name="app_manage_page_target_sdk_version">ターゲットSDKバージョン</string>
+    <string name="app_manage_page_apk_size">インストールパッケージサイズ</string>
+    <string name="app_manage_page_install_path">インストールパス</string>
+    <string name="app_manage_page_last_update_time">最終更新時間</string>
+
+    <string name="file_manage_page_delete">削除</string>
+    <string name="file_manage_page_move">移動</string>
+    <string name="file_manage_page_copy">コピー</string>
+    <string name="file_manage_page_pull">PCにプル</string>
+    <string name="file_manage_page_copy_path">ファイルパスをコピー</string>
+    <string name="file_manage_page_root_tip">すでにルートディレクトリにいます</string>
+    <string name="file_manage_page_choose_first_tip">まずファイルを選択してください</string>
+    <string name="file_manage_page_copied_tip">パスをクリップボードにコピーしました</string>
+    <string name="file_manage_page_drag_tip">ファイルをここに直接ドラッグしてプッシュ操作を実行できます</string>
+    <string name="file_manage_page_file_modify_time">変更時間</string>
+    <string name="file_manage_page_delete_confirm">%1$sを削除しますか？</string>
+
+    <string name="command_page_terminal">ターミナル</string>
+    <string name="command_page_command_tip">コマンドを入力してください</string>
+    <string name="command_page_execute">実行</string>
+    <string name="command_page_input_command">ターミナルコマンドを入力</string>
+    <string name="command_page_android_shell">Androidシェル</string>
+    <string name="command_page_adb_command">adbコマンドを入力</string>
+
+    <string name="performance_page_cpu_overview">CPU概要</string>
+    <string name="performance_page_cpu_total">合計</string>
+    <string name="performance_page_cpu_user">ユーザー</string>
+    <string name="performance_page_cpu_sys">システム</string>
+    <string name="performance_page_cpu_nice">低優先度</string>
+    <string name="performance_page_cpu_idle">アイドル</string>
+    <string name="performance_page_cpu_io">IO待機</string>
+    <string name="performance_page_cpu_irq">ハードウェア割り込み</string>
+    <string name="performance_page_cpu_sirq">ソフトウェア割り込み</string>
+    <string name="performance_page_cpu_host">ホスト（仮想マシン）</string>
+    <string name="performance_page_memory_overview">メモリ概要</string>
+    <string name="performance_page_memory_total">合計</string>
+    <string name="performance_page_memory_free">空き</string>
+    <string name="performance_page_memory_used">使用済み</string>
+    <string name="performance_page_app_performance">アプリ性能</string>
+    <string name="performance_page_user_id">ユーザーID</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">物理メモリ</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">プロセス名</string>
+
+    <string name="ai_page_input_chat_word">チャットテキストを入力</string>
+    <string name="ai_page_empty_tip">まずチャット内容を入力してください</string>
+    <string name="ai_page_send">送信</string>
+
+    <string name="tools_log_page_title">ログファイル処理</string>
+    <string name="tools_log_page_drag_drop_tip">ログフォルダをここにドラッグするか、クリックして選択</string>
+    <string name="tools_log_page_tag_hint">タグ（大文字と小文字を区別）</string>
+    <string name="tools_log_page_process_button">処理を開始</string>
+    <string name="tools_log_page_process_tip">開始する前に、検索時間を短縮するために範囲を絞り、無関係なログを削除してください</string>
+    <string name="tools_log_page_tag_max_tip">最大10個のタグを追加できます</string>
+    <string name="tools_log_page_tag_exist_tip">このタグはすでに存在します</string>
+    <string name="tools_log_page_tag_empty_tip">まずタグを入力してください</string>
+    <string name="tools_log_page_folder_empty_tip">まずログファイルを選択してください</string>
+    <string name="tools_log_page_process_start_tip">処理を開始しました。完了後、関連フォルダが自動的に開きます</string>
+
+    <string name="about_page_theme_setting">テーマ設定</string>
+    <string name="about_page_language_setting">言語設定</string>
+    <string name="about_page_cache_folder_path">キャッシュパス</string>
+    <string name="about_page_open_cache_folder">キャッシュフォルダを開く</string>
+    <string name="about_page_pulled_folder_path">PULLファイルパス</string>
+    <string name="about_page_open_pulled_folder">PULLフォルダを開く</string>
+</resources>

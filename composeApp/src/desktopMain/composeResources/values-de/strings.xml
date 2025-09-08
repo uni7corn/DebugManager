@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">Willkommen bei DebugManager</string>
+
+    <string name="dialog_confirm">Bestätigen</string>
+    <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_confirm_exit">Anwendung wirklich beenden?</string>
+
+    <string name="side_menu_deviceinfo">Geräteinformationen</string>
+    <string name="side_menu_app_manege">Anwendungsverwaltung</string>
+    <string name="side_menu_command">Befehlsmodus</string>
+    <string name="side_menu_filemanage">Dateiverwaltung</string>
+    <string name="side_menu_performance">Leistungsüberwachung</string>
+    <string name="side_menu_tools">Nützliche Werkzeuge</string>
+    <string name="side_menu_about">Über</string>
+    <string name="side_menu_aimodel">KI-Modell</string>
+
+    <string name="language_english">Englisch</string>
+    <string name="language_chinese">Chinesisch</string>
+    <string name="language_spanish">Spanisch</string>
+    <string name="language_russian">Russisch</string>
+    <string name="language_korean">Koreanisch</string>
+    <string name="language_japanese">Japanisch</string>
+    <string name="language_hindi">Hindi</string>
+    <string name="language_french">Französisch</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_arabic">Arabisch</string>
+    <string name="system_default">Systemstandard</string>
+
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_system">Systemstandard</string>
+
+    <string name="device_page_basic_info">Grundlegende Geräteinformationen</string>
+    <string name="device_page_refresh">Aktualisieren</string>
+    <string name="device_page_serial_number">Seriennummer</string>
+    <string name="device_page_model_name">Modell</string>
+    <string name="device_page_internal_code">Interner Codename</string>
+    <string name="device_page_manufacturer">Hersteller</string>
+    <string name="device_page_os_version">Betriebssystem-Version</string>
+    <string name="device_page_build_type">Build-Typ</string>
+    <string name="device_page_android_version">Android-Version</string>
+    <string name="device_page_cpu_arch">CPU-Architektur</string>
+    <string name="device_page_resolution">Auflösung</string>
+    <string name="device_page_dpi">Anzeigedichte</string>
+
+    <string name="device_page_quick_operations">Schnellaktionen</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">TO Recovery</string>
+    <string name="device_page_reboot">NEUSTART</string>
+    <string name="device_page_to_fastboot">TO Fastboot</string>
+    <string name="device_page_shutdown">Herunterfahren</string>
+    <string name="device_page_capture_trace">Trace aufnehmen</string>
+    <string name="device_page_google_settings">Google-Einstellungen</string>
+    <string name="device_page_display_id">DisplayId (Standard 0)</string>
+    <string name="device_page_scrcpy">Scrcpy-Bildschirmspiegelung</string>
+
+    <string name="device_page_screen_record_capture">Bildschirmaufnahme und Screenshot</string>
+    <string name="device_page_set_duration">Dauer einstellen (s)</string>
+    <string name="device_page_start_record">Aufnahme starten</string>
+    <string name="device_page_capture_save">Screenshot speichern</string>
+    <string name="device_page_clear_record_cache">Aufnahme-Cache löschen</string>
+    <string name="device_page_clear_capture_cache">Screenshot-Cache löschen</string>
+
+    <string name="device_page_virtual_buttons">Simulierte Tasten</string>
+    <string name="device_page_back_button">Zurück-Taste</string>
+    <string name="device_page_home_button">Zum Startbildschirm</string>
+    <string name="device_page_recents_button">Letzte Aufgaben</string>
+    <string name="device_page_wake_screen">Bildschirm aufwecken</string>
+    <string name="device_page_sleep_screen">Bildschirm ausschalten</string>
+    <string name="device_page_lock_screen">Bildschirm sperren</string>
+    <string name="device_page_mute_switch">Stummschalter</string>
+    <string name="device_page_volume_up">Lautstärke+</string>
+    <string name="device_page_volume_down">Lautstärke-</string>
+    <string name="device_page_input_text">Eingabemethode (nur Englisch)</string>
+    <string name="device_page_confirm">Bestätigen</string>
+
+    <string name="device_page_remount_tip">Ausgeführt. Wenn dies das erste Remount nach dem Flashen ist, starten Sie das Gerät bitte neu.</string>
+    <string name="device_page_trace_file_tip">Standardmäßig werden 10s aufgenommen. Der Ordner wird nach Abschluss automatisch geöffnet.</string>
+    <string name="device_page_scrcpy_display_tip">Parameter ist leer, displayId wird standardmäßig auf 0 gesetzt.</string>
+    <string name="device_page_last_record_unfinish">Die letzte Aufnahme ist noch nicht abgeschlossen.</string>
+    <string name="device_page_record_time_tip">Bitte geben Sie zuerst die Aufnahmedauer ein.</string>
+    <string name="device_page_start_record_tip">Gestartet. Tipppositionen werden während der Aufnahme angezeigt. Der Ordner wird nach Abschluss automatisch geöffnet.</string>
+    <string name="device_page_recors_param_wrong">Bitte geben Sie einen korrekten Wert für die Dauer ein.</string>
+    <string name="device_page_pull_file_tip">Der Ordner wird nach Abschluss automatisch geöffnet.</string>
+    <string name="device_page_recording">Aufnahme läuft, bitte versuchen Sie es später erneut.</string>
+    <string name="device_page_chche_clear_tip">Cache wurde geleert, um Speicherplatz zu sparen.</string>
+
+    <string name="app_manage_page_showsystemapp">System-Apps anzeigen</string>
+    <string name="app_manage_page_switch_too_fast">Zu schnell gewechselt~</string>
+    <string name="app_manage_page_apk_file_drag_tip">APK-Datei hierher ziehen oder zum Auswählen klicken</string>
+    <string name="app_manage_page_install_apk">Installieren</string>
+    <string name="app_manage_page_apk_file_null_tip">Bitte wählen Sie eine zu installierende APK-Datei aus.</string>
+    <string name="app_manage_page_yes">Ja</string>
+    <string name="app_manage_page_no">Nein</string>
+    <string name="app_manage_page_start_an_app">Öffnen</string>
+    <string name="app_manage_page_force_stop">Erzwingen des Stopps</string>
+    <string name="app_manage_page_show_app_info">Informationen anzeigen</string>
+    <string name="app_manage_page_extract_apk">Installationspaket extrahieren</string>
+    <string name="app_manage_page_install_directly">Direkt installieren</string>
+    <string name="app_manage_page_reinstall">Neu installieren</string>
+    <string name="app_manage_page_test_install">Testinstallation</string>
+    <string name="app_manage_page_downgrade">Downgrade-Installation</string>
+    <string name="app_manage_page_grant_permission">Installation mit Berechtigung</string>
+    <string name="app_manage_page_is_system_app">System-App?</string>
+    <string name="app_manage_page_min_sdk_version">Minimale SDK-Version</string>
+    <string name="app_manage_page_target_sdk_version">Ziel-SDK-Version</string>
+    <string name="app_manage_page_apk_size">APK-Größe</string>
+    <string name="app_manage_page_install_path">Installationspfad</string>
+    <string name="app_manage_page_last_update_time">Letzte Aktualisierung</string>
+
+    <string name="file_manage_page_delete">Löschen</string>
+    <string name="file_manage_page_move">Verschieben nach</string>
+    <string name="file_manage_page_copy">Kopieren nach</string>
+    <string name="file_manage_page_pull">Auf PC ziehen</string>
+    <string name="file_manage_page_copy_path">Dateipfad kopieren</string>
+    <string name="file_manage_page_root_tip">Bereits im Stammverzeichnis</string>
+    <string name="file_manage_page_choose_first_tip">Bitte wählen Sie zuerst eine Datei aus.</string>
+    <string name="file_manage_page_copied_tip">Pfad in die Zwischenablage kopiert</string>
+    <string name="file_manage_page_drag_tip">Dateien können direkt hierher gezogen werden, um einen Push-Vorgang durchzuführen.</string>
+    <string name="file_manage_page_file_modify_time">Änderungszeit</string>
+    <string name="file_manage_page_delete_confirm">Wirklich %1$s löschen?</string>
+
+    <string name="command_page_terminal">Terminal</string>
+    <string name="command_page_command_tip">Befehl eingeben</string>
+    <string name="command_page_execute">Ausführen</string>
+    <string name="command_page_input_command">Terminal-Befehl eingeben</string>
+    <string name="command_page_android_shell">Android Shell</string>
+    <string name="command_page_adb_command">adb-Befehl eingeben</string>
+
+    <string name="performance_page_cpu_overview">CPU-Übersicht</string>
+    <string name="performance_page_cpu_total">Gesamt</string>
+    <string name="performance_page_cpu_user">Benutzer</string>
+    <string name="performance_page_cpu_sys">System</string>
+    <string name="performance_page_cpu_nice">Nice (niedrige Priorität)</string>
+    <string name="performance_page_cpu_idle">Leerlauf</string>
+    <string name="performance_page_cpu_io">IO-Wartezeit</string>
+    <string name="performance_page_cpu_irq">IRQ (Hardware-Unterbrechung)</string>
+    <string name="performance_page_cpu_sirq">SIRQ (Software-Unterbrechung)</string>
+    <string name="performance_page_cpu_host">Host (Virtuelle Maschine)</string>
+    <string name="performance_page_memory_overview">Speicherübersicht</string>
+    <string name="performance_page_memory_total">Gesamt</string>
+    <string name="performance_page_memory_free">Frei</string>
+    <string name="performance_page_memory_used">Genutzt</string>
+    <string name="performance_page_app_performance">App-Leistung</string>
+    <string name="performance_page_user_id">Benutzer-ID</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">Physischer Speicher</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">Prozessname</string>
+
+    <string name="ai_page_input_chat_word">Chat-Text eingeben</string>
+    <string name="ai_page_empty_tip">Bitte geben Sie zuerst einen Chat-Text ein.</string>
+    <string name="ai_page_send">Senden</string>
+
+    <string name="tools_log_page_title">Protokolldateien verarbeiten</string>
+    <string name="tools_log_page_drag_drop_tip">Protokollordner hierher ziehen oder zum Auswählen klicken</string>
+    <string name="tools_log_page_tag_hint">Tag (Groß-/Kleinschreibung beachten)</string>
+    <string name="tools_log_page_process_button">Verarbeitung starten</string>
+    <string name="tools_log_page_process_tip">Vor dem Start den Umfang so weit wie möglich eingrenzen und irrelevante Protokolle löschen, um lange Suchzeiten zu vermeiden.</string>
+    <string name="tools_log_page_tag_max_tip">Es können maximal 10 Tags hinzugefügt werden.</string>
+    <string name="tools_log_page_tag_exist_tip">Tag existiert bereits.</string>
+    <string name="tools_log_page_tag_empty_tip">Bitte geben Sie zuerst ein Tag ein.</string>
+    <string name="tools_log_page_folder_empty_tip">Bitte wählen Sie zuerst eine Protokolldatei aus.</string>
+    <string name="tools_log_page_process_start_tip">Verarbeitung gestartet. Der Ordner wird nach Abschluss automatisch geöffnet.</string>
+
+    <string name="about_page_theme_setting">Thema-Einstellungen</string>
+    <string name="about_page_language_setting">Spracheinstellungen</string>
+    <string name="about_page_cache_folder_path">Cache-Pfad</string>
+    <string name="about_page_open_cache_folder">Cache-Ordner öffnen</string>
+    <string name="about_page_pulled_folder_path">PULL-Dateipfad</string>
+    <string name="about_page_open_pulled_folder">PULL-Ordner öffnen</string>
+</resources>
