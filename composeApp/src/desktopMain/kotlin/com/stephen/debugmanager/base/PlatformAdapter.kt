@@ -58,8 +58,8 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
         val lockFilePath = "${userConfigFile}${sp}app.lock"
 
-        val systemLocale = Locale.getDefault()
-        val systemLanguage = Locale.getDefault().toString().split("_").first()
+        val systemLocale: Locale = Locale.getDefault() ?: Locale.US
+        val systemLanguage = systemLocale.toString().split("_").first()
     }
 
     val localAdbPath =
@@ -176,6 +176,7 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
             // 等待进程结束
             val exitCode = process.waitFor()
+            LogUtils.printLog("process exit code: $exitCode")
 
             // 拼接最终结果
             val overallResult = StringBuilder()
