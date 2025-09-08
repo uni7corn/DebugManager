@@ -13,7 +13,6 @@ import com.stephen.composeapp.generated.resources.language_chinese
 import com.stephen.composeapp.generated.resources.language_english
 import com.stephen.composeapp.generated.resources.language_hindi
 import com.stephen.composeapp.generated.resources.language_russian
-import com.stephen.composeapp.generated.resources.language_system
 import com.stephen.composeapp.generated.resources.side_menu_about
 import com.stephen.composeapp.generated.resources.side_menu_aimodel
 import com.stephen.composeapp.generated.resources.side_menu_app_manege
@@ -22,6 +21,7 @@ import com.stephen.composeapp.generated.resources.side_menu_deviceinfo
 import com.stephen.composeapp.generated.resources.side_menu_filemanage
 import com.stephen.composeapp.generated.resources.side_menu_performance
 import com.stephen.composeapp.generated.resources.side_menu_tools
+import com.stephen.composeapp.generated.resources.system_default
 import com.stephen.composeapp.generated.resources.theme_dark
 import com.stephen.composeapp.generated.resources.theme_light
 import com.stephen.composeapp.generated.resources.theme_system
@@ -56,10 +56,10 @@ object Constants {
     )
 
     val languageMap = mapOf(
-        Res.string.language_chinese to LanguageState.CHINESE,
-        Res.string.language_english to LanguageState.ENGLISH,
-        Res.string.language_russian to LanguageState.RUSSIAN,
-        Res.string.language_hindi to LanguageState.HINDI,
-        Res.string.language_system to LanguageState.AUTO
+        LanguageState.CHINESE to Res.string.language_chinese,
+        LanguageState.ENGLISH to Res.string.language_english,
+        LanguageState.RUSSIAN to Res.string.language_russian,
+        LanguageState.HINDI to Res.string.language_hindi,
+        LanguageState.AUTO to Res.string.system_default
     )
 }

@@ -17,11 +17,17 @@
     <string name="side_menu_about">关于</string>
     <string name="side_menu_aimodel">AI大模型</string>
 
+    <string name="language_english">英语</string>
     <string name="language_chinese">中文</string>
-    <string name="language_english">英文</string>
+    <string name="language_spanish">西班牙语</string>
     <string name="language_russian">俄语</string>
-    <string name="language_hindi">印度语</string>
-    <string name="language_system">跟随系统</string>
+    <string name="language_korean">韩语</string>
+    <string name="language_japanese">日语</string>
+    <string name="language_hindi">印地语</string>
+    <string name="language_french">法语</string>
+    <string name="language_german">德语</string>
+    <string name="language_arabic">阿拉伯语</string>
+    <string name="system_default">跟随系统</string>
 
     <string name="theme_dark">深色</string>
     <string name="theme_light">浅色</string>

@@ -17,11 +17,17 @@
     <string name="side_menu_about">About</string>
     <string name="side_menu_aimodel">AI Model</string>
 
-    <string name="language_chinese">Chinese</string>
     <string name="language_english">English</string>
+    <string name="language_chinese">Chinese</string>
+    <string name="language_spanish">Spanish</string>
     <string name="language_russian">Russian</string>
+    <string name="language_korean">Korean</string>
+    <string name="language_japanese">Japanese</string>
     <string name="language_hindi">Hindi</string>
-    <string name="language_system">System</string>
+    <string name="language_french">French</string>
+    <string name="language_german">German</string>
+    <string name="language_arabic">Arabic</string>
+    <string name="system_default">System default</string>
 
     <string name="theme_dark">Dark</string>
     <string name="theme_light">Light</string>

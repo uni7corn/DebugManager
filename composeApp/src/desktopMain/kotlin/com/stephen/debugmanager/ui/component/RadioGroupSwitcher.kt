@@ -33,7 +33,7 @@ fun RadioGroupSwitcher(
             .height(IntrinsicSize.Max)
             .clip(RoundedCornerShape(50))
             .background(MaterialTheme.colorScheme.surface)
-            .padding(5.dp)
+            .padding(2.dp)
     ) {
         nameValueMap.forEach {
             val itemNameResource = it.key

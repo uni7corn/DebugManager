@@ -2,7 +2,6 @@ package  com.stephen.debugmanager.ui.component
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,10 +34,13 @@ fun <T> DropdownSelector(
 
     val rotateAnimation by animateFloatAsState(if (expanded) 180f else 0f, label = "expand or collapse")
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier.clip(RoundedCornerShape(10)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
+                .fillMaxWidth(1f)
                 .clickable {
                     if (!DoubleClickUtils.isFastDoubleClick())
                         expanded = expanded.not()
@@ -59,21 +61,22 @@ fun <T> DropdownSelector(
                 contentDescription = "Dropdown"
             )
         }
-
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = {
                 if (!DoubleClickUtils.isFastDoubleClick())
                     expanded = false
             },
+            containerColor = MaterialTheme.colorScheme.surface,
+            shadowElevation = 10.dp,
             properties = PopupProperties(usePlatformDefaultWidth = false),
-            modifier = modifier.background(MaterialTheme.colorScheme.surface).width(IntrinsicSize.Min)
+            modifier = modifier
         ) {
             options.forEach {
-                CenterText(it.value, modifier = modifier.fillMaxWidth(1f).clickable {
+                CenterText(it.value, modifier = Modifier.fillMaxWidth(1f).clickable {
                     onSelected(it.key)
                     expanded = false
-                }.padding(vertical = 10.dp))
+                }.padding(vertical = 5.dp))
             }
         }
     }

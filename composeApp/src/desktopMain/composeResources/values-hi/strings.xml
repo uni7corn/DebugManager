@@ -17,11 +17,17 @@
     <string name="side_menu_about">के बारे में</string>
     <string name="side_menu_aimodel">एआई मॉडल</string>
 
-    <string name="language_chinese">चीनी</string>
     <string name="language_english">अंग्रेजी</string>
-    <string name="language_russian">रस्ता</string>
+    <string name="language_chinese">चीनी</string>
+    <string name="language_spanish">स्पेनिश</string>
+    <string name="language_russian">रूसी</string>
+    <string name="language_korean">कोरियाई</string>
+    <string name="language_japanese">जापानी</string>
     <string name="language_hindi">हिंदी</string>
-    <string name="language_system">सिस्टम के अनुसार</string>
+    <string name="language_french">फ्रेंच</string>
+    <string name="language_german">जर्मन</string>
+    <string name="language_arabic">अरबी</string>
+    <string name="system_default">सिस्टम डिफ़ॉल्ट</string>
 
     <string name="theme_dark">गहरा</string>
     <string name="theme_light">हल्का</string>
@@ -72,12 +78,18 @@
     <string name="device_page_input_text">इनपुट विधि (केवल अंग्रेज़ी)</string>
     <string name="device_page_confirm">पुष्टि करें</string>
 
-    <string name="device_page_remount_tip">किया गया है, अगर यह फ़्लैश करने के बाद पहली रीमाउंट है, तो कृपया डिवाइस को पहले रीबूट करें</string>
-    <string name="device_page_trace_file_tip">डिफ़ॉल्ट रूप से 10 सेकंड के लिए कैप्चर करता है, पूरा होने पर फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
+    <string name="device_page_remount_tip">किया गया है, अगर यह फ़्लैश करने के बाद पहली रीमाउंट है, तो कृपया डिवाइस को
+        पहले रीबूट करें
+    </string>
+    <string name="device_page_trace_file_tip">डिफ़ॉल्ट रूप से 10 सेकंड के लिए कैप्चर करता है, पूरा होने पर फ़ोल्डर
+        स्वचालित रूप से खुल जाएगा
+    </string>
     <string name="device_page_scrcpy_display_tip">पैरामीटर खाली है, डिस्प्लेआईडी डिफ़ॉल्ट रूप से 0 पर सेट है</string>
     <string name="device_page_last_record_unfinish">पिछली रिकॉर्डिंग अभी तक पूरी नहीं हुई है</string>
     <string name="device_page_record_time_tip">कृपया पहले रिकॉर्डिंग की अवधि दर्ज करें</string>
-    <string name="device_page_start_record_tip">शुरू हो गया है, रिकॉर्डिंग के दौरान उंगली के क्लिक की स्थिति दिखाई जाएगी, पूरा होने पर फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
+    <string name="device_page_start_record_tip">शुरू हो गया है, रिकॉर्डिंग के दौरान उंगली के क्लिक की स्थिति दिखाई
+        जाएगी, पूरा होने पर फ़ोल्डर स्वचालित रूप से खुल जाएगा
+    </string>
     <string name="device_page_recors_param_wrong">कृपया सही अवधि मान दर्ज करें</string>
     <string name="device_page_pull_file_tip">पूरा होने पर फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
     <string name="device_page_recording">रिकॉर्डिंग जारी है, कृपया बाद में पुनः प्रयास करें</string>
@@ -155,12 +167,16 @@
     <string name="tools_log_page_drag_drop_tip">लॉग फ़ोल्डर को यहां खींचें या चुनने के लिए क्लिक करें</string>
     <string name="tools_log_page_tag_hint">टैग (केस-सेंसिटिव)</string>
     <string name="tools_log_page_process_button">प्रसंस्करण शुरू करें</string>
-    <string name="tools_log_page_process_tip">शुरू करने से पहले, अनावश्यक लॉग हटाकर दायरे को कम करने का प्रयास करें, ताकि खोज में बहुत अधिक समय न लगे</string>
+    <string name="tools_log_page_process_tip">शुरू करने से पहले, अनावश्यक लॉग हटाकर दायरे को कम करने का प्रयास करें,
+        ताकि खोज में बहुत अधिक समय न लगे
+    </string>
     <string name="tools_log_page_tag_max_tip">आप अधिकतम 10 टैग जोड़ सकते हैं</string>
     <string name="tools_log_page_tag_exist_tip">यह टैग पहले से मौजूद है</string>
     <string name="tools_log_page_tag_empty_tip">कृपया पहले एक टैग दर्ज करें</string>
     <string name="tools_log_page_folder_empty_tip">कृपया पहले लॉग फ़ाइल चुनें</string>
-    <string name="tools_log_page_process_start_tip">प्रसंस्करण शुरू हो गया है, पूरा होने पर संबंधित फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
+    <string name="tools_log_page_process_start_tip">प्रसंस्करण शुरू हो गया है, पूरा होने पर संबंधित फ़ोल्डर स्वचालित रूप
+        से खुल जाएगा
+    </string>
 
     <string name="about_page_theme_setting">थीम सेटिंग्स</string>
     <string name="about_page_language_setting">भाषा सेटिंग्स</string>
