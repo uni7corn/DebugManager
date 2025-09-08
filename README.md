@@ -129,6 +129,14 @@ Starting from version 2.4.0, a multi-window mechanism has been introduced. If an
 
 ![](/screenshots/blogs_multi_window_singleinstance.png)
 
+
+### Multi-language Support
+Starting from version 2.6.0, multilingual support has been added. It currently includes Chinese, English, Russian, Hindi, Spanish, French, German, Korean, Japanese, and Arabic.
+
+![](/screenshots/blogs_debugmanager_multilang.png)
+
+![](/screenshots/blogs_debugmanager_hindi.png)
+
 ### Open-Source Libraries Used
 
 1. [AYA Server](https://github.com/liriliri/aya) The previous method for retrieving app icons involved installing an APK and launching a service, which required dealing with permission issues. Using the AYA Server, a DEX file is pushed to the device to hook system services, which then starts as a Linux process to store the icons.
