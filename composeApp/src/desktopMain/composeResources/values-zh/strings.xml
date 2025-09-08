@@ -18,7 +18,9 @@
     <string name="side_menu_aimodel">AI大模型</string>
 
     <string name="language_chinese">中文</string>
-    <string name="language_english">English</string>
+    <string name="language_english">英文</string>
+    <string name="language_russian">俄语</string>
+    <string name="language_hindi">印度语</string>
     <string name="language_system">跟随系统</string>
 
     <string name="theme_dark">深色</string>

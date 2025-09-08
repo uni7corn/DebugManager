@@ -11,6 +11,8 @@ import com.stephen.composeapp.generated.resources.ic_terminal
 import com.stephen.composeapp.generated.resources.ic_tools
 import com.stephen.composeapp.generated.resources.language_chinese
 import com.stephen.composeapp.generated.resources.language_english
+import com.stephen.composeapp.generated.resources.language_hindi
+import com.stephen.composeapp.generated.resources.language_russian
 import com.stephen.composeapp.generated.resources.language_system
 import com.stephen.composeapp.generated.resources.side_menu_about
 import com.stephen.composeapp.generated.resources.side_menu_aimodel
@@ -56,6 +58,8 @@ object Constants {
     val languageMap = mapOf(
         Res.string.language_chinese to LanguageState.CHINESE,
         Res.string.language_english to LanguageState.ENGLISH,
+        Res.string.language_russian to LanguageState.RUSSIAN,
+        Res.string.language_hindi to LanguageState.HINDI,
         Res.string.language_system to LanguageState.AUTO
     )
 }

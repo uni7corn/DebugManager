@@ -1,5 +1,6 @@
 package com.stephen.debugmanager.base
 
+import com.stephen.debugmanager.data.LanguageState
 import com.stephen.debugmanager.data.PlatformType
 import com.stephen.debugmanager.utils.LogUtils
 import kotlinx.coroutines.Dispatchers
@@ -266,7 +267,42 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
     }
 }
 
+/**
+ * 获取系统环境变量
+ * @param key 环境变量的key
+ * @return 环境变量的值
+ */
 @Suppress("unused")
 fun getSystemEnv(key: String): String? = System.getenv(key).also {
     LogUtils.printLog("getSystemEnv: $key = $it")
+}
+
+/**
+ * 获取语言的Locale
+ * @param languageState 语言状态
+ * @return 语言的Locale
+ */
+fun getLanguageLocale(languageState: Int): Locale {
+    return when (languageState) {
+        LanguageState.CHINESE -> Locale("zh", "CN")
+        LanguageState.ENGLISH -> Locale("en", "US")
+        LanguageState.RUSSIAN -> Locale("ru", "RU")
+        LanguageState.HINDI -> Locale("hi", "IN")
+        else -> PlatformAdapter.systemLocale
+    }
+}
+
+/**
+ * 获取语言的Code
+ * @param languageState 语言状态
+ * @return 语言的Code
+ */
+fun getLanguageCode(languageState: Int): String {
+    return when (languageState) {
+        LanguageState.CHINESE -> "zh"
+        LanguageState.ENGLISH -> "en"
+        LanguageState.RUSSIAN -> "ru"
+        LanguageState.HINDI -> "hi"
+        else -> PlatformAdapter.systemLanguage
+    }
 }

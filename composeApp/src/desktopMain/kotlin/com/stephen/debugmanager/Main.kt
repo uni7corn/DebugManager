@@ -25,6 +25,8 @@ import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.composeapp.generated.resources.dialog_confirm_exit
 import com.stephen.debugmanager.base.PlatformAdapter
+import com.stephen.debugmanager.base.getLanguageCode
+import com.stephen.debugmanager.base.getLanguageLocale
 import com.stephen.debugmanager.data.LanguageState
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
@@ -120,22 +122,14 @@ fun main() = application {
                     else LightDefaultContextMenuRepresentation
                 }
 
-                val LocalLocalization = staticCompositionLocalOf { "en" }
+                val LocalLocalization = compositionLocalOf { "en" }
                 var languageCode by remember { mutableStateOf("en") }
 
                 LaunchedEffect(languageState.value) {
                     LogUtils.printLog("languageState.value: ${languageState.value}")
-                    val locale = when (languageState.value) {
-                        LanguageState.CHINESE -> Locale("zh", "CN")
-                        LanguageState.ENGLISH -> Locale("en", "US")
-                        else -> PlatformAdapter.systemLocale
-                    }
+                    val locale = getLanguageLocale(languageState.value)
                     Locale.setDefault(locale)
-                    languageCode = when (languageState.value) {
-                        LanguageState.CHINESE -> "zh"
-                        LanguageState.ENGLISH -> "en"
-                        else -> PlatformAdapter.systemLanguage
-                    }
+                    languageCode = getLanguageCode(languageState.value)
                     LogUtils.printLog("languageCode: $languageCode")
                 }
 

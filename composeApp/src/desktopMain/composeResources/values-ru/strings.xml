@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">Добро пожаловать в DebugManager</string>
+
+    <string name="dialog_confirm">Подтвердить</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_confirm_exit">Подтвердить выход из приложения?</string>
+
+    <string name="side_menu_deviceinfo">Информация об устройстве</string>
+    <string name="side_menu_app_manege">Управление приложениями</string>
+    <string name="side_menu_command">Командный режим</string>
+    <string name="side_menu_filemanage">Управление файлами</string>
+    <string name="side_menu_performance">Мониторинг производительности</string>
+    <string name="side_menu_tools">Утилиты</string>
+    <string name="side_menu_about">О программе</string>
+    <string name="side_menu_aimodel">Большая модель AI</string>
+
+    <string name="language_chinese">Китайский</string>
+    <string name="language_english">Английский</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_hindi">хинди</string>
+    <string name="language_system">Системный</string>
+
+    <string name="theme_dark">Темная</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_system">Системная</string>
+
+    <string name="device_page_basic_info">Основная информация об устройстве</string>
+    <string name="device_page_refresh">Обновить</string>
+    <string name="device_page_serial_number">Серийный номер</string>
+    <string name="device_page_model_name">Модель</string>
+    <string name="device_page_internal_code">Внутреннее кодовое имя</string>
+    <string name="device_page_manufacturer">Производитель</string>
+    <string name="device_page_os_version">Версия ОС</string>
+    <string name="device_page_build_type">Тип сборки</string>
+    <string name="device_page_android_version">Версия Android</string>
+    <string name="device_page_cpu_arch">Архитектура CPU</string>
+    <string name="device_page_resolution">Разрешение</string>
+    <string name="device_page_dpi">Плотность пикселей</string>
+
+    <string name="device_page_quick_operations">Быстрые операции</string>
+    <string name="device_page_root">ROOT</string>
+    <string name="device_page_remount">REMOUNT</string>
+    <string name="device_page_to_recovery">В Recovery</string>
+    <string name="device_page_reboot">Перезагрузка</string>
+    <string name="device_page_to_fastboot">В Fastboot</string>
+    <string name="device_page_shutdown">Выключение</string>
+    <string name="device_page_capture_trace">Захват Trace</string>
+    <string name="device_page_google_settings">Настройки Google</string>
+    <string name="device_page_display_id">DisplayId (по умолчанию 0)</string>
+    <string name="device_page_scrcpy">Scrcpy зеркалирование</string>
+
+    <string name="device_page_screen_record_capture">Запись и скриншот экрана</string>
+    <string name="device_page_set_duration">Установить длительность (с)</string>
+    <string name="device_page_start_record">Начать запись</string>
+    <string name="device_page_capture_save">Сделать скриншот</string>
+    <string name="device_page_clear_record_cache">Очистить кэш записи</string>
+    <string name="device_page_clear_capture_cache">Очистить кэш скриншотов</string>
+
+    <string name="device_page_virtual_buttons">Виртуальные кнопки</string>
+    <string name="device_page_back_button">Кнопка "Назад"</string>
+    <string name="device_page_home_button">Вернуться на рабочий стол</string>
+    <string name="device_page_recents_button">Недавние задачи</string>
+    <string name="device_page_wake_screen">Включить экран</string>
+    <string name="device_page_sleep_screen">Выключить экран</string>
+    <string name="device_page_lock_screen">Заблокировать экран</string>
+    <string name="device_page_mute_switch">Переключатель без звука</string>
+    <string name="device_page_volume_up">Громкость +</string>
+    <string name="device_page_volume_down">Громкость -</string>
+    <string name="device_page_input_text">Метод ввода (только английский)</string>
+    <string name="device_page_confirm">Подтвердить</string>
+
+    <string name="device_page_remount_tip">Выполнено. Если это первый remount после прошивки, сначала перезагрузите устройство</string>
+    <string name="device_page_trace_file_tip">Захват по умолчанию 10 с. После завершения папка откроется автоматически</string>
+    <string name="device_page_scrcpy_display_tip">Параметр пустой, displayId по умолчанию 0</string>
+    <string name="device_page_last_record_unfinish">Предыдущая запись еще не завершена</string>
+    <string name="device_page_record_time_tip">Пожалуйста, сначала введите длительность записи</string>
+    <string name="device_page_start_record_tip">Запись началась. Позиция касания пальца будет отображаться во время записи. После завершения папка откроется автоматически</string>
+    <string name="device_page_recors_param_wrong">Пожалуйста, введите правильное значение длительности</string>
+    <string name="device_page_pull_file_tip">После завершения папка откроется автоматически</string>
+    <string name="device_page_recording">Идет запись, пожалуйста, повторите попытку позже</string>
+    <string name="device_page_chche_clear_tip">Кэш очищен, место сохранено</string>
+
+
+    <string name="app_manage_page_showsystemapp">Показать системные приложения</string>
+    <string name="app_manage_page_switch_too_fast">Слишком быстрое переключение!</string>
+    <string name="app_manage_page_apk_file_drag_tip">Перетащите APK-файл сюда или нажмите, чтобы выбрать</string>
+    <string name="app_manage_page_install_apk">Установить</string>
+    <string name="app_manage_page_apk_file_null_tip">Пожалуйста, выберите APK-файл для установки</string>
+    <string name="app_manage_page_yes">Да</string>
+    <string name="app_manage_page_no">Нет</string>
+    <string name="app_manage_page_start_an_app">Открыть</string>
+    <string name="app_manage_page_force_stop">Принудительно остановить</string>
+    <string name="app_manage_page_show_app_info">Показать информацию</string>
+    <string name="app_manage_page_extract_apk">Извлечь APK</string>
+    <string name="app_manage_page_install_directly">Прямая установка</string>
+    <string name="app_manage_page_reinstall">Переустановить</string>
+    <string name="app_manage_page_test_install">Тестовая установка</string>
+    <string name="app_manage_page_downgrade">Установка более старой версии</string>
+    <string name="app_manage_page_grant_permission">Установка с разрешением</string>
+    <string name="app_manage_page_is_system_app">Системное приложение</string>
+    <string name="app_manage_page_min_sdk_version">Минимальная версия SDK</string>
+    <string name="app_manage_page_target_sdk_version">Целевая версия SDK</string>
+    <string name="app_manage_page_apk_size">Размер APK</string>
+    <string name="app_manage_page_install_path">Путь установки</string>
+    <string name="app_manage_page_last_update_time">Время последнего обновления</string>
+
+    <string name="file_manage_page_delete">Удалить</string>
+    <string name="file_manage_page_move">Переместить в</string>
+    <string name="file_manage_page_copy">Скопировать в</string>
+    <string name="file_manage_page_pull">Извлечь на ПК</string>
+    <string name="file_manage_page_copy_path">Скопировать путь к файлу</string>
+    <string name="file_manage_page_root_tip">Вы уже в корневой папке</string>
+    <string name="file_manage_page_choose_first_tip">Пожалуйста, сначала выберите файл</string>
+    <string name="file_manage_page_copied_tip">Путь скопирован в буфер обмена</string>
+    <string name="file_manage_page_drag_tip">Вы можете перетащить файлы сюда для операции push</string>
+    <string name="file_manage_page_file_modify_time">Время изменения</string>
+    <string name="file_manage_page_delete_confirm">Подтвердить удаление %1$s?</string>
+
+    <string name="command_page_terminal">Терминал</string>
+    <string name="command_page_command_tip">Пожалуйста, введите команду</string>
+    <string name="command_page_execute">Выполнить</string>
+    <string name="command_page_input_command">Введите команду терминала</string>
+    <string name="command_page_android_shell">Оболочка Android</string>
+    <string name="command_page_adb_command">Введите команду adb</string>
+
+    <string name="performance_page_cpu_overview">Обзор CPU</string>
+    <string name="performance_page_cpu_total">Всего</string>
+    <string name="performance_page_cpu_user">Пользователь</string>
+    <string name="performance_page_cpu_sys">Система</string>
+    <string name="performance_page_cpu_nice">Nice (низкий приоритет)</string>
+    <string name="performance_page_cpu_idle">Свободно</string>
+    <string name="performance_page_cpu_io">Ожидание ввода/вывода</string>
+    <string name="performance_page_cpu_irq">IRQ (аппаратное прерывание)</string>
+    <string name="performance_page_cpu_sirq">SIRQ (программное прерывание)</string>
+    <string name="performance_page_cpu_host">Хост (виртуальная машина)</string>
+    <string name="performance_page_memory_overview">Обзор памяти</string>
+    <string name="performance_page_memory_total">Всего</string>
+    <string name="performance_page_memory_free">Свободно</string>
+    <string name="performance_page_memory_used">Использовано</string>
+    <string name="performance_page_app_performance">Производительность приложения</string>
+    <string name="performance_page_user_id">ID пользователя</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">Физическая память</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">Имя процесса</string>
+
+    <string name="ai_page_input_chat_word">Введите текст для чата</string>
+    <string name="ai_page_empty_tip">Пожалуйста, сначала введите текст</string>
+    <string name="ai_page_send">Отправить</string>
+
+    <string name="tools_log_page_title">Обработка файлов журналов</string>
+    <string name="tools_log_page_drag_drop_tip">Перетащите папку с журналами сюда или нажмите, чтобы выбрать</string>
+    <string name="tools_log_page_tag_hint">Тег (чувствительный к регистру)</string>
+    <string name="tools_log_page_process_button">Начать обработку</string>
+    <string name="tools_log_page_process_tip">Перед началом постарайтесь сузить область поиска и удалить ненужные журналы, чтобы избежать слишком долгого поиска</string>
+    <string name="tools_log_page_tag_max_tip">Можно добавить не более 10 тегов</string>
+    <string name="tools_log_page_tag_exist_tip">Этот тег уже существует</string>
+    <string name="tools_log_page_tag_empty_tip">Пожалуйста, сначала введите тег</string>
+    <string name="tools_log_page_folder_empty_tip">Пожалуйста, сначала выберите файл журнала</string>
+    <string name="tools_log_page_process_start_tip">Начата обработка. После завершения папка откроется автоматически</string>
+
+    <string name="about_page_theme_setting">Настройки темы</string>
+    <string name="about_page_language_setting">Настройки языка</string>
+    <string name="about_page_cache_folder_path">Путь к кэш-папке</string>
+    <string name="about_page_open_cache_folder">Открыть кэш-папку</string>
+    <string name="about_page_pulled_folder_path">Путь к папке PULL</string>
+    <string name="about_page_open_pulled_folder">Открыть папку PULL</string>
+</resources>

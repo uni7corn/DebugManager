@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DebugManager</string>
+
+    <string name="app_splash_welcome">DebugManager में आपका स्वागत है</string>
+
+    <string name="dialog_confirm">पुष्टि करें</string>
+    <string name="dialog_cancel">रद्द करें</string>
+    <string name="dialog_confirm_exit">क्या आप ऐप्लिकेशन से बाहर निकलने की पुष्टि करते हैं?</string>
+
+    <string name="side_menu_deviceinfo">डिवाइस की जानकारी</string>
+    <string name="side_menu_app_manege">सॉफ्टवेयर प्रबंधन</string>
+    <string name="side_menu_command">कमांड मोड</string>
+    <string name="side_menu_filemanage">फ़ाइल प्रबंधन</string>
+    <string name="side_menu_performance">परफ़ॉर्मेंस की निगरानी</string>
+    <string name="side_menu_tools">उपयोगी उपकरण</string>
+    <string name="side_menu_about">के बारे में</string>
+    <string name="side_menu_aimodel">एआई मॉडल</string>
+
+    <string name="language_chinese">चीनी</string>
+    <string name="language_english">अंग्रेजी</string>
+    <string name="language_russian">रस्ता</string>
+    <string name="language_hindi">हिंदी</string>
+    <string name="language_system">सिस्टम के अनुसार</string>
+
+    <string name="theme_dark">गहरा</string>
+    <string name="theme_light">हल्का</string>
+    <string name="theme_system">सिस्टम के अनुसार</string>
+
+    <string name="device_page_basic_info">डिवाइस की बुनियादी जानकारी</string>
+    <string name="device_page_refresh">रीफ्रेश करें</string>
+    <string name="device_page_serial_number">सीरियल नंबर</string>
+    <string name="device_page_model_name">मॉडल</string>
+    <string name="device_page_internal_code">आंतरिक कोड नाम</string>
+    <string name="device_page_manufacturer">निर्माता</string>
+    <string name="device_page_os_version">OS संस्करण</string>
+    <string name="device_page_build_type">बिल्ड प्रकार</string>
+    <string name="device_page_android_version">Android संस्करण</string>
+    <string name="device_page_cpu_arch">CPU आर्किटेक्चर</string>
+    <string name="device_page_resolution">रिज़ॉल्यूशन</string>
+    <string name="device_page_dpi">डिस्प्ले घनत्व</string>
+
+    <string name="device_page_quick_operations">त्वरित संचालन</string>
+    <string name="device_page_root">रूट</string>
+    <string name="device_page_remount">रीमाउंट</string>
+    <string name="device_page_to_recovery">रिकवरी पर जाएं</string>
+    <string name="device_page_reboot">रीबूट करें</string>
+    <string name="device_page_to_fastboot">फ़ास्टबूट पर जाएं</string>
+    <string name="device_page_shutdown">बंद करें</string>
+    <string name="device_page_capture_trace">ट्रेस कैप्चर करें</string>
+    <string name="device_page_google_settings">Google सेटिंग्स</string>
+    <string name="device_page_display_id">डिस्प्ले आईडी (डिफ़ॉल्ट 0 है)</string>
+    <string name="device_page_scrcpy">Scrcpy स्क्रीन मिररिंग</string>
+
+    <string name="device_page_screen_record_capture">स्क्रीन रिकॉर्डिंग और स्क्रीनशॉट</string>
+    <string name="device_page_set_duration">अवधि सेट करें (सेकंड में)</string>
+    <string name="device_page_start_record">रिकॉर्डिंग शुरू करें</string>
+    <string name="device_page_capture_save">स्क्रीनशॉट सहेजें</string>
+    <string name="device_page_clear_record_cache">रिकॉर्डिंग कैश साफ़ करें</string>
+    <string name="device_page_clear_capture_cache">स्क्रीनशॉट कैश साफ़ करें</string>
+
+    <string name="device_page_virtual_buttons">वर्चुअल बटन</string>
+    <string name="device_page_back_button">पीछे जाएं</string>
+    <string name="device_page_home_button">होम पर जाएं</string>
+    <string name="device_page_recents_button">हाल के कार्य</string>
+    <string name="device_page_wake_screen">स्क्रीन चालू करें</string>
+    <string name="device_page_sleep_screen">स्क्रीन बंद करें</string>
+    <string name="device_page_lock_screen">स्क्रीन लॉक करें</string>
+    <string name="device_page_mute_switch">म्यूट स्विच</string>
+    <string name="device_page_volume_up">आवाज़ बढ़ाएं</string>
+    <string name="device_page_volume_down">आवाज़ कम करें</string>
+    <string name="device_page_input_text">इनपुट विधि (केवल अंग्रेज़ी)</string>
+    <string name="device_page_confirm">पुष्टि करें</string>
+
+    <string name="device_page_remount_tip">किया गया है, अगर यह फ़्लैश करने के बाद पहली रीमाउंट है, तो कृपया डिवाइस को पहले रीबूट करें</string>
+    <string name="device_page_trace_file_tip">डिफ़ॉल्ट रूप से 10 सेकंड के लिए कैप्चर करता है, पूरा होने पर फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
+    <string name="device_page_scrcpy_display_tip">पैरामीटर खाली है, डिस्प्लेआईडी डिफ़ॉल्ट रूप से 0 पर सेट है</string>
+    <string name="device_page_last_record_unfinish">पिछली रिकॉर्डिंग अभी तक पूरी नहीं हुई है</string>
+    <string name="device_page_record_time_tip">कृपया पहले रिकॉर्डिंग की अवधि दर्ज करें</string>
+    <string name="device_page_start_record_tip">शुरू हो गया है, रिकॉर्डिंग के दौरान उंगली के क्लिक की स्थिति दिखाई जाएगी, पूरा होने पर फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
+    <string name="device_page_recors_param_wrong">कृपया सही अवधि मान दर्ज करें</string>
+    <string name="device_page_pull_file_tip">पूरा होने पर फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
+    <string name="device_page_recording">रिकॉर्डिंग जारी है, कृपया बाद में पुनः प्रयास करें</string>
+    <string name="device_page_chche_clear_tip">कैश साफ़ कर दिया गया है, जगह बचाई गई है</string>
+
+
+    <string name="app_manage_page_showsystemapp">सिस्टम ऐप्लिकेशन दिखाएं</string>
+    <string name="app_manage_page_switch_too_fast">बहुत तेज़ी से स्विच कर रहे हैं!</string>
+    <string name="app_manage_page_apk_file_drag_tip">APK फ़ाइल को यहां खींचें या चुनने के लिए क्लिक करें</string>
+    <string name="app_manage_page_install_apk">इंस्टॉल करें</string>
+    <string name="app_manage_page_apk_file_null_tip">कृपया इंस्टॉल करने के लिए एक APK फ़ाइल चुनें</string>
+    <string name="app_manage_page_yes">हाँ</string>
+    <string name="app_manage_page_no">नहीं</string>
+    <string name="app_manage_page_start_an_app">खोलें</string>
+    <string name="app_manage_page_force_stop">ज़बरदस्ती बंद करें</string>
+    <string name="app_manage_page_show_app_info">जानकारी दिखाएं</string>
+    <string name="app_manage_page_extract_apk">APK निकालें</string>
+    <string name="app_manage_page_install_directly">सीधी स्थापना</string>
+    <string name="app_manage_page_reinstall">पुनः स्थापित करें</string>
+    <string name="app_manage_page_test_install">परीक्षण स्थापना</string>
+    <string name="app_manage_page_downgrade">डाउनग्रेड स्थापना</string>
+    <string name="app_manage_page_grant_permission">अनुमति के साथ स्थापित करें</string>
+    <string name="app_manage_page_is_system_app">क्या यह सिस्टम ऐप्लिकेशन है</string>
+    <string name="app_manage_page_min_sdk_version">न्यूनतम SDK संस्करण</string>
+    <string name="app_manage_page_target_sdk_version">लक्षित SDK संस्करण</string>
+    <string name="app_manage_page_apk_size">APK का आकार</string>
+    <string name="app_manage_page_install_path">स्थापना पथ</string>
+    <string name="app_manage_page_last_update_time">अंतिम अपडेट का समय</string>
+
+    <string name="file_manage_page_delete">मिटाएँ</string>
+    <string name="file_manage_page_move">यहां ले जाएं</string>
+    <string name="file_manage_page_copy">यहां कॉपी करें</string>
+    <string name="file_manage_page_pull">कंप्यूटर पर खींचें</string>
+    <string name="file_manage_page_copy_path">फ़ाइल पथ कॉपी करें</string>
+    <string name="file_manage_page_root_tip">पहले से ही रूट डायरेक्टरी में है</string>
+    <string name="file_manage_page_choose_first_tip">कृपया पहले एक फ़ाइल चुनें</string>
+    <string name="file_manage_page_copied_tip">पथ क्लिपबोर्ड पर कॉपी किया गया है</string>
+    <string name="file_manage_page_drag_tip">आप पुश ऑपरेशन के लिए सीधे फ़ाइलों को यहां खींच सकते हैं</string>
+    <string name="file_manage_page_file_modify_time">संशोधन का समय</string>
+    <string name="file_manage_page_delete_confirm">%1$s को मिटाने की पुष्टि करें?</string>
+
+    <string name="command_page_terminal">टर्मिनल</string>
+    <string name="command_page_command_tip">कृपया कमांड दर्ज करें</string>
+    <string name="command_page_execute">निष्पादित करें</string>
+    <string name="command_page_input_command">टर्मिनल कमांड दर्ज करें</string>
+    <string name="command_page_android_shell">Android शेल</string>
+    <string name="command_page_adb_command">adb कमांड दर्ज करें</string>
+
+    <string name="performance_page_cpu_overview">CPU अवलोकन</string>
+    <string name="performance_page_cpu_total">कुल</string>
+    <string name="performance_page_cpu_user">उपयोगकर्ता</string>
+    <string name="performance_page_cpu_sys">सिस्टम</string>
+    <string name="performance_page_cpu_nice">नाइस (कम प्राथमिकता)</string>
+    <string name="performance_page_cpu_idle">निष्क्रिय</string>
+    <string name="performance_page_cpu_io">IO प्रतीक्षा</string>
+    <string name="performance_page_cpu_irq">IRQ (हार्डवेयर इंटरप्ट)</string>
+    <string name="performance_page_cpu_sirq">SIRQ (सॉफ्टवेयर इंटरप्ट)</string>
+    <string name="performance_page_cpu_host">होस्ट (वर्चुअल मशीन)</string>
+    <string name="performance_page_memory_overview">मेमोरी अवलोकन</string>
+    <string name="performance_page_memory_total">कुल</string>
+    <string name="performance_page_memory_free">रिक्त</string>
+    <string name="performance_page_memory_used">उपयोग</string>
+    <string name="performance_page_app_performance">ऐप परफ़ॉर्मेंस</string>
+    <string name="performance_page_user_id">उपयोगकर्ता आईडी</string>
+    <string name="performance_page_pid">PID</string>
+    <string name="performance_page_physical_memory">भौतिक मेमोरी</string>
+    <string name="performance_page_cpu">CPU</string>
+    <string name="performance_page_process_name">प्रक्रिया का नाम</string>
+
+    <string name="ai_page_input_chat_word">बातचीत पाठ दर्ज करें</string>
+    <string name="ai_page_empty_tip">कृपया पहले बातचीत का पाठ दर्ज करें</string>
+    <string name="ai_page_send">भेजें</string>
+
+    <string name="tools_log_page_title">लॉग फ़ाइल प्रसंस्करण</string>
+    <string name="tools_log_page_drag_drop_tip">लॉग फ़ोल्डर को यहां खींचें या चुनने के लिए क्लिक करें</string>
+    <string name="tools_log_page_tag_hint">टैग (केस-सेंसिटिव)</string>
+    <string name="tools_log_page_process_button">प्रसंस्करण शुरू करें</string>
+    <string name="tools_log_page_process_tip">शुरू करने से पहले, अनावश्यक लॉग हटाकर दायरे को कम करने का प्रयास करें, ताकि खोज में बहुत अधिक समय न लगे</string>
+    <string name="tools_log_page_tag_max_tip">आप अधिकतम 10 टैग जोड़ सकते हैं</string>
+    <string name="tools_log_page_tag_exist_tip">यह टैग पहले से मौजूद है</string>
+    <string name="tools_log_page_tag_empty_tip">कृपया पहले एक टैग दर्ज करें</string>
+    <string name="tools_log_page_folder_empty_tip">कृपया पहले लॉग फ़ाइल चुनें</string>
+    <string name="tools_log_page_process_start_tip">प्रसंस्करण शुरू हो गया है, पूरा होने पर संबंधित फ़ोल्डर स्वचालित रूप से खुल जाएगा</string>
+
+    <string name="about_page_theme_setting">थीम सेटिंग्स</string>
+    <string name="about_page_language_setting">भाषा सेटिंग्स</string>
+    <string name="about_page_cache_folder_path">कैश पथ</string>
+    <string name="about_page_open_cache_folder">कैश फ़ोल्डर खोलें</string>
+    <string name="about_page_pulled_folder_path">PULL फ़ाइल पथ</string>
+    <string name="about_page_open_pulled_folder">PULL फ़ोल्डर खोलें</string>
+</resources>
