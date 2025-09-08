@@ -6,7 +6,10 @@
 
     <string name="dialog_confirm">Confirmar</string>
     <string name="dialog_cancel">Cancelar</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">¿Confirmar la salida de la aplicación?</string>
+
+    <string name="single_process_tip">Ya se ha detectado una instancia en ejecución.</string>
 
     <string name="side_menu_deviceinfo">Información del dispositivo</string>
     <string name="side_menu_app_manege">Gestión de aplicaciones</string>
@@ -78,12 +81,18 @@
     <string name="device_page_input_text">Método de entrada (solo inglés)</string>
     <string name="device_page_confirm">Confirmar</string>
 
-    <string name="device_page_remount_tip">Ejecutado. Si es el primer remount después de flashear, por favor reinicie el dispositivo primero</string>
-    <string name="device_page_trace_file_tip">Captura por defecto 10s. Al finalizar, la carpeta se abrirá automáticamente</string>
+    <string name="device_page_remount_tip">Ejecutado. Si es el primer remount después de flashear, por favor reinicie el
+        dispositivo primero
+    </string>
+    <string name="device_page_trace_file_tip">Captura por defecto 10s. Al finalizar, la carpeta se abrirá
+        automáticamente
+    </string>
     <string name="device_page_scrcpy_display_tip">El parámetro está vacío, el displayId por defecto es 0</string>
     <string name="device_page_last_record_unfinish">La última grabación aún no se ha completado</string>
     <string name="device_page_record_time_tip">Por favor, introduzca la duración de la grabación primero</string>
-    <string name="device_page_start_record_tip">Iniciado. La posición del clic del dedo se mostrará durante la grabación. Al finalizar, la carpeta se abrirá automáticamente</string>
+    <string name="device_page_start_record_tip">Iniciado. La posición del clic del dedo se mostrará durante la
+        grabación. Al finalizar, la carpeta se abrirá automáticamente
+    </string>
     <string name="device_page_recors_param_wrong">Por favor, introduzca un valor de duración correcto</string>
     <string name="device_page_pull_file_tip">Al finalizar, la carpeta se abrirá automáticamente</string>
     <string name="device_page_recording">Grabando, por favor, intente de nuevo más tarde</string>
@@ -158,15 +167,20 @@
     <string name="ai_page_send">Enviar</string>
 
     <string name="tools_log_page_title">Procesamiento de archivos de registro</string>
-    <string name="tools_log_page_drag_drop_tip">Arrastre la carpeta de registro aquí o haga clic para seleccionar</string>
+    <string name="tools_log_page_drag_drop_tip">Arrastre la carpeta de registro aquí o haga clic para seleccionar
+    </string>
     <string name="tools_log_page_tag_hint">Etiqueta (distingue mayúsculas de minúsculas)</string>
     <string name="tools_log_page_process_button">Comenzar a procesar</string>
-    <string name="tools_log_page_process_tip">Antes de comenzar, intente reducir el alcance y eliminar registros irrelevantes para evitar que la búsqueda tarde demasiado</string>
+    <string name="tools_log_page_process_tip">Antes de comenzar, intente reducir el alcance y eliminar registros
+        irrelevantes para evitar que la búsqueda tarde demasiado
+    </string>
     <string name="tools_log_page_tag_max_tip">Se pueden agregar un máximo de 10 etiquetas</string>
     <string name="tools_log_page_tag_exist_tip">Esta etiqueta ya existe</string>
     <string name="tools_log_page_tag_empty_tip">Por favor, introduzca una etiqueta primero</string>
     <string name="tools_log_page_folder_empty_tip">Por favor, seleccione un archivo de registro primero</string>
-    <string name="tools_log_page_process_start_tip">Procesamiento iniciado. Al finalizar, la carpeta correspondiente se abrirá automáticamente</string>
+    <string name="tools_log_page_process_start_tip">Procesamiento iniciado. Al finalizar, la carpeta correspondiente se
+        abrirá automáticamente
+    </string>
 
     <string name="about_page_theme_setting">Configuración del tema</string>
     <string name="about_page_language_setting">Configuración del idioma</string>

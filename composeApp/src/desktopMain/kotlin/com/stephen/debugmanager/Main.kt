@@ -1,10 +1,6 @@
 package com.stephen.debugmanager
 
-import androidx.compose.foundation.DarkDefaultContextMenuRepresentation
-import androidx.compose.foundation.LightDefaultContextMenuRepresentation
-import androidx.compose.foundation.LocalContextMenuRepresentation
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,19 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Tray
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberNotification
-import androidx.compose.ui.window.rememberTrayState
-import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.*
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.composeapp.generated.resources.dialog_confirm_exit
-import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.getLanguageCode
 import com.stephen.debugmanager.base.getLanguageLocale
-import com.stephen.debugmanager.data.LanguageState
 import com.stephen.debugmanager.data.ThemeState
 import com.stephen.debugmanager.di.koinModules
 import com.stephen.debugmanager.ui.ContentView
@@ -44,7 +33,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import java.awt.Dimension
-import java.util.Locale
+import java.util.*
 
 fun main() = application {
 

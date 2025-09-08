@@ -6,7 +6,10 @@
 
     <string name="dialog_confirm">Bestätigen</string>
     <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">Anwendung wirklich beenden?</string>
+
+    <string name="single_process_tip">Es ist bereits eine laufende Instanz von DebugManager vorhanden.</string>
 
     <string name="side_menu_deviceinfo">Geräteinformationen</string>
     <string name="side_menu_app_manege">Anwendungsverwaltung</string>

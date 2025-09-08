@@ -6,7 +6,10 @@
 
     <string name="dialog_confirm">Confirmer</string>
     <string name="dialog_cancel">Annuler</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">Confirmer la sortie de l'application ?</string>
+
+    <string name="single_process_tip">Une instance est déjà en cours d'exécution.</string>
 
     <string name="side_menu_deviceinfo">Informations sur l'appareil</string>
     <string name="side_menu_app_manege">Gestion des applications</string>

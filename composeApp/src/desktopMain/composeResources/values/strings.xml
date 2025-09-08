@@ -6,7 +6,10 @@
 
     <string name="dialog_confirm">Confirm</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">Confirm to exit the application?</string>
+
+    <string name="single_process_tip">A single instance of DebugManager is already running.</string>
 
     <string name="side_menu_deviceinfo">Device Info</string>
     <string name="side_menu_app_manege">App Manage</string>

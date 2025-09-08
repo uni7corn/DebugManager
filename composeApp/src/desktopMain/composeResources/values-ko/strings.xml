@@ -6,7 +6,10 @@
 
     <string name="dialog_confirm">확인</string>
     <string name="dialog_cancel">취소</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">앱을 종료하시겠습니까?</string>
+
+    <string name="single_process_tip">이미 실행 중인 인스턴스가 감지되었습니다.</string>
 
     <string name="side_menu_deviceinfo">장치 정보</string>
     <string name="side_menu_app_manege">앱 관리</string>

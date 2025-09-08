@@ -6,7 +6,10 @@
 
     <string name="dialog_confirm">पुष्टि करें</string>
     <string name="dialog_cancel">रद्द करें</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">क्या आप ऐप्लिकेशन से बाहर निकलने की पुष्टि करते हैं?</string>
+
+    <string name="single_process_tip">एक प्रकार की प्रक्रिया पहले से चल रही है।</string>
 
     <string name="side_menu_deviceinfo">डिवाइस की जानकारी</string>
     <string name="side_menu_app_manege">सॉफ्टवेयर प्रबंधन</string>

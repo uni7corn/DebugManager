@@ -6,7 +6,10 @@
 
     <string name="dialog_confirm">确认</string>
     <string name="dialog_cancel">取消</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">确认退出应用程序？</string>
+
+    <string name="single_process_tip">已经检测到有实例在运行</string>
 
     <string name="side_menu_deviceinfo">设备信息</string>
     <string name="side_menu_app_manege">软件管理</string>

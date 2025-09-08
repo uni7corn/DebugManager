@@ -97,9 +97,7 @@ class MainStateHolder(
             // 没有实例运行再初始化，如果有实例，只显示一个窗口
             if (!isRunning) {
                 adbClient.init()
-                dataStoreHelper.init(dataStoreFileName)
                 recycleCheckConnection()
-                initThemeAndLanguageState()
                 CoroutineScope(Dispatchers.IO).launch {
                     platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} start-server")
                     adbClient.runRootScript()
@@ -109,6 +107,8 @@ class MainStateHolder(
                 }
             }
         }
+        dataStoreHelper.init(dataStoreFileName)
+        initThemeAndLanguageState()
     }
 
     fun setSelectSystemApp(select: Boolean) {
