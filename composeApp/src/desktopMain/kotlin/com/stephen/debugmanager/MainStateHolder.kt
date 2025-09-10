@@ -93,17 +93,17 @@ class MainStateHolder(
         platformAdapter.init { isRunning ->
             // UI 界面以此判断显示关闭弹窗还是直接退出
             isOtherInstanceRunning.value = isRunning
-
             // 没有实例运行再初始化，如果有实例，只显示一个窗口
             if (!isRunning) {
                 adbClient.init()
                 recycleCheckConnection()
                 CoroutineScope(Dispatchers.IO).launch {
-                    platformAdapter.executeCommandWithResult("${platformAdapter.localAdbPath} start-server")
-                    adbClient.runRootScript()
-                    adbClient.runRemountScript()
-                    appinfoHelper.initAppInfoServer()
-                    getpackageListInfo()
+                    adbClient.whenDevicesConnected {
+                        adbClient.runRootScript()
+                        adbClient.runRemountScript()
+                        appinfoHelper.initAppInfoServer()
+                        getpackageListInfo()
+                    }
                 }
             }
         }
@@ -160,7 +160,7 @@ class MainStateHolder(
                     themeState
                 }
 
-                val languageState = it[languagePreferencesKey]?.toInt()?: LanguageState.CHINESE
+                val languageState = it[languagePreferencesKey]?.toInt() ?: LanguageState.CHINESE
                 LogUtils.printLog("getLanguageState-> languageState:$languageState", LogUtils.LogLevel.INFO)
                 _languageState.update {
                     languageState

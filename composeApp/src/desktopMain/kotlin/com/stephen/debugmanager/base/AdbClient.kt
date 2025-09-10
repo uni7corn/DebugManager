@@ -27,6 +27,14 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
             .contains("List of devices attached")
     }
 
+    suspend fun whenDevicesConnected(onDeviceConnected: suspend () -> Unit) = withContext(Dispatchers.IO) {
+        while (androidDeviceMap.isEmpty()) {
+            LogUtils.printLog("No Devices Connected!")
+            delay(500L)
+        }
+        onDeviceConnected()
+    }
+
     /**
      * 解析adb devices输出获取设备列表
      */
