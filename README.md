@@ -62,10 +62,7 @@ This software is for learning and communication purposes only. Do not use it for
 
 1. Install App: The "Software Installation" function at the top allows you to select an APK file from your computer. By configuring the correct installation parameters (e.g., downgrade, overwrite), you can install the APK onto the system. This is typically used for verifying third-party APKs. Note that system-built-in priv-apps cannot be updated with the install function; you must use the "Push" function below to replace them.
 2. App List: The app list below shows the name, version, package name, and update time of apps on the system. You can choose to display a simplified list or all apps. On the far right of each entry, a three-dot menu opens a detailed operation pop-up.
-3. Open App: This can directly open the main interface of the corresponding app. Note that this works for regular Activity-driven apps, but not for floating-window-based apps like those for A/C, seats, or all apps.
-4. Uninstall: Generally used for apps installed via run or third-party apps. For system-preloaded apps, direct uninstallation via uninstall is ineffective; they can only be removed by physically removing the APK file.
-5. Extract APK: Extracts the APK file of the corresponding software from the system to the desktop.
-6. Replace APK: Allows you to select an APK file from your computer to replace the original one on the device, enabling precise software updates. This is suitable for small-scale verification without a full system flash. After selecting the file, click "Start PUSH," and the replacement will happen automatically. After all pending APKs are replaced, reboot the device. The new APKs will be in effect on the next boot. Be aware that the push duration depends on the APK size; for APKs over 100MB, wait at least 10 seconds before rebooting.
+3. Left-clicking on each icon opens a pop-up window that displays information about the app, such as the version number, package name, and installation path. Right-clicking the icon opens a menu with options to launch the app's main interface, force stop it, extract the APK to a local directory, view information, and more.
 
 ### File Management
 
