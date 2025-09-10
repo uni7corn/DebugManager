@@ -31,6 +31,13 @@ A Compose Multiplatform Desktop software, for Android device debugging.
 ## Introduction
 This is a desktop software for debugging Android devices, particularly in-car systems. It is based on Compose Multiplatform and supports Windows, Linux, and macOS platforms.
 
+On macOS, you need to grant execution permissions to the scrcpy and adb executables first by running the following command:
+
+```bash
+cd /Applications/DebugManager.app/Contents/app/resources/
+chmod -R +x *
+```
+
 ## Declaration
 This software is for learning and communication purposes only. Do not use it for illegal activities, or you will be responsible for the consequences.
 
@@ -140,7 +147,8 @@ Starting from version 2.6.0, multilingual support has been added. It currently i
 ### Open-Source Libraries Used
 
 1. [AYA Server](https://github.com/liriliri/aya) The previous method for retrieving app icons involved installing an APK and launching a service, which required dealing with permission issues. Using the AYA Server, a DEX file is pushed to the device to hook system services, which then starts as a Linux process to store the icons.
-2. [Ktor](https://ktor.io/) Used for building the HTTP service.
-3. [Koin](https://insert-koin.io/) Used for dependency injection.
-4. [Coil](https://coil-kt.github.io/coil/) Used for image loading.
-5. [DataStore](https://klibs.io/project/androidx/androidx) Used for persistent storage of theme and language.
+2. [scrcpy](https://github.com/Genymobile/scrcpy) To offer a plug-and-play experience for non-technical users without requiring them to set up environment variables or other configurations, I use the scrcpy open-source project's official release files, which contain both the screen-mirroring and ADB tools.
+3. [Ktor](https://ktor.io/) Used for building the HTTP service.
+4. [Koin](https://insert-koin.io/) Used for dependency injection.
+5. [Coil](https://coil-kt.github.io/coil/) Used for image loading.
+6. [DataStore](https://klibs.io/project/androidx/androidx) Used for persistent storage of theme and language.
