@@ -9,7 +9,9 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">Подтвердить выход из приложения?</string>
 
-    <string name="single_process_tip">Экземпляр приложения уже запущен.</string>
+    <string name="device_not_connect_tip">Android-устройство не подключено. Эта функция недоступна</string>
+
+    <string name="single_process_tip">Экземпляр приложения уже запущен</string>
 
     <string name="side_menu_deviceinfo">Информация об устройстве</string>
     <string name="side_menu_app_manege">Управление приложениями</string>

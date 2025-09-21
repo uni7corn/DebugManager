@@ -9,6 +9,8 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">تأكيد الخروج من التطبيق؟</string>
 
+    <string name="device_not_connect_tip">جهاز Android غير متصل، هذه الميزة غير متاحة</string>
+
     <string name="single_process_tip">تم الكشف عن وجود نسخة قيد التشغيل بالفعل</string>
 
     <string name="side_menu_deviceinfo">معلومات الجهاز</string>

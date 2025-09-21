@@ -9,7 +9,9 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">アプリケーションを終了しますか？</string>
 
-    <string name="single_process_tip">既に実行中のインスタンスがあります。</string>
+    <string name="device_not_connect_tip">Androidデバイスが接続されていません。この機能は利用できません</string>
+
+    <string name="single_process_tip">既に実行中のインスタンスがあります</string>
 
     <string name="side_menu_deviceinfo">デバイス情報</string>
     <string name="side_menu_app_manege">アプリ管理</string>

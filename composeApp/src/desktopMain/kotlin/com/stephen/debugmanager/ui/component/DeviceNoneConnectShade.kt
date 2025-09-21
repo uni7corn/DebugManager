@@ -8,6 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.stephen.composeapp.generated.resources.Res
+import com.stephen.composeapp.generated.resources.device_not_connect_tip
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DeviceNoneConnectShade() {
@@ -15,7 +18,7 @@ fun DeviceNoneConnectShade() {
         MutableInteractionSource()
     }
     CenterText(
-        "设备未连接，当前功能不可用", modifier = Modifier.fillMaxSize(1f).background(
+        stringResource(Res.string.device_not_connect_tip), modifier = Modifier.fillMaxSize(1f).background(
             MaterialTheme.colorScheme.background.copy(alpha = 0.8f)
         ).clickable(indication = null, interactionSource = interactionSource) {
             // 屏蔽掉鼠标点击事件

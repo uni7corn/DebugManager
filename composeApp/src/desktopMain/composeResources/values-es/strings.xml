@@ -9,6 +9,8 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">¿Confirmar la salida de la aplicación?</string>
 
+    <string name="device_not_connect_tip">El dispositivo Android no está conectado, esta función no está disponible</string>
+
     <string name="single_process_tip">Ya se ha detectado una instancia en ejecución.</string>
 
     <string name="side_menu_deviceinfo">Información del dispositivo</string>

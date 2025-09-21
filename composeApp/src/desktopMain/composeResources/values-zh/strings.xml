@@ -9,6 +9,8 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">确认退出应用程序？</string>
 
+    <string name="device_not_connect_tip">Android设备未连接，当前功能不可用</string>
+
     <string name="single_process_tip">已经检测到有实例在运行</string>
 
     <string name="side_menu_deviceinfo">设备信息</string>

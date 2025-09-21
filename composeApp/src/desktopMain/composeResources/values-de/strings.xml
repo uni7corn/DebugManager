@@ -9,6 +9,8 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">Anwendung wirklich beenden?</string>
 
+    <string name="device_not_connect_tip">Android-Gerät ist nicht verbunden, diese Funktion ist nicht verfügbar</string>
+
     <string name="single_process_tip">Es ist bereits eine laufende Instanz von DebugManager vorhanden.</string>
 
     <string name="side_menu_deviceinfo">Geräteinformationen</string>

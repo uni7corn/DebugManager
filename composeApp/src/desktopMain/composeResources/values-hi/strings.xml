@@ -9,6 +9,8 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_confirm_exit">क्या आप ऐप्लिकेशन से बाहर निकलने की पुष्टि करते हैं?</string>
 
+    <string name="device_not_connect_tip">एड्रॉइड डिवाइस नहीं कनेक्टेड, यह सुविधा उपलब्ध नहीं है</string>
+
     <string name="single_process_tip">एक प्रकार की प्रक्रिया पहले से चल रही है।</string>
 
     <string name="side_menu_deviceinfo">डिवाइस की जानकारी</string>
