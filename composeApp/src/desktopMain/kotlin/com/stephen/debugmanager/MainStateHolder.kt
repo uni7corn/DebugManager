@@ -26,6 +26,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 
 class MainStateHolder(
@@ -842,26 +843,27 @@ class MainStateHolder(
         // 在线call，等待AI模型生成回复
         CoroutineScope(Dispatchers.IO).launch {
             runCatching {
-                val result = when (model) {
-                    AIModels.DEEPSEEK -> deepSeekRepository.chatWithDeepSeek(text).choices[0].message.content
-                    AIModels.KIMI -> kimiRepository.chatWithMoonShotKimi(text).choices[0].message.content
-                    else -> "Error Occurred"
+                val streamResult = StringBuilder()
+                val currentChatList = _aiModelChatListState.value.chatList
+                deepSeekRepository.streamChatCompletion(text).collect { data ->
+                    streamResult.append(data.choices[0].delta.content)
+                    LogUtils.printLog("streamChatCompletion-> 回复内容: $streamResult")
+                    // 模拟延迟，效果更真实
+                    delay(200)
+                    _aiModelChatListState.update {
+                        it.copy(
+                            chatList = currentChatList + listOf(
+                                ChatItem(
+                                    content = streamResult.toString(),
+                                    modelName = model,
+                                    role = Role.ASSISTANT
+                                )
+                            ),
+                            listSize = it.listSize + 1
+                        )
+                    }
+                    _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
                 }
-                LogUtils.printLog(result)
-                // 回复的内容
-                _aiModelChatListState.update {
-                    it.copy(
-                        chatList = it.chatList + listOf(
-                            ChatItem(
-                                content = result,
-                                modelName = model,
-                                role = Role.ASSISTANT
-                            )
-                        ),
-                        listSize = it.listSize + 1
-                    )
-                }
-                _aiModelChatListState.value = _aiModelChatListState.value.toUiState()
             }.onFailure { e ->
                 LogUtils.printLog(e.message.toString(), LogUtils.LogLevel.ERROR)
                 // 回复的内容

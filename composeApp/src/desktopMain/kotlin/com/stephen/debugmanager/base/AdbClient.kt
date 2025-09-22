@@ -29,9 +29,9 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
 
     suspend fun whenDevicesConnected(onDeviceConnected: suspend () -> Unit) = withContext(Dispatchers.IO) {
         while (androidDeviceMap.isEmpty()) {
-            LogUtils.printLog("No Devices Connected!")
             delay(500L)
         }
+        LogUtils.printLog("Device Connected: $serial")
         onDeviceConnected()
     }
 
