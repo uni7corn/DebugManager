@@ -64,30 +64,32 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     val localAdbPath =
         when (platformType) {
-            PlatformType.WINDOWS, PlatformType.UNKNOWN ->
+            PlatformType.WINDOWS ->
                 "$workDirectory${sp}app${sp}resources${sp}scrcpy${sp}adb.exe"
 
-            PlatformType.LINUX -> "adb"
+            PlatformType.LINUX, PlatformType.UNKNOWN -> "${sp}opt${sp}debugmanager${sp}lib${sp}app${sp}resources${sp}scrcpy${sp}adb"
 
             PlatformType.MAC -> "${sp}Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}scrcpy${sp}adb"
         }
 
     val localScrcpyPath =
         when (platformType) {
-            PlatformType.WINDOWS, PlatformType.UNKNOWN ->
+            PlatformType.WINDOWS ->
                 "$workDirectory${sp}app${sp}resources${sp}scrcpy${sp}scrcpy.exe"
 
-            PlatformType.MAC, PlatformType.LINUX -> "scrcpy"
+            PlatformType.LINUX, PlatformType.UNKNOWN -> "${sp}opt${sp}debugmanager${sp}lib${sp}app${sp}resources${sp}scrcpy${sp}scrcpy"
+
+            PlatformType.MAC -> "${sp}Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}scrcpy${sp}scrcpy"
         }
 
     fun getUserTempFilePath() = userConfigFile
 
     suspend fun getAppInfoServerDexPath() =
         when (platformType) {
-            PlatformType.WINDOWS, PlatformType.UNKNOWN ->
+            PlatformType.WINDOWS ->
                 "\"$workDirectory${sp}app${sp}resources${sp}aya.dex\""
 
-            PlatformType.LINUX ->
+            PlatformType.LINUX, PlatformType.UNKNOWN ->
                 // original result:
                 // DebugManager: /opt/debugmanager/bin/DebugManager
                 // need to switch to /opt/debugmanager//lib/app/resources/AppInfoService.apk
