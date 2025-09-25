@@ -142,7 +142,7 @@ class Connection(private val client: LocalSocket) : Thread() {
 
         val info = JSONObject()
         info.put("packageName", packageInfo.packageName)
-        info.put("versionName", packageInfo.versionName)
+        info.put("versionName", packageInfo.versionName ?: "")
         info.put("firstInstallTime", packageInfo.firstInstallTime)
         info.put("lastUpdateTime", packageInfo.lastUpdateTime)
 //        info.put("signatures", getSignatures(packageInfo))
