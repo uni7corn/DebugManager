@@ -67,10 +67,11 @@ data / utils 不依赖 Compose UI 与 ADB
 
 **启动顺序（简）：**
 
-1. `startKoin { modules(koinModules) }`
-2. `PlatformAdapter.init` → 单实例锁回调
-3. 已有实例 → `ui/SingleProcessTipWindow`；否则 `AdbClient.init` + 连接轮询等
-4. UI：`SplashScreen` → `ContentView`
+1. `PlatformAdapter.configureLogging()`（注入日志目录）
+2. `startKoin { modules(koinModules) }`
+3. `PlatformAdapter.init` → 单实例锁回调
+4. 已有实例 → `ui/SingleProcessTipWindow`；否则 `AdbClient.init` + 连接轮询等
+5. UI：`SplashScreen` → `ContentView`
 
 **MainStateHolder** 持有并编排：设备列表/当前设备、文件目录、应用列表、性能、终端与 ADB 命令历史、AI 对话、主题/语言/模型选择（DataStore）。UI 经 Koin / `GlobalContext.get().get<MainStateHolder>()` 获取。
 
@@ -86,12 +87,12 @@ data / utils 不依赖 Compose UI 与 ADB
 |---|---|
 | `AdbClient.kt` | 设备列表解析、当前 `serial`、root/remount、shell 执行 |
 | `PlatformAdapter.kt` | OS 判定、adb/scrcpy/dex 路径、进程执行、缓存目录、剪贴板、Locale |
-| `SingleInstanceApp.kt` | `~/.debugmanagerTemp/app.lock` 文件锁 |
+| `SingleInstanceApp.kt` | 配置目录下 `app.lock` 文件锁 |
 
 要点：
 
 - **ADB/scrcpy 路径动态解析**（`PlatformAdapter.resolveResourcePath`）：打包态从本 class 所在 JAR 反推 `<安装目录>/app/resources/…`，开发态回退仓库 `resources/{platform}/…`；不再写死 `/Applications` / `/opt` / `user.dir`。
-- 用户数据目录：`~/.debugmanagerTemp`（日志、拉取缓存、DataStore、锁）。
+- 用户数据目录按 OS 标准位置三分离：配置（DataStore、锁）、缓存（拉取文件、设备临时数据）、日志。日志目录由 `PlatformAdapter.configureLogging()` 注入 `debugmanager.log.dir` 系统属性，`log4j2.xml` 读取该属性写日志。
 - 命令执行用 `executeCommandWithResult` / `executeTerminalCommand`，UI 层不要直接 `ProcessBuilder`。
 - 带设备命令使用 `AdbClient.serial` 与 `-s`。
 - OS 差异放 `PlatformAdapter`；ADB 语义放 `AdbClient`。改单实例需同步 `Main.kt` 分支。

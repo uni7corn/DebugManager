@@ -68,7 +68,7 @@ PlatformAdapter（进程执行、路径、剪贴板、单实例锁）
 2. **MainStateHolder**：设备列表、当前设备、文件树、应用列表、性能、终端历史、主题/语言/AI 状态的唯一编排入口。
 3. **base**：
    - `AdbClient`：设备发现、root/remount、shell 执行等 ADB 语义。
-   - `PlatformAdapter`：OS 差异、资源路径、命令执行、用户缓存目录 `~/.debugmanagerTemp`。
+   - `PlatformAdapter`：OS 差异、资源路径、命令执行、用户配置/缓存/日志目录（按 OS 标准位置）。
    - `SingleInstanceApp`：文件锁单实例；已有实例时显示 `SingleProcessTipWindow`。
 4. **helper**：文件管理、应用信息（AYA）、日志路径、DataStore 封装。
 5. **net**：HTTP 客户端与各 LLM Repository。
@@ -94,7 +94,7 @@ PlatformAdapter（进程执行、路径、剪贴板、单实例锁）
 
 `PlatformAdapter.localAdbPath` / `localScrcpyPath` / `aya.dex` 路径**动态解析**，不再写死安装目录：优先从本 class 所在 JAR 反推 app 内容目录（打包后为 `<安装目录>/app/resources/scrcpy/…`，macOS 为 `*.app/Contents/app/resources/scrcpy/…`），开发态回退到仓库 `resources/{platform}/…`。资源仍经 Compose Desktop `appResourcesRootDir`（`../resources`）打进安装包（`prepareAppResources` 会把 `{platform}/scrcpy` 压平为 `resources/scrcpy`、`common/aya.dex` 压平为 `resources/aya.dex`）。打包配置在 `composeApp/build.gradle.kts` 的 `compose.desktop.application`。
 
-用户数据目录：`~/.debugmanagerTemp`（日志、拉取缓存、DataStore、单实例锁等）。
+用户数据目录按 OS 标准位置三分离：配置（DataStore、单实例锁）、缓存（拉取文件、设备临时数据）、日志，分别落在 macOS `~/Library/Application Support|Caches|Logs/DebugManager`、Windows `%APPDATA%`/`%LOCALAPPDATA%`、Linux `~/.config`/`~/.cache`/`~/.local/state`。
 
 ## 运行与构建
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.window.*
 import com.stephen.composeapp.generated.resources.Res
 import com.stephen.composeapp.generated.resources.app_logo
 import com.stephen.composeapp.generated.resources.dialog_confirm_exit
+import com.stephen.debugmanager.base.PlatformAdapter
 import com.stephen.debugmanager.base.getLanguageCode
 import com.stephen.debugmanager.base.getLanguageLocale
 import com.stephen.debugmanager.data.ThemeState
@@ -36,6 +37,9 @@ import java.awt.Dimension
 import java.util.*
 
 fun main() = application {
+
+    // 必须在任何 Logger 初始化之前注入日志目录（log4j2 读取系统属性）
+    PlatformAdapter.configureLogging()
 
     startKoin {
         modules(koinModules)

@@ -21,44 +21,109 @@ import java.util.*
 class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     fun init(onSingleAppRunning: (Boolean) -> Unit) {
-        createInitTempFile()
+        ensureUserDataDirectories()
         ensureExecutablePermissions()
         singleInstanceApp.initCheckFileLock(lockFilePath, onSingleAppRunning)
     }
 
     companion object {
-        // 路径分隔符
+
+        // ===== 平台判定 =====
+
+        /** 系统路径分隔符（Windows 为 '\'，macOS/Linux 为 '/'） */
         val sp: String = File.separator
 
+        /** 当前系统登录用户名，用于终端提示符展示 */
         val computerUserName: String? = System.getProperty("user.name")
 
-        val osName = System.getProperty("os.name").lowercase(Locale.getDefault())
+        /** 操作系统名（小写），仅用于下方 platformType 判定 */
+        private val osName = System.getProperty("os.name").lowercase(Locale.getDefault())
 
-        val platformType = if (osName.contains("win")) PlatformType.WINDOWS
-        else if (osName.contains("mac")) PlatformType.MAC
-        else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) PlatformType.LINUX
-        else PlatformType.UNKNOWN
+        val platformType = when {
+            osName.contains("win") -> PlatformType.WINDOWS
+            osName.contains("mac") -> PlatformType.MAC
+            osName.contains("nix") || osName.contains("nux") || osName.contains("aix") -> PlatformType.LINUX
+            else -> PlatformType.UNKNOWN
+        }
 
-        // 终端清屏命令
-        val clearCommandList = listOf<String>("cls", "clear")
+        /** 终端清屏命令（Windows 为 cls，macOS/Linux 为 clear） */
+        val clearCommandList = listOf("cls", "clear")
 
-        // jvm工作目录
-        // Windows可以显示exe的目录，另外2个平台显示的都是user目录
+        // ===== 运行环境 =====
+
+        /** JVM 工作目录；仅开发态（gradle run）回退定位资源时使用，打包态不依赖它 */
         private val workDirectory: String = System.getProperty("user.dir")
 
-        // use目录下的配置文件目录
-        private val userConfigFile = "${System.getProperty("user.home")}${sp}.debugmanagerTemp"
-        val userLogConfigFile = "${userConfigFile}${sp}LogFiles"
-        val userAndroidTempFiles = "${userConfigFile}${sp}AndroidDeviceTempFiles"
+        /** 应用版本：打包态由 jpackage 注入，开发态显示 dev */
+        val appVersion: String = System.getProperty("jpackage.app-version") ?: "dev"
 
-        // 拉取Android文件缓存文件夹路径
-        val pulledTempFolder = "$userConfigFile${sp}PulledTempFiles"
+        // ===== 用户数据 / 缓存 / 日志目录（按 OS 标准位置） =====
+        // 配置、缓存、日志分别落到各平台约定目录，避免自建 ~/.debugmanagerTemp。
 
-        val appVersion: String = System.getProperty("jpackage.app-version") ?: "DefaultVersion 1.0.0"
+        /** 用户主目录 */
+        private val homeDir: String = System.getProperty("user.home")
 
-        val dataStoreFileName = "${userConfigFile}${sp}local_datastore.preferences_pb"
+        /** 配置目录：DataStore 偏好、单实例锁 */
+        private val userConfigDir: String = when (platformType) {
+            PlatformType.WINDOWS ->
+                (System.getenv("APPDATA")?.takeIf { it.isNotBlank() } ?: homeDir) + "${sp}DebugManager"
+            PlatformType.MAC ->
+                "$homeDir${sp}Library${sp}Application Support${sp}DebugManager"
+            else ->
+                (System.getenv("XDG_CONFIG_HOME")?.takeIf { it.isNotBlank() } ?: "$homeDir${sp}.config") + "${sp}DebugManager"
+        }
 
-        val lockFilePath = "${userConfigFile}${sp}app.lock"
+        /** 缓存目录：设备拉取的临时数据与文件 */
+        private val userCacheDir: String = when (platformType) {
+            PlatformType.WINDOWS ->
+                (System.getenv("LOCALAPPDATA")?.takeIf { it.isNotBlank() } ?: homeDir) + "${sp}DebugManager${sp}Cache"
+            PlatformType.MAC ->
+                "$homeDir${sp}Library${sp}Caches${sp}DebugManager"
+            else ->
+                (System.getenv("XDG_CACHE_HOME")?.takeIf { it.isNotBlank() } ?: "$homeDir${sp}.cache") + "${sp}DebugManager"
+        }
+
+        /** 日志目录 */
+        private val userLogDir: String = when (platformType) {
+            PlatformType.WINDOWS ->
+                (System.getenv("LOCALAPPDATA")?.takeIf { it.isNotBlank() } ?: homeDir) + "${sp}DebugManager${sp}Logs"
+            PlatformType.MAC ->
+                "$homeDir${sp}Library${sp}Logs${sp}DebugManager"
+            else ->
+                (System.getenv("XDG_STATE_HOME")?.takeIf { it.isNotBlank() } ?: "$homeDir${sp}.local${sp}state") + "${sp}DebugManager"
+        }
+
+        /** 从 Android 设备拉取的临时数据目录（应用图标等） */
+        val userAndroidTempFiles = "$userCacheDir${sp}AndroidDeviceTempFiles"
+
+        /** 从设备 Pull 下来的文件缓存目录 */
+        val pulledTempFolder = "$userCacheDir${sp}PulledTempFiles"
+
+        /** 应用偏好文件（主题 / 语言 / AI 模型，DataStore） */
+        val dataStoreFileName = "$userConfigDir${sp}local_datastore.preferences_pb"
+
+        /** 单实例文件锁 */
+        val lockFilePath = "$userConfigDir${sp}app.lock"
+
+        /** 启动时需确保存在的所有目录（幂等创建） */
+        private val userDataDirs = listOf(
+            userConfigDir,
+            userCacheDir,
+            userLogDir,
+            userAndroidTempFiles,
+            pulledTempFolder,
+        )
+
+        /**
+         * 必须在任何 Logger 初始化之前调用：创建日志目录并把路径注入系统属性，
+         * 供 log4j2.xml 的 ${sys:debugmanager.log.dir} 使用。
+         */
+        fun configureLogging() {
+            runCatching { Files.createDirectories(Paths.get(userLogDir)) }
+            System.setProperty("debugmanager.log.dir", userLogDir)
+        }
+
+        // ===== 本地化 =====
 
         val systemLocale: Locale = Locale.getDefault() ?: Locale.US
         val systemLanguage = systemLocale.toString().split("_").first()
@@ -103,31 +168,19 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     val localScrcpyPath: String = binaryPath("scrcpy")
 
-    fun getUserTempFilePath() = userConfigFile
+    fun getUserTempFilePath() = userCacheDir
 
     suspend fun getAppInfoServerDexPath(): String = resolveResourcePath("aya.dex")
 
     /**
-     * 创建配置文件缓存文件夹
+     * 启动时确保用户数据 / 缓存目录存在（幂等：已存在则跳过）。
      */
-    private fun createInitTempFile() {
+    private fun ensureUserDataDirectories() {
         runCatching {
-            // 创建本地log文件夹
-            val localLogFile = Paths.get("${userLogConfigFile}${sp}thisisaemptyfile")
-            Files.createDirectories(localLogFile.parent)
-            // 创建android拉取图标等数据文件夹
-            val androidTemp = Paths.get("${userAndroidTempFiles}${sp}thisisaemptyfile")
-            Files.createDirectories(androidTemp.parent)
-            // 创建桌面的缓存文件
-            val desktopTemp = Paths.get("${pulledTempFolder}${sp}thisisaemptyfile")
-            Files.createDirectories(desktopTemp.parent)
-            // 进程锁文件
-            val lockFile = Paths.get(lockFilePath)
-            Files.createDirectories(lockFile.parent)
-            // 目录创建完成，程序开启
+            userDataDirs.forEach { Files.createDirectories(Paths.get(it)) }
             LogUtils.printLog("\n\n\n=====>Application start<======")
         }.onFailure { e ->
-            LogUtils.printLog("创建配置文件失败：${e.message}")
+            LogUtils.printLog("创建用户数据目录失败：${e.message}", LogUtils.LogLevel.ERROR)
         }
     }
 

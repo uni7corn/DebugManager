@@ -69,8 +69,8 @@
 
 ## 3. 运行时主路径
 
-1. `Main.kt`：`startKoin` → 取 `MainStateHolder`
-2. `PlatformAdapter.init` + 单实例锁（`SingleInstanceApp` / `~/.debugmanagerTemp/app.lock`）
+1. `Main.kt`：`PlatformAdapter.configureLogging()` → `startKoin` → 取 `MainStateHolder`
+2. `PlatformAdapter.init` + 单实例锁（`SingleInstanceApp` / 配置目录下 `app.lock`）
 3. 若已有实例 → 仅 `SingleProcessTipWindow`；否则 `AdbClient.init` 与连接轮询
 4. Window（透明无边框）→ Splash → `ContentView`（侧栏 + NavHost）
 5. 各 Page `collectAsState` StateFlow，用户操作回调 StateHolder 方法
@@ -150,7 +150,7 @@
 | 日志 | `utils.LogUtils` | 避免散落 `println` |
 | 原生资源 | 仓库 `resources/` | 勿随意替换 scrcpy/adb 二进制 |
 
-用户数据根目录：`~/.debugmanagerTemp`。
+用户数据目录按 OS 标准位置三分离（配置/缓存/日志）：macOS `~/Library/Application Support|Caches|Logs/DebugManager`，Windows `%APPDATA%`/`%LOCALAPPDATA%`，Linux `~/.config`/`~/.cache`/`~/.local/state`。
 
 ---
 
