@@ -15,12 +15,14 @@ import java.io.File
 import java.io.InputStreamReader
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.attribute.PosixFilePermission
 import java.util.*
 
 class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
 
     fun init(onSingleAppRunning: (Boolean) -> Unit) {
         createInitTempFile()
+        ensureExecutablePermissions()
         singleInstanceApp.initCheckFileLock(lockFilePath, onSingleAppRunning)
     }
 
@@ -62,45 +64,48 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
         val systemLanguage = systemLocale.toString().split("_").first()
     }
 
-    val localAdbPath =
-        when (platformType) {
-            PlatformType.WINDOWS ->
-                "$workDirectory${sp}app${sp}resources${sp}scrcpy${sp}adb.exe"
+    /**
+     * 应用内容目录：打包后本 class 从 <安装目录>/app 下的 jar 加载
+     * （macOS 为 *.app/Contents/app，Linux 为 /opt/debugmanager/lib/app，Windows 为 <安装目录>/app），
+     * 该 jar 所在目录即 app 内容目录，adb/scrcpy 等资源统一放在它下面的 resources/。
+     * 开发态（gradle run）class 从 build/classes 加载，此值不可用，交由 resolveResourcePath 回退 user.dir。
+     */
+    private val appContentDir: String? = runCatching {
+        val url = PlatformAdapter::class.java.protectionDomain?.codeSource?.location
+            ?: return@runCatching null
+        Paths.get(url.toURI()).parent?.toString()
+    }.getOrNull()
 
-            PlatformType.LINUX, PlatformType.UNKNOWN -> "${sp}opt${sp}debugmanager${sp}lib${sp}app${sp}resources${sp}scrcpy${sp}adb"
-
-            PlatformType.MAC -> "${sp}Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}scrcpy${sp}adb"
+    /**
+     * 解析本机资源文件的绝对路径：按候选顺序取第一个存在的文件，都不存在则返回首选（动态路径，不写死安装目录）。
+     * 三平台统一布局为 <资源根>/resources/…，仅 Windows 的可执行文件带 .exe 后缀。
+     */
+    private fun resolveResourcePath(relativeInResources: String): String {
+        val platformDir = when (platformType) {
+            PlatformType.WINDOWS -> "windows"
+            PlatformType.MAC -> "macos"
+            else -> "linux"
         }
-
-    val localScrcpyPath =
-        when (platformType) {
-            PlatformType.WINDOWS ->
-                "$workDirectory${sp}app${sp}resources${sp}scrcpy${sp}scrcpy.exe"
-
-            PlatformType.LINUX, PlatformType.UNKNOWN -> "${sp}opt${sp}debugmanager${sp}lib${sp}app${sp}resources${sp}scrcpy${sp}scrcpy"
-
-            PlatformType.MAC -> "${sp}Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}scrcpy${sp}scrcpy"
+        val candidates = buildList {
+            // 1) 打包态：app 内容目录下的 resources/
+            appContentDir?.let { add("$it${sp}resources${sp}$relativeInResources") }
+            // 2) 开发态：仓库 resources/{platform}/（相对 user.dir 或上一级）
+            add("$workDirectory${sp}resources${sp}$platformDir${sp}$relativeInResources")
+            add("$workDirectory${sp}..${sp}resources${sp}$platformDir${sp}$relativeInResources")
         }
+        return candidates.firstOrNull { Files.exists(Paths.get(it)) } ?: candidates.first()
+    }
+
+    private fun binaryPath(name: String): String =
+        resolveResourcePath("scrcpy${sp}${if (platformType == PlatformType.WINDOWS) "$name.exe" else name}")
+
+    val localAdbPath: String = binaryPath("adb")
+
+    val localScrcpyPath: String = binaryPath("scrcpy")
 
     fun getUserTempFilePath() = userConfigFile
 
-    suspend fun getAppInfoServerDexPath() =
-        when (platformType) {
-            PlatformType.WINDOWS ->
-                "\"$workDirectory${sp}app${sp}resources${sp}aya.dex\""
-
-            PlatformType.LINUX, PlatformType.UNKNOWN ->
-                // original result:
-                // DebugManager: /opt/debugmanager/bin/DebugManager
-                // need to switch to /opt/debugmanager//lib/app/resources/AppInfoService.apk
-                executeCommandWithResult("whereis DebugManager").split(" ").drop(1).joinToString()
-                    .split("/")
-                    .dropLast(2)
-                    .joinToString("/") + "${sp}lib${sp}app${sp}resources${sp}aya.dex"
-
-            PlatformType.MAC ->
-                "/Applications${sp}DebugManager.app${sp}Contents${sp}app${sp}resources${sp}aya.dex"
-        }
+    suspend fun getAppInfoServerDexPath(): String = resolveResourcePath("aya.dex")
 
     /**
      * 创建配置文件缓存文件夹
@@ -123,6 +128,37 @@ class PlatformAdapter(private val singleInstanceApp: SingleInstanceApp) {
             LogUtils.printLog("\n\n\n=====>Application start<======")
         }.onFailure { e ->
             LogUtils.printLog("创建配置文件失败：${e.message}")
+        }
+    }
+
+    /**
+     * 确保本机 adb/scrcpy 二进制具备可执行权限。
+     * jpackage 在 macOS/Linux 打包时可能丢失文件的 x 位，导致命令执行报 Permission denied；
+     * 这里在启动阶段自动修复，避免依赖用户手动 chmod。Windows 使用 .exe，无需处理。
+     */
+    fun ensureExecutablePermissions() {
+        if (platformType == PlatformType.WINDOWS) return
+        listOf(localAdbPath, localScrcpyPath).forEach { path ->
+            runCatching {
+                val file = Paths.get(path)
+                if (Files.exists(file)) {
+                    Files.setPosixFilePermissions(
+                        file,
+                        setOf(
+                            PosixFilePermission.OWNER_READ,
+                            PosixFilePermission.OWNER_WRITE,
+                            PosixFilePermission.OWNER_EXECUTE,
+                            PosixFilePermission.GROUP_READ,
+                            PosixFilePermission.GROUP_EXECUTE,
+                            PosixFilePermission.OTHERS_READ,
+                            PosixFilePermission.OTHERS_EXECUTE,
+                        )
+                    )
+                    LogUtils.printLog("ensureExecutablePermissions: $path")
+                }
+            }.onFailure { e ->
+                LogUtils.printLog("ensureExecutablePermissions failed: $path -> ${e.message}", LogUtils.LogLevel.ERROR)
+            }
         }
     }
 

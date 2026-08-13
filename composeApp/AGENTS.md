@@ -90,7 +90,7 @@ data / utils 不依赖 Compose UI 与 ADB
 
 要点：
 
-- **ADB/scrcpy 路径按安装包布局**解析。Windows 例：`{user.dir}/app/resources/scrcpy/adb.exe`；macOS/Linux 为固定安装路径。开发态 `run` 时 `user.dir` 可能不同，改路径前确认开发/打包差异。
+- **ADB/scrcpy 路径动态解析**（`PlatformAdapter.resolveResourcePath`）：打包态从本 class 所在 JAR 反推 `<安装目录>/app/resources/…`，开发态回退仓库 `resources/{platform}/…`；不再写死 `/Applications` / `/opt` / `user.dir`。
 - 用户数据目录：`~/.debugmanagerTemp`（日志、拉取缓存、DataStore、锁）。
 - 命令执行用 `executeCommandWithResult` / `executeTerminalCommand`，UI 层不要直接 `ProcessBuilder`。
 - 带设备命令使用 `AdbClient.serial` 与 `-s`。

@@ -92,11 +92,7 @@ PlatformAdapter（进程执行、路径、剪贴板、单实例锁）
 
 ### 平台与资源路径（重要）
 
-`PlatformAdapter.localAdbPath` / `localScrcpyPath` 按 **已安装包布局** 解析，例如 Windows：
-
-`{user.dir}/app/resources/scrcpy/adb.exe`
-
-开发态 `run` 时 `user.dir` 未必等于该布局；调试 ADB 相关功能时需注意资源是否已按 Compose Desktop `appResourcesRootDir`（`../resources`）正确落到运行目录。打包配置在 `composeApp/build.gradle.kts` 的 `compose.desktop.application`。
+`PlatformAdapter.localAdbPath` / `localScrcpyPath` / `aya.dex` 路径**动态解析**，不再写死安装目录：优先从本 class 所在 JAR 反推 app 内容目录（打包后为 `<安装目录>/app/resources/scrcpy/…`，macOS 为 `*.app/Contents/app/resources/scrcpy/…`），开发态回退到仓库 `resources/{platform}/…`。资源仍经 Compose Desktop `appResourcesRootDir`（`../resources`）打进安装包（`prepareAppResources` 会把 `{platform}/scrcpy` 压平为 `resources/scrcpy`、`common/aya.dex` 压平为 `resources/aya.dex`）。打包配置在 `composeApp/build.gradle.kts` 的 `compose.desktop.application`。
 
 用户数据目录：`~/.debugmanagerTemp`（日志、拉取缓存、DataStore、单实例锁等）。
 

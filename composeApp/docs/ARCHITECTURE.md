@@ -87,7 +87,7 @@
 - `PlatformAdapter`：OS 分支、adb/scrcpy/dex 路径、进程执行、缓存目录、剪贴板、Locale
 - `SingleInstanceApp`：文件锁
 
-路径约定（安装包布局）：Windows 例 `{user.dir}/app/resources/scrcpy/adb.exe`。改路径必须同时考虑开发态 `run` 与打包态。
+路径约定（安装包布局）：打包后资源统一在 `<app 内容目录>/resources/scrcpy/…`（macOS 为 `*.app/Contents/app/resources/…`）。`PlatformAdapter` 用 `resolveResourcePath` 动态解析：优先从本 class 所在 JAR 反推 app 内容目录，开发态 `run` 回退仓库 `resources/{platform}/…`；不再写死安装目录。改路径必须同时考虑开发态与打包态。
 
 ### 4.2 `helper` — 领域助手
 

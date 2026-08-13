@@ -31,12 +31,13 @@ A Compose Multiplatform Desktop software, for Android device debugging.
 ## Introduction
 This is a desktop software for debugging Android devices, particularly in-car systems. It is based on Compose Multiplatform and supports Windows, Linux, and macOS platforms.
 
-You need to grant execution permissions to the scrcpy and adb executables first by running the following command on MACOS and Linux:
+On macOS and Linux, execution permissions for the bundled `scrcpy` and `adb` executables are now fixed automatically at startup. If the app still cannot launch them (for example, after macOS Gatekeeper has quarantined a downloaded build), you can grant permissions manually:
 
 ```bash
 # MACOS
 cd /Applications/DebugManager.app/Contents/app/resources/
 chmod -R +x *
+xattr -dr com.apple.quarantine /Applications/DebugManager.app
 
 # Linux
 cd /opt/debugmanager/lib/app/resources/scrcpy/

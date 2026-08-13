@@ -71,7 +71,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
      */
     fun runRootScript() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} $serial root")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s $serial root")
         }
     }
 
@@ -80,7 +80,7 @@ class AdbClient(private val platformAdapter: PlatformAdapter) {
      */
     fun runRemountScript() {
         CoroutineScope(Dispatchers.IO).launch {
-            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} $serial remount")
+            platformAdapter.executeTerminalCommand("${platformAdapter.localAdbPath} -s $serial remount")
         }
     }
 
